@@ -1,0 +1,92 @@
+      #mc-3d {
+        background: #DDD;
+        padding-top: 32px;
+       }
+       
+       #mc-3d .canvas-wrapper {
+        height: 500px;
+       }
+       
+      #mc-3d button {
+        width: 32px;
+        height: 32px;
+        position: relative;
+        top: -32px;
+        margin-right: 16px;
+      }
+      @font-face { font-family: Miso Light; src: url('/sites/minecraftarchitect.com/themes/minecraftarchitect/miso-light.otf'); }
+      body {
+        font: 16px/2em miso light, verdana, tahoma, arial regular;
+        margin: 2em;
+        }
+      #structure-node-form .xy-grid .mc-block {
+        width: 15px;
+        height: 15px;
+        float: left;
+        margin: 0 1px 1px 0;
+      }
+      #structure-node-form .xy-grid {
+        width: 256px;
+        height: 256px;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: pointer;
+        border-color: #222;
+        border-style: solid;
+        border-width: 1px 0 0 1px;
+        background: url('grid-bg.png');
+        margin: 32px;
+      }
+      #structure-node-form .z-nav button {
+        width: 32px;
+        height: 32px;
+        margin: 0 0 0 16px;
+      }
+      #structure-node-form .xy-nav .north-y,
+      #structure-node-form .xy-nav .south-y{
+        width: 256px;
+        height: 32px;
+      }
+      #structure-node-form .xy-nav .east-x,
+      #structure-node-form .xy-nav .west-x{
+        width: 32px;
+        height: 256px;
+      }
+      #structure-node-form .xy-nav .north-y {
+        position: absolute;
+        margin-left: 32px;
+        margin-top: 32px;
+      }
+      #structure-node-form .xy-nav .south-y {
+        position: absolute;
+        margin-top: 321px;
+        margin-left: 32px;
+      }
+      #structure-node-form .xy-nav .east-x {
+        position: absolute;
+        margin-top: 64px;
+        margin-left: 289px;
+      }
+      #structure-node-form .xy-nav .west-x {
+        position: absolute;
+        margin-top: 64px;
+      }
+
+      #structure-node-form .block-type {
+        float: left;
+        width: 200px;
+        height: 500px;
+        overflow-y: scroll;
+      }
+      
+      .ui-selectable-helper{
+        position:absolute;
+        z-index:100;
+        border: 1px solid #222;
+        background: rgba(0,0,0,.2);
+      }
+      
+      #edit-field-structurearray {
+        display: none;
+      }

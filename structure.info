@@ -1,0 +1,5 @@
+name = Structure
+description = Enables structure content.
+package = Custom
+version = VERSION
+core = 7.x
