@@ -26,7 +26,7 @@ function structure_form($node, $form_state) {
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/Three.js');
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/jquery-ui-1.8.16.custom.min.js');
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/RequestAnimationFrame.js');
-  drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure.js');
+  drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure_build.js');
   drupal_add_js(array('structurePath' => drupal_get_path('module', 'structure')), 'setting');
   
   return structure_node_content_form($node, $form_state);
