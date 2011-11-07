@@ -26,10 +26,10 @@ function structure_form($node, $form_state) {
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/Three.js');
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/jquery-ui-1.8.16.custom.min.js');
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/RequestAnimationFrame.js');
-  drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure_build.js');
-  drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure_3d.js');
+  drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure.js');
   drupal_add_js(array('structurePath' => drupal_get_path('module', 'structure')), 'setting');
-    drupal_add_js(array('structureArray' => $node->field_structurearray['und']['0']['value']), 'setting');
+  drupal_add_js(array('structureArray' => $node->field_structurearray['und']['0']['value']), 'setting');
+  drupal_add_js(array('structureMode' => 'edit'), 'setting');
   
   return structure_node_content_form($node, $form_state);
 }
@@ -410,10 +410,10 @@ function structure_view($node, $view_mode) {
     drupal_add_js(drupal_get_path('module', 'structure') . '/js/Three.js');
     drupal_add_js(drupal_get_path('module', 'structure') . '/js/jquery-ui-1.8.16.custom.min.js');
     drupal_add_js(drupal_get_path('module', 'structure') . '/js/RequestAnimationFrame.js');
-    drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure_3d.js');
-    drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure_load.js');
+    drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure.js');
     drupal_add_js(array('structurePath' => drupal_get_path('module', 'structure')), 'setting');
     drupal_add_js(array('structureArray' => $node->field_structurearray['und']['0']['value']), 'setting');
+    drupal_add_js(array('structureMode' => 'view'), 'setting');
   }
   
   $node->content['structurearray'] = array(
