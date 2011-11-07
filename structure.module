@@ -415,15 +415,6 @@ function structure_view($node, $view_mode) {
     drupal_add_js(array('structureArray' => $node->field_structurearray['und']['0']['value']), 'setting');
     drupal_add_js(array('structureMode' => 'view'), 'setting');
   }
-  
-  $node->content['structurearray'] = array(
-    '#type' => 'textarea',
-    '#rows' => '1',
-    '#prefix' => '<div id="edit-field-structurearray">',
-    '#suffix' => '</div>',
-    '#value' => $node->field_structurearray['und']['0']['value']
-  );
-  
   $node->content['mc_3d'] = array(
     '#prefix' => '<div id="mc-3d">',
     '#suffix' => '</div>',
