@@ -414,7 +414,7 @@ function structure_view($node, $view_mode) {
     drupal_add_js(array('structurePath' => drupal_get_path('module', 'structure')), 'setting');
     drupal_add_js(array('structureArray' => $node->field_structurearray['und']['0']['value']), 'setting');
     drupal_add_js(array('structureMode' => 'view'), 'setting');
-  }
+  
   $node->content['mc_3d'] = array(
     '#prefix' => '<div id="mc-3d">',
     '#suffix' => '</div>',
@@ -431,6 +431,7 @@ function structure_view($node, $view_mode) {
   $node->content['mc_3d']['canvas'] = array(
     '#markup' => '<div class="canvas-wrapper"></div>',
   );
+  }
 
   return $node;
 }
