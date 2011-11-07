@@ -29,6 +29,9 @@
             && block[1] == blocks[i][1]
             && block[2] == blocks[i][2]) {
           //console.log('killing block..');
+          if (enable3d) {
+            killBlock(blocks[i][4]);
+          }
           blocks.splice(i,1);
           break;
         }
@@ -127,8 +130,7 @@
       var blocks = new Array();
       
       // load blocks from page element
-      var blockstr = $('#edit-field-structurearray-und-0-value').val();
-      $('#edit-field-structurearray-und-0-value').val('');
+      var blockstr = Drupal.settings.structureArray;
       
       // if element provided data..
       if (blockstr) {

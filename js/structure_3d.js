@@ -123,9 +123,8 @@ function drawBlock(block) {
     //draw
     scene.add(Cube);
 
-    block.push(Cube);
+    block[4] = Cube;
   }
-  console.log(block);
   return block;
 }
 
@@ -169,4 +168,8 @@ function drawBlocks(blocks, scene) {
   for(var i=0; blocks[i]; i++) {
     drawBlock(blocks[i], scene);
   }
+}
+
+function killBlock(Cube) {
+  scene.remove(Cube);
 }

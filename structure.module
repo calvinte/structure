@@ -29,6 +29,7 @@ function structure_form($node, $form_state) {
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure_build.js');
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure_3d.js');
   drupal_add_js(array('structurePath' => drupal_get_path('module', 'structure')), 'setting');
+    drupal_add_js(array('structureArray' => $node->field_structurearray['und']['0']['value']), 'setting');
   
   return structure_node_content_form($node, $form_state);
 }
@@ -401,11 +402,44 @@ function structure_menu_local_tasks_alter(&$data, $router_item, $root_path) {
 }
 
 /**
- * Access callback for user blog pages.
+ * Implements hook_view().
  */
-function structure_page_user_access($account) {
-  // The visitor must be able to access the site's content.
-  // For a blog to 'exist' the user must either be able to
-  // create new blog entries, or it must have existing posts.
-  return $account->uid && user_access('access content') && (user_access('create structures', $account) || _structure_post_exists($account));
+function structure_view($node, $view_mode) {
+  if ($view_mode == 'full' && node_is_page($node)) {
+    drupal_add_css(drupal_get_path('module', 'structure') . '/styles.css');
+    drupal_add_js(drupal_get_path('module', 'structure') . '/js/Three.js');
+    drupal_add_js(drupal_get_path('module', 'structure') . '/js/jquery-ui-1.8.16.custom.min.js');
+    drupal_add_js(drupal_get_path('module', 'structure') . '/js/RequestAnimationFrame.js');
+    drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure_3d.js');
+    drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure_load.js');
+    drupal_add_js(array('structurePath' => drupal_get_path('module', 'structure')), 'setting');
+    drupal_add_js(array('structureArray' => $node->field_structurearray['und']['0']['value']), 'setting');
+  }
+  
+  $node->content['structurearray'] = array(
+    '#type' => 'textarea',
+    '#rows' => '1',
+    '#prefix' => '<div id="edit-field-structurearray">',
+    '#suffix' => '</div>',
+    '#value' => $node->field_structurearray['und']['0']['value']
+  );
+  
+  $node->content['mc_3d'] = array(
+    '#prefix' => '<div id="mc-3d">',
+    '#suffix' => '</div>',
+  );
+
+  $node->content['mc_3d']['zoom_out'] = array(
+    '#markup' => '<button type="button" value="Zoom Out" class="zoom-out">-</button>',
+  );
+
+  $node->content['mc_3d']['zoom_in'] = array(
+    '#markup' => '<button type="button" value="Zoom In" class="zoom-in">+</button>',
+  );
+
+  $node->content['mc_3d']['canvas'] = array(
+    '#markup' => '<div class="canvas-wrapper"></div>',
+  );
+
+  return $node;
 }
