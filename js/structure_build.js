@@ -18,7 +18,7 @@
           && block[1] == blocks[i][1]
           && block[2] == blocks[i][2]
           && block[3] == blocks[i][3]) {
-          console.log('nothing to add');
+          //console.log('nothing to add');
           return blocks;
         }
        /* 
@@ -28,7 +28,7 @@
         else if (block[0] == blocks[i][0]
             && block[1] == blocks[i][1]
             && block[2] == blocks[i][2]) {
-          console.log('killing block..');
+          //console.log('killing block..');
           blocks.splice(i,1);
           break;
         }
@@ -38,7 +38,7 @@
       * ensure that the block we're about to add isn't a 0 block (air)
       */
       if (block[3] !=  0) {
-        console.log('adding block..');
+        //console.log('adding block..');
         blocks.push(block);
       }
       return blocks;
@@ -52,7 +52,7 @@
     * @param blocks as array
     */
     function drawControls(Z, X, Y, blocks) {
-      console.log('drawing controls');
+      //console.log('drawing controls');
      /* If there aren't any .xy-grid .mc-block elements then it's our first
       * time through, create them
       */
@@ -148,12 +148,18 @@
     var currentZ = new Number;
     var currentX = new Number;
     var currentY = new Number;
-    drawControls(currentZ, currentX, currentY, blocks);  
+    drawControls(currentZ, currentX, currentY, blocks);
+    var enable3d = new Boolean;
+    enable3d = true;
+    drawBlocks(blocks, scene);
 
     $('.up-z').click(function() {
       console.log('up');
       currentZ++;
-      drawControls(currentZ, currentX, currentY, blocks);  
+      drawControls(currentZ, currentX, currentY, blocks); 
+      if (enable3d) {
+        line = drawGrid(scene, currentZ, line);
+      }
       return false;
     });
 
@@ -161,6 +167,9 @@
       console.log('down');
       currentZ--;
       drawControls(currentZ, currentX, currentY, blocks);  
+      if (enable3d) {
+        line = drawGrid(scene, currentZ, line);
+      } 
       return false;
     });
 
@@ -203,7 +212,10 @@
       }
       $('#edit-field-structurearray-und-0-value').val(blockstr);
     });
-
+    
+    var startTime = new Date();
+    var endTime = new Date();
+    
     $('#structure-node-form .xy-grid').selectable({
       /*
       selecting: function(event, ui){ 
@@ -214,17 +226,23 @@
       },
       */
       selected: function(event, ui){ 
+        startTime = new Date().getTime();
         $(".ui-selected", this).each(function(){
           block = identifyBlock(this);
           type = $('input:radio[name=block_type]:checked').val();
           $(this).attr('class', 'mc-block '+ type);
           blocks = addBlock(blocks,block);
+          if (enable3d) {
+            drawBlock(block);
+          }
           return blocks;
         });
       },
       
       stop: function(event, ui){
         drawControls(currentZ, currentX, currentY, blocks);
+        endTime = new Date().getTime();
+        console.log('Execution time: ' + (Number(endTime) - Number(startTime)));
       }
     });
 
