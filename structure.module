@@ -28,7 +28,9 @@ function structure_form($node, $form_state) {
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/RequestAnimationFrame.js');
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure.js');
   drupal_add_js(array('structurePath' => drupal_get_path('module', 'structure')), 'setting');
-  drupal_add_js(array('structureArray' => $node->field_structurearray['und']['0']['value']), 'setting');
+  if (isset($node->field_structurearray['und']['0']['value'])) {
+    drupal_add_js(array('structureArray' => $node->field_structurearray['und']['0']['value']), 'setting');
+  }
   drupal_add_js(array('structureMode' => 'edit'), 'setting');
   
   return structure_node_content_form($node, $form_state);
@@ -316,36 +318,41 @@ function structure_node_content_form($node, $form_state) {
       ),
     );
     
-    $form['xy_nav'] = array(
+    $form['controls'] = array(
+    	'#prefix' => '<div class="controls">',
+    	'#suffix' => '</div>'
+    );
+    
+    $form['controls']['xy_nav'] = array(
       '#prefix' => '<div class="xy-nav">',
       '#suffix' => '</div>',
     );
     
-    $form['z_nav'] = array(
+    $form['controls']['z_nav'] = array(
       '#prefix' => '<div class="z-nav">',
       '#suffix' => '</div>',
     );
     
-    $form['z_nav']['up'] = array(
+    $form['controls']['z_nav']['up'] = array(
       '#markup' => '<button type="button" value="Up a Layer" class="up-z">+</button>',
     );
-    $form['z_nav']['down']  = array(
+    $form['controls']['z_nav']['down']  = array(
       '#markup' => '<button type="button" value="Down a Layer" class="down-z">-</button>',
     );
     
-    $form['xy_nav']['north'] = array(
+    $form['controls']['xy_nav']['north'] = array(
       '#markup' => '<button type="button" value="North" class="north-y">↑</button>',
     );
-    $form['xy_nav']['east']  = array(
+    $form['controls']['xy_nav']['east']  = array(
       '#markup' => '<button type="button" value="East" class="east-x">→</button>',
     );
-    $form['xy_nav']['south'] = array(
+    $form['controls']['xy_nav']['south'] = array(
       '#markup' => '<button type="button" value="South" class="south-y">↓</button>',
     );
-    $form['xy_nav']['west']  = array(
+    $form['controls']['xy_nav']['west']  = array(
       '#markup' => '<button type="button" value="West" class="west-x">←</button>',
     );
-    $form['xy_grid'] = array(
+    $form['controls']['xy_grid'] = array(
       '#markup' => '<div class="xy-grid"></div>',
     );
     
