@@ -309,49 +309,98 @@ var currentZoom = new Number;
 
 function blockTexture(textureId) {
   if (textureId == 1) {
-  var blockTop    = new THREE.MeshLambertMaterial( { map: THREE.ImageUtils.loadTexture( '/' + Drupal.settings.structurePath + '/sprites/mc-sprite_1.png' ) } );
-  var blockSides  = new THREE.MeshLambertMaterial( { map: THREE.ImageUtils.loadTexture( '/' + Drupal.settings.structurePath + '/sprites/mc-sprite_4.png' ) } );
-  var blockBottom = new THREE.MeshLambertMaterial( { map: THREE.ImageUtils.loadTexture( '/' + Drupal.settings.structurePath + '/sprites/mc-sprite_3.png' ) } );
-   
-  return new Array(
-    blockSides,  // Left side
-    blockSides,  // Right side
-    blockTop,    // Top side
-    blockBottom, // Bottom side
-    blockSides,  // Front side
-    blockSides   // Back side
-  );
+    var blockTopt = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_1.png');
+        blockTopt.wrapS = THREE.ClampToEdgeWrapping;
+        blockTopt.wrapT = THREE.ClampToEdgeWrapping;
+        blockTopt.magFilter = THREE.NearestFilter;
+        blockTopt.minFilter = THREE.LinearMipMapLinearFilter;
+    var blockTop    = new THREE.MeshLambertMaterial( { map:blockTopt } );
+    
+    var blockSidest = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_4.png');
+        blockSidest.wrapS = THREE.ClampToEdgeWrapping;
+        blockSidest.wrapT = THREE.ClampToEdgeWrapping;
+        blockSidest.magFilter = THREE.NearestFilter;
+        blockSidest.minFilter = THREE.LinearMipMapLinearFilter;
+    var blockSides  = new THREE.MeshLambertMaterial( { map:blockSidest } );
+    
+    var blockBottomt = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_3.png');
+        blockBottomt.wrapS = THREE.ClampToEdgeWrapping;
+        blockBottomt.wrapT = THREE.ClampToEdgeWrapping;
+        blockBottomt.magFilter = THREE.NearestFilter;
+        blockBottomt.minFilter = THREE.LinearMipMapLinearFilter;
+    var blockBottom = new THREE.MeshLambertMaterial( { map:blockBottomt} );
+    
+    return new Array(
+      blockSides,  // Left side
+      blockSides,  // Right side
+      blockTop,    // Top side
+      blockBottom, // Bottom side
+      blockSides,  // Front side
+      blockSides   // Back side
+    );
   }
   else if (textureId == 22) {
-  var blockTop    = new THREE.MeshLambertMaterial( { map: THREE.ImageUtils.loadTexture( '/' + Drupal.settings.structurePath + '/sprites/mc-sprite_22.png' ) } );
-  var blockSides  = new THREE.MeshLambertMaterial( { map: THREE.ImageUtils.loadTexture( '/' + Drupal.settings.structurePath + '/sprites/mc-sprite_21.png' ) } );
-   
-  return new Array(
-    blockSides,  // Left side
-    blockSides,  // Right side
-    blockTop,    // Top side
-    blockTop,    // Bottom side
-    blockSides,  // Front side
-    blockSides   // Back side
-  );
+    var blockTopt = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_22.png');
+        blockTopt.wrapS = THREE.ClampToEdgeWrapping;
+        blockTopt.wrapT = THREE.ClampToEdgeWrapping;
+        blockTopt.magFilter = THREE.NearestFilter;
+        blockTopt.minFilter = THREE.LinearMipMapLinearFilter;
+    var blockTop    = new THREE.MeshLambertMaterial( { map:blockTopt } );
+    
+    var blockSidest = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_21.png');
+        blockSidest.wrapS = THREE.ClampToEdgeWrapping;
+        blockSidest.wrapT = THREE.ClampToEdgeWrapping;
+        blockSidest.magFilter = THREE.NearestFilter;
+        blockSidest.minFilter = THREE.LinearMipMapLinearFilter;
+    var blockSides  = new THREE.MeshLambertMaterial( { map:blockSidest } );
+     
+    return new Array(
+      blockSides,  // Left side
+      blockSides,  // Right side
+      blockTop,    // Top side
+      blockTop,    // Bottom side
+      blockSides,  // Front side
+      blockSides   // Back side
+    );
   }
   else if (textureId == 28) {
-  var blockTop    = new THREE.MeshLambertMaterial( { map: THREE.ImageUtils.loadTexture( '/' + Drupal.settings.structurePath + '/sprites/mc-sprite_26.png' ) } );
-  var blockFront  = new THREE.MeshLambertMaterial( { map: THREE.ImageUtils.loadTexture( '/' + Drupal.settings.structurePath + '/sprites/mc-sprite_28.png' ) } );
-  var blockSides  = new THREE.MeshLambertMaterial( { map: THREE.ImageUtils.loadTexture( '/' + Drupal.settings.structurePath + '/sprites/mc-sprite_27.png' ) } );
-   
-  return new Array(
-    blockSides,  // Left side
-    blockSides,  // Right side
-    blockTop,    // Top side
-    blockTop,    // Bottom side
-    blockFront,  // Front side
-    blockSides   // Back side
-  );
+    var blockTopt = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_26.png');
+        blockTopt.wrapS = THREE.ClampToEdgeWrapping;
+        blockTopt.wrapT = THREE.ClampToEdgeWrapping;
+        blockTopt.magFilter = THREE.NearestFilter;
+        blockTopt.minFilter = THREE.LinearMipMapLinearFilter;
+    var blockTop    = new THREE.MeshLambertMaterial( { map:blockTopt } );
+
+    var blockFrontt = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_28.png');
+        blockFrontt.wrapS = THREE.ClampToEdgeWrapping;
+        blockFrontt.wrapT = THREE.ClampToEdgeWrapping;
+        blockFrontt.magFilter = THREE.NearestFilter;
+        blockFrontt.minFilter = THREE.LinearMipMapLinearFilter;
+    var blockFront  = new THREE.MeshLambertMaterial( { map:blockFrontt } );
+
+    var blockSidest = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_27.png');
+        blockSidest.wrapS = THREE.ClampToEdgeWrapping;
+        blockSidest.wrapT = THREE.ClampToEdgeWrapping;
+        blockSidest.magFilter = THREE.NearestFilter;
+        blockSidest.minFilter = THREE.LinearMipMapLinearFilter;
+    var blockSides  = new THREE.MeshLambertMaterial( { map:blockSidest });
+     
+    return new Array(
+      blockSides,  // Left side
+      blockSides,  // Right side
+      blockTop,    // Top side
+      blockTop,    // Bottom side
+      blockFront,  // Front side
+      blockSides   // Back side
+    );
   }
   else {
-  //create material
-  return new THREE.MeshLambertMaterial( { map: THREE.ImageUtils.loadTexture( '/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + textureId + '.png' ), transparent: true } );
+    var texture = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + textureId + '.png');
+    texture.wrapS = THREE.ClampToEdgeWrapping;
+    texture.wrapT = THREE.ClampToEdgeWrapping;
+    texture.magFilter = THREE.NearestFilter;
+    texture.minFilter = THREE.LinearMipMapLinearFilter;
+    return new THREE.MeshLambertMaterial( { map:texture, transparent: true } );
   }
 }
 
@@ -385,7 +434,7 @@ function drawBlock(block) {
     
     //create cube
     var Cube = new THREE.Mesh(
-    new THREE.CubeGeometry(size,size,size,1,1,1),CubeMaterial);  
+    new THREE.CubeGeometry(size,size,size,1,1,1,CubeMaterial), new THREE.MeshFaceMaterial());  
     //position
     Cube.position['y'] = (block[0]*size);
     Cube.position['x'] = (block[1]-8)*size+8;
