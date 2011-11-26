@@ -69,8 +69,8 @@ function structureBuild() {
           * with the same coordinates, if there are remove them
           */
           else if (block[0] == blocks[i][0]
-              && block[1] == blocks[i][1]
-              && block[2] == blocks[i][2]) {
+                && block[1] == blocks[i][1]
+                && block[2] == blocks[i][2]) {
             //console.log('killing block..');
             if (enable3d) {
               killBlock(blocks[i][4]);
@@ -86,6 +86,10 @@ function structureBuild() {
         if (block[3] !=  0) {
           //console.log('adding block..');
           blocks.push(block);
+          
+          if (enable3d) {
+            drawBlock(block);
+          }
         }
         return blocks;
       }
@@ -249,9 +253,6 @@ function structureBuild() {
             type = $('input:radio[name=block_type]:checked').val();
             $(this).attr('class', 'mc-block '+ type);
             blocks = addBlock(blocks,block);
-            if (enable3d) {
-              drawBlock(block);
-            }
             return blocks;
           });
         },
