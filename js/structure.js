@@ -88,7 +88,7 @@ function structureBuild() {
           blocks.push(block);
           
           if (enable3d) {
-            drawBlock(block);
+            block = drawBlock(block);
           }
         }
         return blocks;
@@ -310,49 +310,65 @@ var currentZoom = new Number;
 
 function blockTexture(textureId) {
   function sides(left,right,top,bottom,front,back) {
-    var textureLeft = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + left + '.png');
-        textureLeft.wrapS = THREE.ClampToEdgeWrapping;
-        textureLeft.wrapT = THREE.ClampToEdgeWrapping;
-        textureLeft.magFilter = THREE.NearestFilter;
-        textureLeft.minFilter = THREE.LinearMipMapLinearFilter;
-    var materialLeft    = new THREE.MeshLambertMaterial( { map:textureLeft, transparent: true } );
-    
+    if (left) {
+      var textureLeft = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + left + '.png');
+          textureLeft.wrapS = THREE.ClampToEdgeWrapping;
+          textureLeft.wrapT = THREE.ClampToEdgeWrapping;
+          textureLeft.magFilter = THREE.NearestFilter;
+          textureLeft.minFilter = THREE.LinearMipMapLinearFilter;
+      var materialLeft    = new THREE.MeshLambertMaterial( { map:textureLeft, transparent: true } );
+    }
+    if (right) {
     var textureRight = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + right + '.png');
         textureRight.wrapS = THREE.ClampToEdgeWrapping;
         textureRight.wrapT = THREE.ClampToEdgeWrapping;
         textureRight.magFilter = THREE.NearestFilter;
         textureRight.minFilter = THREE.LinearMipMapLinearFilter;
     var materialRight    = new THREE.MeshLambertMaterial( { map:textureRight, transparent: true } );
+    }
     
+    if (top) {
     var textureTop = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + top + '.png');
         textureTop.wrapS = THREE.ClampToEdgeWrapping;
         textureTop.wrapT = THREE.ClampToEdgeWrapping;
         textureTop.magFilter = THREE.NearestFilter;
         textureTop.minFilter = THREE.LinearMipMapLinearFilter;
     var materialTop    = new THREE.MeshLambertMaterial( { map:textureTop, transparent: true } );
+    }
     
+    if (bottom) {
     var textureBottom = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + bottom + '.png');
         textureBottom.wrapS = THREE.ClampToEdgeWrapping;
         textureBottom.wrapT = THREE.ClampToEdgeWrapping;
         textureBottom.magFilter = THREE.NearestFilter;
         textureBottom.minFilter = THREE.LinearMipMapLinearFilter;
     var materialBottom    = new THREE.MeshLambertMaterial( { map:textureBottom, transparent: true } );
+    }
     
+    if (front) {
     var textureFront = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + front + '.png');
         textureFront.wrapS = THREE.ClampToEdgeWrapping;
         textureFront.wrapT = THREE.ClampToEdgeWrapping;
         textureFront.magFilter = THREE.NearestFilter;
         textureFront.minFilter = THREE.LinearMipMapLinearFilter;
     var materialFront    = new THREE.MeshLambertMaterial( { map:textureFront, transparent: true } );
+    }
     
+    if (back) {
     var textureBack = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + back + '.png');
         textureBack.wrapS = THREE.ClampToEdgeWrapping;
         textureBack.wrapT = THREE.ClampToEdgeWrapping;
         textureBack.magFilter = THREE.NearestFilter;
         textureBack.minFilter = THREE.LinearMipMapLinearFilter;
     var materialBack    = new THREE.MeshLambertMaterial( { map:textureBack, transparent: true } );
+    }
     
-    return new Array(materialLeft,materialRight,materialTop,materialBottom,materialFront,materialBack);
+    if (left && !right && !top && !bottom && !front && !back) {
+      return materialLeft;
+    }
+    else {
+      return new Array(materialLeft,materialRight,materialTop,materialBottom,materialFront,materialBack);
+    }
     
   }
   if (textureId == 1) {
@@ -433,7 +449,7 @@ function blockTexture(textureId) {
   }
   else {
     //wildcard
-    return sides(textureId,textureId,textureId,textureId,textureId,textureId);
+    return sides(textureId);
   }
 }
 
