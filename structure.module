@@ -27,6 +27,7 @@ function structure_form($node, $form_state) {
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/jquery-ui-1.8.16.custom.min.js');
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/RequestAnimationFrame.js');
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure.js');
+  drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure-3d.js');
   drupal_add_js(array('structurePath' => drupal_get_path('module', 'structure')), 'setting');
   if (isset($node->field_structurearray['und']['0']['value'])) {
     drupal_add_js(array('structureArray' => $node->field_structurearray['und']['0']['value']), 'setting');
@@ -371,7 +372,7 @@ function structure_node_content_form($node, $form_state) {
     );
     
     $form['mc_3d']['canvas'] = array(
-      '#markup' => '<div class="canvas-wrapper"></div>',
+      '#markup' => '<div class="canvas-wrapper"><span class="enable-3d-warning">If you are using Google Chrome or Mozilla Firefox you can <a href="#enable3d" class="enable-3d">enable 3d</a>.</span></div>',
     );
 
   return $form;
@@ -419,6 +420,7 @@ function structure_view($node, $view_mode) {
     drupal_add_js(drupal_get_path('module', 'structure') . '/js/jquery-ui-1.8.16.custom.min.js');
     drupal_add_js(drupal_get_path('module', 'structure') . '/js/RequestAnimationFrame.js');
     drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure.js');
+    drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure-3d.js');
     drupal_add_js(array('structurePath' => drupal_get_path('module', 'structure')), 'setting');
     drupal_add_js(array('structureArray' => $node->field_structurearray['und']['0']['value']), 'setting');
     drupal_add_js(array('structureMode' => 'view'), 'setting');
