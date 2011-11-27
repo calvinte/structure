@@ -15,7 +15,7 @@ window.onload=function(){
   (function ($) {
     $(document).ready(function(){
       $('a.enable-3d').click(function() {
-        initiate3d();    
+        initiate3d();
       });
     });
   })(jQuery); 

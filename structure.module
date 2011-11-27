@@ -425,22 +425,22 @@ function structure_view($node, $view_mode) {
     drupal_add_js(array('structureArray' => $node->field_structurearray['und']['0']['value']), 'setting');
     drupal_add_js(array('structureMode' => 'view'), 'setting');
   
-  $node->content['mc_3d'] = array(
-    '#prefix' => '<div id="mc-3d">',
-    '#suffix' => '</div>',
-  );
+    $node->content['mc_3d'] = array(
+      '#prefix' => '<div id="mc-3d">',
+      '#suffix' => '</div>',
+    );
 
-  $node->content['mc_3d']['zoom_out'] = array(
-    '#markup' => '<button type="button" value="Zoom Out" class="zoom-out">-</button>',
-  );
+    $node->content['mc_3d']['zoom_out'] = array(
+      '#markup' => '<button type="button" value="Zoom Out" class="zoom-out">-</button>',
+    );
 
-  $node->content['mc_3d']['zoom_in'] = array(
-    '#markup' => '<button type="button" value="Zoom In" class="zoom-in">+</button>',
-  );
+    $node->content['mc_3d']['zoom_in'] = array(
+      '#markup' => '<button type="button" value="Zoom In" class="zoom-in">+</button>',
+    );
 
-  $node->content['mc_3d']['canvas'] = array(
-    '#markup' => '<div class="canvas-wrapper"></div>',
-  );
+    $node->content['mc_3d']['canvas'] = array(
+      '#markup' => '<div class="canvas-wrapper"><span class="enable-3d-warning">If you are using Google Chrome or Mozilla Firefox you can <a href="#enable3d" class="enable-3d">enable 3d</a>.</span></div>',
+    );
   }
 
   return $node;
