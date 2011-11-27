@@ -90,17 +90,14 @@ function drawGrid(scene, Z, grid) {
 function drawBlock(block) {
   if (block[3] !=  0) {
     size = 16;
-
-    var CubeMaterial = blockTexture(block[3]);
     
-    //create cube
-    var Cube = new THREE.Mesh(
-    new THREE.CubeGeometry(size,size,size,1,1,1,CubeMaterial), new THREE.MeshFaceMaterial());  
+    var Cube = generateBlock(block[3]);
+    
     //position
-    Cube.position['y'] = (block[0]*size);
-    Cube.position['x'] = (block[1]-8)*size+8;
-    Cube.position['z'] = (block[2]-8)*-size-8;
-
+    Cube.position['y'] += (block[0]*size);
+    Cube.position['x'] += (block[1]-8)*size+8;
+    Cube.position['z'] += (block[2]-8)*-size-8;
+        
     //draw
     scene.add(Cube);
 
@@ -124,7 +121,7 @@ function render() {
   camera.position.x = Math.cos( timer ) * 300;
   camera.position.z = Math.sin( timer ) * 300;
   camera.lookAt( scene.position );
-
+  
   renderer.render( scene, camera );
 }
 
@@ -159,6 +156,34 @@ function killBlock(Cube) {
   scene.remove(Cube);
 }
 
+function generateBlock(blockId) {
+  if (blockId == 81) {
+    //create cube
+    var BlockMaterial = blockTexture(blockId);
+    var BlockGeometry = blockGeometry(blockId);
+    var Cube = new THREE.Mesh(new THREE.CubeGeometry(BlockGeometry[0],BlockGeometry[1],BlockGeometry[2],1,1,1,BlockMaterial), new THREE.MeshFaceMaterial());
+    Cube.position['y'] -= 3;
+    console.log(Cube.position['z']);
+    return Cube;
+  }
+  else {
+    //create cube
+    var BlockMaterial = blockTexture(blockId);
+    var BlockGeometry = blockGeometry(blockId);
+    return new THREE.Mesh(new THREE.CubeGeometry(BlockGeometry[0],BlockGeometry[1],BlockGeometry[2],1,1,1,BlockMaterial), new THREE.MeshFaceMaterial());
+  }
+}
+
+function blockGeometry(blockId) {
+  if (blockId == 81) {
+    //torch
+    return new Array(2,10,2);
+  }
+  else {
+    return new Array(16,16,16);
+  }
+}
+
 /* Provide texture for block
  * 
  * @param textureId as Number representing block id
@@ -168,56 +193,56 @@ function killBlock(Cube) {
 function blockTexture(textureId) {
   function sides(left,right,top,bottom,front,back) {
     if (left) {
-      var textureLeft = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + left + '.png');
-          textureLeft.wrapS = THREE.ClampToEdgeWrapping;
-          textureLeft.wrapT = THREE.ClampToEdgeWrapping;
-          textureLeft.magFilter = THREE.NearestFilter;
-          textureLeft.minFilter = THREE.LinearMipMapLinearFilter;
-      var materialLeft    = new THREE.MeshLambertMaterial( { map:textureLeft, transparent: true } );
+        var textureLeft = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + left + '.png');
+            textureLeft.wrapS = THREE.ClampToEdgeWrapping;
+            textureLeft.wrapT = THREE.ClampToEdgeWrapping;
+            textureLeft.magFilter = THREE.NearestFilter;
+            textureLeft.minFilter = THREE.LinearMipMapLinearFilter;
+        var materialLeft    = new THREE.MeshLambertMaterial( {map:textureLeft, transparent: true} );
     }
     if (right) {
-    var textureRight = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + right + '.png');
-        textureRight.wrapS = THREE.ClampToEdgeWrapping;
-        textureRight.wrapT = THREE.ClampToEdgeWrapping;
-        textureRight.magFilter = THREE.NearestFilter;
-        textureRight.minFilter = THREE.LinearMipMapLinearFilter;
-    var materialRight    = new THREE.MeshLambertMaterial( { map:textureRight, transparent: true } );
+      var textureRight = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + right + '.png');
+          textureRight.wrapS = THREE.ClampToEdgeWrapping;
+          textureRight.wrapT = THREE.ClampToEdgeWrapping;
+          textureRight.magFilter = THREE.NearestFilter;
+          textureRight.minFilter = THREE.LinearMipMapLinearFilter;
+      var materialRight    = new THREE.MeshLambertMaterial( {map:textureRight, transparent: true} );
     }
     
     if (top) {
-    var textureTop = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + top + '.png');
-        textureTop.wrapS = THREE.ClampToEdgeWrapping;
-        textureTop.wrapT = THREE.ClampToEdgeWrapping;
-        textureTop.magFilter = THREE.NearestFilter;
-        textureTop.minFilter = THREE.LinearMipMapLinearFilter;
-    var materialTop    = new THREE.MeshLambertMaterial( { map:textureTop, transparent: true } );
+      var textureTop = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + top + '.png');
+          textureTop.wrapS = THREE.ClampToEdgeWrapping;
+          textureTop.wrapT = THREE.ClampToEdgeWrapping;
+          textureTop.magFilter = THREE.NearestFilter;
+          textureTop.minFilter = THREE.LinearMipMapLinearFilter;
+      var materialTop    = new THREE.MeshLambertMaterial( {map:textureTop, transparent: true} );
     }
     
     if (bottom) {
-    var textureBottom = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + bottom + '.png');
-        textureBottom.wrapS = THREE.ClampToEdgeWrapping;
-        textureBottom.wrapT = THREE.ClampToEdgeWrapping;
-        textureBottom.magFilter = THREE.NearestFilter;
-        textureBottom.minFilter = THREE.LinearMipMapLinearFilter;
-    var materialBottom    = new THREE.MeshLambertMaterial( { map:textureBottom, transparent: true } );
+      var textureBottom = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + bottom + '.png');
+          textureBottom.wrapS = THREE.ClampToEdgeWrapping;
+          textureBottom.wrapT = THREE.ClampToEdgeWrapping;
+          textureBottom.magFilter = THREE.NearestFilter;
+          textureBottom.minFilter = THREE.LinearMipMapLinearFilter;
+      var materialBottom    = new THREE.MeshLambertMaterial( {map:textureBottom, transparent: true} );
     }
     
     if (front) {
-    var textureFront = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + front + '.png');
-        textureFront.wrapS = THREE.ClampToEdgeWrapping;
-        textureFront.wrapT = THREE.ClampToEdgeWrapping;
-        textureFront.magFilter = THREE.NearestFilter;
-        textureFront.minFilter = THREE.LinearMipMapLinearFilter;
-    var materialFront    = new THREE.MeshLambertMaterial( { map:textureFront, transparent: true } );
+      var textureFront = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + front + '.png');
+          textureFront.wrapS = THREE.ClampToEdgeWrapping;
+          textureFront.wrapT = THREE.ClampToEdgeWrapping;
+          textureFront.magFilter = THREE.NearestFilter;
+          textureFront.minFilter = THREE.LinearMipMapLinearFilter;
+      var materialFront    = new THREE.MeshLambertMaterial( {map:textureFront, transparent: true} );
     }
     
     if (back) {
-    var textureBack = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + back + '.png');
-        textureBack.wrapS = THREE.ClampToEdgeWrapping;
-        textureBack.wrapT = THREE.ClampToEdgeWrapping;
-        textureBack.magFilter = THREE.NearestFilter;
-        textureBack.minFilter = THREE.LinearMipMapLinearFilter;
-    var materialBack    = new THREE.MeshLambertMaterial( { map:textureBack, transparent: true } );
+      var textureBack = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + back + '.png');
+          textureBack.wrapS = THREE.ClampToEdgeWrapping;
+          textureBack.wrapT = THREE.ClampToEdgeWrapping;
+          textureBack.magFilter = THREE.NearestFilter;
+          textureBack.minFilter = THREE.LinearMipMapLinearFilter;
+      var materialBack    = new THREE.MeshLambertMaterial( {map:textureBack, transparent: true} );
     }
     
     if (left && !right && !top && !bottom && !front && !back) {
@@ -303,6 +328,16 @@ function blockTexture(textureId) {
   else if (textureId == 137) {
     //melon
     return sides(137,137,138,138,137,137);
+  }
+  else if (textureId == 81) {
+    material = sides(81);
+    material.map.wrapS = THREE.RepeatWrapping;
+    material.map.wrapT = THREE.RepeatWrapping;
+    material.map.repeat.x = .125;
+    material.map.repeat.y = .625;
+    material.map.offset.x = -.5625;
+    material.map.offset.y = .375;
+    return material;
   }
   else {
     //wildcard

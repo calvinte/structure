@@ -2,8 +2,8 @@ blocks = new Array();
 var currentZ = new Number;
 var currentX = new Number;
 var currentY = new Number;
-var enable3d = new Boolean(true);
-var ready = new Boolean(false);
+var enable3d = false;
+var ready = false;
 
 window.onload=function(){
   blocks = loadBlocks();
@@ -16,6 +16,8 @@ window.onload=function(){
     $(document).ready(function(){
       $('a.enable-3d').click(function() {
         initiate3d();
+        enable3d = true;
+        return false;
       });
     });
   })(jQuery); 
@@ -40,8 +42,8 @@ window.onload=function(){
      /* Split up blockstr and loop through creating our
       * multi-dimensional blocks array
       */
-      blocks = blockstr.split(",");
-      for (var i = 0, block; block = blocks[i]; i++) {
+      blockstr = blockstr.split(",");
+      for (var i = 0, block; block = blockstr[i]; i++) {
         block = block.replace(/[[]/g, '');
         block = block.split(']');
         blocks[i] = block;
@@ -180,8 +182,6 @@ function structureBuild() {
             blocks.splice(i,1);
             break;
           }
-        endTime = new Date().getTime();
-        console.log('Execution time of addBlock(): ' + (Number(endTime) - Number(startTime)));
         }
 
        /*
@@ -195,6 +195,8 @@ function structureBuild() {
             block = drawBlock(block);
           }
         }
+        endTime = new Date().getTime();
+        console.log('Execution time of addBlock(): ' + (Number(endTime) - Number(startTime)));
         return blocks;
       }
 
