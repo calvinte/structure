@@ -95,13 +95,20 @@ function drawBlock(block) {
     
     //position
     Cube.position['y'] += (block[0]*size);
-    Cube.position['x'] += (block[1]-8)*size+8;
-    Cube.position['z'] += (block[2]-8)*-size-8;
+    Cube.position['x'] += (block[2]-8)*-size-8;
+    Cube.position['z'] += (block[1]-8)*size+8;
+    
+    if (block[4] == 1 || block[4] == 3) {
+      Cube.rotation['y'] = ((block[4]*90)+90)*(Math.PI / 180);
+    }
+    else {
+      Cube.rotation['y'] = ((block[4]*90)-90)*(Math.PI / 180);
+    }
         
     //draw
     scene.add(Cube);
 
-    block[4] = Cube;
+    block[5] = Cube;
   }
   return block;
 }
@@ -163,7 +170,6 @@ function generateBlock(blockId) {
     var BlockGeometry = blockGeometry(blockId);
     var Cube = new THREE.Mesh(new THREE.CubeGeometry(BlockGeometry[0],BlockGeometry[1],BlockGeometry[2],1,1,1,BlockMaterial), new THREE.MeshFaceMaterial());
     Cube.position['y'] -= 3;
-    console.log(Cube.position['z']);
     return Cube;
   }
   else {
@@ -178,6 +184,10 @@ function blockGeometry(blockId) {
   if (blockId == 81) {
     //torch
     return new Array(2,10,2);
+  }
+  else if (blockId == 135 || blockId == 136 ) {
+    //bed
+    return new Array(16,9,16);
   }
   else {
     return new Array(16,16,16);
@@ -246,7 +256,9 @@ function blockTexture(textureId) {
     }
     
     if (left && !right && !top && !bottom && !front && !back) {
+      console.log(materialLeft);
       return materialLeft;
+      
     }
     else {
       return new Array(materialLeft,materialRight,materialTop,materialBottom,materialFront,materialBack);
@@ -324,6 +336,40 @@ function blockTexture(textureId) {
   else if (textureId == 120) {
     //jack o  lantern
     return sides(119,119,103,119,120,119);
+  }
+  else if (textureId == 135 ) {
+    //bed2
+    sides = sides(151,151,135,135,0,150);
+    
+    sides[0].map.wrapS = THREE.RepeatWrapping;
+    sides[0].map.repeat.y = .5625;
+    sides[0].map.offset.y = .4375;
+    sides[0].map.repeat.x = -1;
+    sides[1].map.wrapS = THREE.RepeatWrapping;
+    sides[1].map.repeat.y = .5625;
+    sides[1].map.offset.y = .4375;
+    sides[5].map.wrapS = THREE.RepeatWrapping;
+    sides[5].map.repeat.y = .5625;
+    sides[5].map.offset.y = .4375;
+    
+    return sides;
+  }
+  else if (textureId == 136 ) {
+    //bed2
+    sides = sides(153,0,136,136,152,152);
+    
+    sides[0].map.wrapS = THREE.RepeatWrapping;
+    sides[0].map.repeat.y = .5625;
+    sides[0].map.offset.y = .4375;
+    sides[4].map.wrapS = THREE.RepeatWrapping;
+    sides[4].map.repeat.y = .5625;
+    sides[4].map.offset.y = .4375;
+    sides[5].map.wrapS = THREE.RepeatWrapping;
+    sides[5].map.repeat.y = .5625;
+    sides[5].map.offset.y = .4375;
+    sides[5].map.repeat.x = -1;
+    
+    return sides;
   }
   else if (textureId == 137) {
     //melon
