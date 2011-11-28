@@ -121,29 +121,42 @@ function structureBuild() {
       });
 
       $('#structure-node-form .xy-grid').selectable({
-        /*
+        
         selecting: function(event, ui){ 
-        $(".ui-selecting", this).each(function(){
-            $(this).css('background-image', 'url(' + '\'/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + $('input:radio[name=block_type]:checked').val() + '.png\')');
-            $(this).css('opacity', '1');
-        });
+          $(".ui-selecting:not(.ui-unselecting)", this).each(function(){
+              if($(this).attr('style')){
+                $(this).attr('oldstyle', $(this).attr('style'));
+              }
+              $(this).css('background-image', 'url(' + '\'/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + $('input:radio[name=block_type]:checked').val() + '.png\')');
+              $(this).css('opacity', '1');
+              $(this).addClass('ui-unselecting')
+          });
         },
-        */
-        selected: function(event, ui){ 
-          startTime = new Date().getTime();
-          $(".ui-selected", this).each(function(){
-            block = identifyBlock(this);
-            type = $('input:radio[name=block_type]:checked').val();
-            $(this).attr('class', 'mc-block '+ type);
-            blocks = addBlock(blocks,block);
-            return blocks;
+        
+        unselecting: function(event, ui){
+          $(".ui-unselecting:not(.ui-selecting)", this).each(function(){
+            console.log($(this).attr('oldstyle'));
+            if ($(this).attr('oldstyle')) {
+              $(this).attr('style', $(this).attr('oldstyle'));
+            }
+            else {
+              $(this).removeAttr('style');
+            }
+            $(this).removeAttr('oldstyle');
+            $(this).removeClass('ui-unselecting');
           });
         },
 
         stop: function(event, ui){
+          $(".ui-selected", this).each(function(){
+            $(this).removeAttr('oldstyle');
+            $(this).removeClass('ui-unselecting');
+            block = identifyBlock(this);
+            type = $('input:radio[name=block_type]:checked').val();
+            $(this).attr('class', 'mc-block '+ type);
+            blocks = addBlock(blocks,block);
+          });
           drawControls(currentZ, currentX, currentY, blocks);
-          endTime = new Date().getTime();
-          console.log('Execution time: ' + (Number(endTime) - Number(startTime)));
         }
       });
 
