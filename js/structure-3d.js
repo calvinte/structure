@@ -376,6 +376,7 @@ function blockTexture(textureId) {
     return sides(137,137,138,138,137,137);
   }
   else if (textureId == 81) {
+    //torch
     material = sides(81);
     material.map.wrapS = THREE.RepeatWrapping;
     material.map.wrapT = THREE.RepeatWrapping;
