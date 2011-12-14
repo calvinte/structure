@@ -58,268 +58,613 @@ window.onload=function(){
   }
   temp();
   function temp() {
-    temp[1] = '2',
-    temp[2] = '1',
-    temp[6] = '43',
-    temp[7] = '70',
-    temp[8] = '45',
-    temp[9] = '46',
-    temp[13] = '38',
-    temp[14] = '37',
-    temp[16] = '6',
-    temp[17] = '4',
-    temp[18] = '7',
-    temp[19] = '12',
-    temp[20] = '13',
-    temp[22] = '17',
-    temp[23] = '42',
-    temp[24] = '41',
-    temp[25] = '57',
-    temp[28] = '54',
-    temp[29] = '40',
-    temp[30] = '39',
-    temp[33] = '14',
-    temp[34] = '15',
-    temp[35] = '16',
-    temp[36] = '47',
-    temp[38] = '49',
-    temp[44] = '58',
-    temp[45] = '61',
-    temp[47] = '23',
-    temp[49] = '19',
-    temp[50] = '20',
-    temp[51] = '56',
-    temp[52] = '73',
-    temp[55] = '98',
-    temp[56] = '32',
-    temp[64] = '6:1',
-    temp[65] = '35',
-    temp[66] = '52',
-    temp[67] = '78',
-    temp[68] = '79',
-    temp[71] = '81',
-    temp[73] = '82',
-    temp[74] = '83',
-    temp[76] = '84',
-    temp[80] = '6:2',
-    temp[81] = '50',
-    temp[82] = '64',
-    temp[83] = '71',
-    temp[84] = '65',
-    temp[85] = '96',
-    temp[86] = '101',
-    temp[98] = '64',
-    temp[99] = '71',
-    temp[100] = '76',
-    temp[101] = '98:1',
-    temp[103] = '86',
-    temp[104] = '87',
-    temp[105] = '88',
-    temp[106] = '89',
-    temp[107] = '29',
-    temp[108] = '33',
-    temp[113] = '35:15',
-    temp[114] = '35:7',
-    temp[117] = '17:1',
-    temp[118] = '17:2',
-    temp[120] = '91',
-    temp[122] = '92',
-    temp[125] = '100',
-    temp[126] = '99',
-    temp[128] = '66',
-    temp[129] = '35:14',
-    temp[130] = '35:6',
-    temp[131] = '94',
-    temp[137] = '103',
-    temp[145] = '22',
-    temp[146] = '35:13',
-    temp[147] = '35:5',
-    temp[161] = '21',
-    temp[162] = '35:12',
-    temp[163] = '35:4',
-    temp[164] = '27',
-    temp[178] = '35:11',
-    temp[179] = '35:3',
-    temp[193] = '24',
-    temp[194] = '35:10',
-    temp[195] = '35:2',
-    temp[196] = '28',
-    temp[209] = '121',
-    temp[210] = '35:9',
-    temp[211] = '35:1',
-    temp[223] = '9',
-    temp[226] = '35:8',
-    temp[238] = '11'
+
+    temp["case '0':"] = 0,
+    temp["case '1':"] = 0,
+    temp["case '2':"] = 0,
+    temp["case '3':"] = 0,
+    temp["case '4':"] = 0,
+    temp["case '5':"] = 0,
+    temp["case '6':"] = 0,
+    temp["case '6:1':"] = 0,
+    temp["case '6:2':"] = 0,
+    temp["case '7':"] = 0,
+    temp["case '8':"] = 0,
+    temp["case '9':"] = 0,
+    temp["case '10':"] = 0,
+    temp["case '11':"] = 0,
+    temp["case '12':"] = 0,
+    temp["case '13':"] = 0,
+    temp["case '14':"] = 0,
+    temp["case '15':"] = 0,
+    temp["case '16':"] = 0,
+    temp["case '17':"] = 0,
+    temp["case '17:1':"] = 0,
+    temp["case '17:2':"] = 0,
+    temp["case '18':"] = 0,
+    temp["case '18:1':"] = 0,
+    temp["case '18:2':"] = 0,
+    temp["case '19':"] = 0,
+    temp["case '20':"] = 0,
+    temp["case '21':"] = 0,
+    temp["case '22':"] = 0,
+    temp["case '23':"] = 0,
+    temp["case '24':"] = 0,
+    temp["case '25':"] = 0,
+    temp["case '26':"] = 0,
+    temp["case '27':"] = 0,
+    temp["case '28':"] = 0,
+    temp["case '29':"] = 0,
+    temp["case '30':"] = 0,
+    temp["case '31':"] = 0,
+    temp["case '31:1':"] = 0,
+    temp["case '31:2':"] = 0,
+    temp["case '32':"] = 0,
+    temp["case '33':"] = 0,
+    temp["case '34':"] = 0,
+    temp["case '35':"] = 0,
+    temp["case '35:1':"] = 0,
+    temp["case '35:2':"] = 0,
+    temp["case '35:3':"] = 0,
+    temp["case '35:4':"] = 0,
+    temp["case '35:5':"] = 0,
+    temp["case '35:6':"] = 0,
+    temp["case '35:7':"] = 0,
+    temp["case '35:8':"] = 0,
+    temp["case '35:9':"] = 0,
+    temp["case '35:10':"] = 0,
+    temp["case '35:11':"] = 0,
+    temp["case '35:12':"] = 0,
+    temp["case '35:13':"] = 0,
+    temp["case '35:14':"] = 0,
+    temp["case '35:15':"] = 0,
+    temp["case '36':"] = 0,
+    temp["case '37':"] = 0,
+    temp["case '38':"] = 0,
+    temp["case '39':"] = 0,
+    temp["case '40':"] = 0,
+    temp["case '41':"] = 0,
+    temp["case '42':"] = 0,
+    temp["case '43':"] = 0,
+    temp["case '43:1':"] = 0,
+    temp["case '43:2':"] = 0,
+    temp["case '43:3':"] = 0,
+    temp["case '43:4':"] = 0,
+    temp["case '43:5':"] = 0,
+    temp["case '44':"] = 0,
+    temp["case '44:1':"] = 0,
+    temp["case '44:2':"] = 0,
+    temp["case '44:3':"] = 0,
+    temp["case '44:4':"] = 0,
+    temp["case '44:5':"] = 0,
+    temp["case '45':"] = 0,
+    temp["case '46':"] = 0,
+    temp["case '47':"] = 0,
+    temp["case '48':"] = 0,
+    temp["case '49':"] = 0,
+    temp["case '50':"] = 0,
+    temp["case '51':"] = 0,
+    temp["case '52':"] = 0,
+    temp["case '53':"] = 0,
+    temp["case '54':"] = 0,
+    temp["case '55':"] = 0,
+    temp["case '56':"] = 0,
+    temp["case '57':"] = 0,
+    temp["case '58':"] = 0,
+    temp["case '59':"] = 0,
+    temp["case '60':"] = 0,
+    temp["case '61':"] = 0,
+    temp["case '62':"] = 0,
+    temp["case '63':"] = 0,
+    temp["case '64':"] = 0,
+    temp["case '65':"] = 0,
+    temp["case '66':"] = 0,
+    temp["case '67':"] = 0,
+    temp["case '68':"] = 0,
+    temp["case '69':"] = 0,
+    temp["case '70':"] = 0,
+    temp["case '71':"] = 0,
+    temp["case '72':"] = 0,
+    temp["case '73':"] = 0,
+    temp["case '74':"] = 0,
+    temp["case '75':"] = 0,
+    temp["case '76':"] = 0,
+    temp["case '77':"] = 0,
+    temp["case '78':"] = 0,
+    temp["case '79':"] = 0,
+    temp["case '80':"] = 0,
+    temp["case '81':"] = 0,
+    temp["case '82':"] = 0,
+    temp["case '83':"] = 0,
+    temp["case '84':"] = 0,
+    temp["case '85':"] = 0,
+    temp["case '86':"] = 0,
+    temp["case '87':"] = 0,
+    temp["case '88':"] = 0,
+    temp["case '89':"] = 0,
+    temp["case '90':"] = 0,
+    temp["case '91':"] = 0,
+    temp["case '92':"] = 0,
+    temp["case '93':"] = 0,
+    temp["case '94':"] = 0,
+    temp["case '95':"] = 0,
+    temp["case '96':"] = 0,
+    temp["case '97':"] = 0,
+    temp["case '98':"] = 0,
+    temp["case '98:1':"] = 0,
+    temp["case '98:2':"] = 0,
+    temp["case '99':"] = 0,
+    temp["case '100':"] = 0,
+    temp["case '101':"] = 0,
+    temp["case '102':"] = 0,
+    temp["case '103':"] = 0,
+    temp["case '104':"] = 0,
+    temp["case '105':"] = 0,
+    temp["case '106':"] = 0,
+    temp["case '107':"] = 0,
+    temp["case '108':"] = 0,
+    temp["case '109':"] = 0,
+    temp["case '110':"] = 0,
+    temp["case '111':"] = 0,
+    temp["case '112':"] = 0,
+    temp["case '113':"] = 0,
+    temp["case '114':"] = 0,
+    temp["case '115':"] = 0,
+    temp["case '116':"] = 0,
+    temp["case '117':"] = 0,
+    temp["case '118':"] = 0,
+    temp["case '119':"] = 0,
+    temp["case '120':"] = 0,
+    temp["case '121':"] = 0,
+    temp["case '122':"] = 0,
+ 
+    temp["case '2':"] = "x = '0'; y = '0';",
+    temp["case '1':"] = "x = '1'; y = '0';",
+    temp["case '43':"] = "x = '5'; y = '0';",
+    temp["case '70':"] = "x = '6'; y = '0';",
+    temp["case '45':"] = "x = '7'; y = '0';",
+    temp["case '46':"] = "x = '8'; y = '0';",
+    temp["case '38':"] = "x = '12'; y = '0';",
+    temp["case '37':"] = "x = '13'; y = '0';",
+    temp["case '6':"] = "x = '-1'; y = '1';",
+    temp["case '4':"] = "x = '0'; y = '1';",
+    temp["case '7':"] = "x = '1'; y = '1';",
+    temp["case '12':"] = "x = '2'; y = '1';",
+    temp["case '13':"] = "x = '3'; y = '1';",
+    temp["case '17':"] = "x = '5'; y = '1';",
+    temp["case '42':"] = "x = '6'; y = '1';",
+    temp["case '41':"] = "x = '7'; y = '1';",
+    temp["case '57':"] = "x = '8'; y = '1';",
+    temp["case '54':"] = "x = '11'; y = '1';",
+    temp["case '40':"] = "x = '12'; y = '1';",
+    temp["case '39':"] = "x = '13'; y = '1';",
+    temp["case '14':"] = "x = '0'; y = '2';",
+    temp["case '15':"] = "x = '1'; y = '2';",
+    temp["case '16':"] = "x = '2'; y = '2';",
+    temp["case '47':"] = "x = '3'; y = '2';",
+    temp["case '49':"] = "x = '5'; y = '2';",
+    temp["case '58':"] = "x = '11'; y = '2';",
+    temp["case '61':"] = "x = '12'; y = '2';",
+    temp["case '23':"] = "x = '14'; y = '2';",
+    temp["case '19':"] = "x = '0'; y = '3';",
+    temp["case '20':"] = "x = '1'; y = '3';",
+    temp["case '56':"] = "x = '2'; y = '3';",
+    temp["case '73':"] = "x = '3'; y = '3';",
+    temp["case '98':"] = "x = '6'; y = '3';",
+    temp["case '32':"] = "x = '7'; y = '3';",
+    temp["case '6:1':"] = "x = '-1'; y = '4';",
+    temp["case '35':"] = "x = '0'; y = '4';",
+    temp["case '52':"] = "x = '1'; y = '4';",
+    temp["case '78':"] = "x = '2'; y = '4';",
+    temp["case '79':"] = "x = '3'; y = '4';",
+    temp["case '81':"] = "x = '6'; y = '4';",
+    temp["case '82':"] = "x = '8'; y = '4';",
+    temp["case '83':"] = "x = '9'; y = '4';",
+    temp["case '84':"] = "x = '11'; y = '4';",
+    temp["case '6:2':"] = "x = '-1'; y = '5';",
+    temp["case '50':"] = "x = '0'; y = '5';",
+    temp["case '64':"] = "x = '1'; y = '5';",
+    temp["case '71':"] = "x = '2'; y = '5';",
+    temp["case '65':"] = "x = '3'; y = '5';",
+    temp["case '96':"] = "x = '4'; y = '5';",
+    temp["case '101':"] = "x = '5'; y = '5';",
+    temp["case '64':"] = "x = '1'; y = '6';",
+    temp["case '71':"] = "x = '2'; y = '6';",
+    temp["case '76':"] = "x = '3'; y = '6';",
+    temp["case '98:1':"] = "x = '4'; y = '6';",
+    temp["case '86':"] = "x = '6'; y = '6';",
+    temp["case '87':"] = "x = '7'; y = '6';",
+    temp["case '88':"] = "x = '8'; y = '6';",
+    temp["case '89':"] = "x = '9'; y = '6';",
+    temp["case '29':"] = "x = '10'; y = '6';",
+    temp["case '33':"] = "x = '11'; y = '6';",
+    temp["case '35:15':"] = "x = '0'; y = '7';",
+    temp["case '35:7':"] = "x = '1'; y = '7';",
+    temp["case '17:1':"] = "x = '4'; y = '7';",
+    temp["case '17:2':"] = "x = '5'; y = '7';",
+    temp["case '91':"] = "x = '7'; y = '7';",
+    temp["case '92':"] = "x = '9'; y = '7';",
+    temp["case '100':"] = "x = '12'; y = '7';",
+    temp["case '99':"] = "x = '13'; y = '7';",
+    temp["case '66':"] = "x = '-1'; y = '8';",
+    temp["case '35:14':"] = "x = '0'; y = '8';",
+    temp["case '35:6':"] = "x = '1'; y = '8';",
+    temp["case '94':"] = "x = '2'; y = '8';",
+    temp["case '103':"] = "x = '8'; y = '8';",
+    temp["case '22':"] = "x = '0'; y = '9';",
+    temp["case '35:13':"] = "x = '1'; y = '9';",
+    temp["case '35:5':"] = "x = '2'; y = '9';",
+    temp["case '21':"] = "x = '0'; y = '10';",
+    temp["case '35:12':"] = "x = '1'; y = '10';",
+    temp["case '35:4':"] = "x = '2'; y = '10';",
+    temp["case '27':"] = "x = '3'; y = '10';",
+    temp["case '35:11':"] = "x = '1'; y = '11';",
+    temp["case '35:3':"] = "x = '2'; y = '11';",
+    temp["case '24':"] = "x = '0'; y = '12';",
+    temp["case '35:10':"] = "x = '1'; y = '12';",
+    temp["case '35:2':"] = "x = '2'; y = '12';",
+    temp["case '28':"] = "x = '3'; y = '12';",
+    temp["case '121':"] = "x = '0'; y = '13';",
+    temp["case '35:9':"] = "x = '1'; y = '13';",
+    temp["case '35:1':"] = "x = '2'; y = '13';",
+    temp["case '9':"] = "x = '14'; y = '13';",
+    temp["case '35:8':"] = "x = '1'; y = '14';",
+    temp["case '11':"] = "x = '13'; y = '14';"
     
     fixed = new String();
     for(index in temp) {
-      y = Math.floor(index/16);
-      x = (index-(y*16))-1;
-      fixed += '\ncase \'' + temp[index] + '\':\n x = \'' + x + '\';\n y = \'' + y + '\';';
+      if (temp[index] != 0) {
+        parts = new Array();
+        parts = temp[index].split(';');
+        fixed += index + '\n  ' + parts[0] + '\n ' + parts[1] + '\n';
+      }
+      else {
+        fixed += index + '\n';
+      }
     }
     console.log(fixed);
   }
   
   function textureDefinition(blockid) {
     switch (blockid) {
-      case   '0':
-      case   '1':
-      case   '2':
-      case   '3':
-      case   '4':
-      case   '5':
-      case   '6':
-      case   '6:1':
-      case   '6:2':
-      case   '7':
-      case   '8':
-      case   '9':
-      case  '10':
-      case  '11':
-      case  '12':
-      case  '13':
-      case  '14':
-      case  '15':
-      case  '16':
-      case  '17':
-      case  '17:1':
-      case  '17:2':
-      case  '18':
-      case  '18:1':
-      case  '18:2':
-      case  '19':
-      case  '20':
-      case  '21':
-      case  '22':
-      case  '23':
-      case  '24':
-      case  '25':
-      case  '26':
-      case  '27':
-      case  '28':
-      case  '29':
-      case  '30':
-      case  '31':
-      case  '31:1':
-      case  '31:2':
-      case  '32':
-      case  '33':
-      case  '34':
-      case  '35':
-      case  '35:1':
-      case  '35:2':
-      case  '35:3':
-      case  '35:4':
-      case  '35:5':
-      case  '35:6':
-      case  '35:7':
-      case  '35:8':
-      case  '35:9':
-      case  '35:10':
-      case  '35:11':
-      case  '35:12':
-      case  '35:13':
-      case  '35:14':
-      case  '35:15':
-      case  '36':
-      case  '37':
-      case  '38':
-      case  '39':
-      case  '40':
-      case  '41':
-      case  '42':
-      case  '43':
-      case  '43:1':
-      case  '43:2':
-      case  '43:3':
-      case  '43:4':
-      case  '43:5':
-      case  '44':
-      case  '44:1':
-      case  '44:2':
-      case  '44:3':
-      case  '44:4':
-      case  '44:5':
-      case  '45':
-      case  '46':
-      case  '47':
-      case  '48':
-      case  '49':
-      case  '50':
-      case  '51':
-      case  '52':
-      case  '53':
-      case  '54':
-      case  '55':
-      case  '56':
-      case  '57':
-      case  '58':
-      case  '59':
-      case  '60':
-      case  '61':
-      case  '62':
-      case  '63':
-      case  '64':
-      case  '65':
-      case  '66':
-      case  '67':
-      case  '68':
-      case  '69':
-      case  '70':
-      case  '71':
-      case  '72':
-      case  '73':
-      case  '74':
-      case  '75':
-      case  '76':
-      case  '77':
-      case  '78':
-      case  '79':
-      case  '80':
-      case  '81':
-      case  '82':
-      case  '83':
-      case  '84':
-      case  '85':
-      case  '86':
-      case  '87':
-      case  '88':
-      case  '89':
-      case  '90':
-      case  '91':
-      case  '92':
-      case  '93':
-      case  '94':
-      case  '95':
-      case  '96':
-      case  '97':
-      case  '98':
-      case  '98:1':
-      case  '98:2':
-      case  '99':
-      case  '100':
-      case  '101':
-      case  '102':
-      case  '103':
-      case  '104':
-      case  '105':
-      case  '106':
-      case  '107':
-      case  '108':
-      case  '109':
-      case  '110':
-      case  '111':
-      case  '112':
-      case  '113':
-      case  '114':
-      case  '115':
-      case  '116':
-      case  '117':
-      case  '118':
-      case  '119':
-      case  '120':
-      case  '121':
-      case  '122':
+      case '0':
+      case '1':
+        x = '1'
+        y = '0'
+      case '2':
+        x = '0'
+        y = '0'
+      case '3':
+      case '4':
+        x = '0'
+        y = '1'
+      case '5':
+      case '6':
+        x = '-1'
+        y = '1'
+      case '6:1':
+        x = '-1'
+        y = '4'
+      case '6:2':
+        x = '-1'
+        y = '5'
+      case '7':
+        x = '1'
+        y = '1'
+      case '8':
+      case '9':
+        x = '14'
+        y = '13'
+      case '10':
+      case '11':
+        x = '13'
+        y = '14'
+      case '12':
+        x = '2'
+        y = '1'
+      case '13':
+        x = '3'
+        y = '1'
+      case '14':
+        x = '0'
+        y = '2'
+      case '15':
+        x = '1'
+        y = '2'
+      case '16':
+        x = '2'
+        y = '2'
+      case '17':
+        x = '5'
+        y = '1'
+      case '17:1':
+        x = '4'
+        y = '7'
+      case '17:2':
+        x = '5'
+        y = '7'
+      case '18':
+      case '18:1':
+      case '18:2':
+      case '19':
+        x = '0'
+        y = '3'
+      case '20':
+        x = '1'
+        y = '3'
+      case '21':
+        x = '0'
+        y = '10'
+      case '22':
+        x = '0'
+        y = '9'
+      case '23':
+        x = '14'
+        y = '2'
+      case '24':
+        x = '0'
+        y = '12'
+      case '25':
+      case '26':
+      case '27':
+        x = '3'
+        y = '10'
+      case '28':
+        x = '3'
+        y = '12'
+      case '29':
+        x = '10'
+        y = '6'
+      case '30':
+      case '31':
+      case '31:1':
+      case '31:2':
+      case '32':
+        x = '7'
+        y = '3'
+      case '33':
+        x = '11'
+        y = '6'
+      case '34':
+      case '35':
+        x = '0'
+        y = '4'
+      case '35:1':
+        x = '2'
+        y = '13'
+      case '35:2':
+        x = '2'
+        y = '12'
+      case '35:3':
+        x = '2'
+        y = '11'
+      case '35:4':
+        x = '2'
+        y = '10'
+      case '35:5':
+        x = '2'
+        y = '9'
+      case '35:6':
+        x = '1'
+        y = '8'
+      case '35:7':
+        x = '1'
+        y = '7'
+      case '35:8':
+        x = '1'
+        y = '14'
+      case '35:9':
+        x = '1'
+        y = '13'
+      case '35:10':
+        x = '1'
+        y = '12'
+      case '35:11':
+        x = '1'
+        y = '11'
+      case '35:12':
+        x = '1'
+        y = '10'
+      case '35:13':
+        x = '1'
+        y = '9'
+      case '35:14':
+        x = '0'
+        y = '8'
+      case '35:15':
+        x = '0'
+        y = '7'
+      case '36':
+      case '37':
+        x = '13'
+        y = '0'
+      case '38':
+        x = '12'
+        y = '0'
+      case '39':
+        x = '13'
+        y = '1'
+      case '40':
+        x = '12'
+        y = '1'
+      case '41':
+        x = '7'
+        y = '1'
+      case '42':
+        x = '6'
+        y = '1'
+      case '43':
+        x = '5'
+        y = '0'
+      case '43:1':
+      case '43:2':
+      case '43:3':
+      case '43:4':
+      case '43:5':
+      case '44':
+      case '44:1':
+      case '44:2':
+      case '44:3':
+      case '44:4':
+      case '44:5':
+      case '45':
+        x = '7'
+        y = '0'
+      case '46':
+        x = '8'
+        y = '0'
+      case '47':
+        x = '3'
+        y = '2'
+      case '48':
+      case '49':
+        x = '5'
+        y = '2'
+      case '50':
+        x = '0'
+        y = '5'
+      case '51':
+      case '52':
+        x = '1'
+        y = '4'
+      case '53':
+      case '54':
+        x = '11'
+        y = '1'
+      case '55':
+      case '56':
+        x = '2'
+        y = '3'
+      case '57':
+        x = '8'
+        y = '1'
+      case '58':
+        x = '11'
+        y = '2'
+      case '59':
+      case '60':
+      case '61':
+        x = '12'
+        y = '2'
+      case '62':
+      case '63':
+      case '64':
+        x = '1'
+        y = '6'
+      case '65':
+        x = '3'
+        y = '5'
+      case '66':
+        x = '-1'
+        y = '8'
+      case '67':
+      case '68':
+      case '69':
+      case '70':
+        x = '6'
+        y = '0'
+      case '71':
+        x = '2'
+        y = '6'
+      case '72':
+      case '73':
+        x = '3'
+        y = '3'
+      case '74':
+      case '75':
+      case '76':
+        x = '3'
+        y = '6'
+      case '77':
+      case '78':
+        x = '2'
+        y = '4'
+      case '79':
+        x = '3'
+        y = '4'
+      case '80':
+      case '81':
+        x = '6'
+        y = '4'
+      case '82':
+        x = '8'
+        y = '4'
+      case '83':
+        x = '9'
+        y = '4'
+      case '84':
+        x = '11'
+        y = '4'
+      case '85':
+      case '86':
+        x = '6'
+        y = '6'
+      case '87':
+        x = '7'
+        y = '6'
+      case '88':
+        x = '8'
+        y = '6'
+      case '89':
+        x = '9'
+        y = '6'
+      case '90':
+      case '91':
+        x = '7'
+        y = '7'
+      case '92':
+        x = '9'
+        y = '7'
+      case '93':
+      case '94':
+        x = '2'
+        y = '8'
+      case '95':
+      case '96':
+        x = '4'
+        y = '5'
+      case '97':
+      case '98':
+        x = '6'
+        y = '3'
+      case '98:1':
+        x = '4'
+        y = '6'
+      case '98:2':
+      case '99':
+        x = '13'
+        y = '7'
+      case '100':
+        x = '12'
+        y = '7'
+      case '101':
+        x = '5'
+        y = '5'
+      case '102':
+      case '103':
+        x = '8'
+        y = '8'
+      case '104':
+      case '105':
+      case '106':
+      case '107':
+      case '108':
+      case '109':
+      case '110':
+      case '111':
+      case '112':
+      case '113':
+      case '114':
+      case '115':
+      case '116':
+      case '117':
+      case '118':
+      case '119':
+      case '120':
+      case '121':
+        x = '0'
+        y = '13'
+      case '122':
     }
   }
 
