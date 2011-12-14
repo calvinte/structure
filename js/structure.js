@@ -56,6 +56,272 @@ window.onload=function(){
 
     return blocks;
   }
+  temp();
+  function temp() {
+    temp[1] = '2',
+    temp[2] = '1',
+    temp[6] = '43',
+    temp[7] = '70',
+    temp[8] = '45',
+    temp[9] = '46',
+    temp[13] = '38',
+    temp[14] = '37',
+    temp[16] = '6',
+    temp[17] = '4',
+    temp[18] = '7',
+    temp[19] = '12',
+    temp[20] = '13',
+    temp[22] = '17',
+    temp[23] = '42',
+    temp[24] = '41',
+    temp[25] = '57',
+    temp[28] = '54',
+    temp[29] = '40',
+    temp[30] = '39',
+    temp[33] = '14',
+    temp[34] = '15',
+    temp[35] = '16',
+    temp[36] = '47',
+    temp[38] = '49',
+    temp[44] = '58',
+    temp[45] = '61',
+    temp[47] = '23',
+    temp[49] = '19',
+    temp[50] = '20',
+    temp[51] = '56',
+    temp[52] = '73',
+    temp[55] = '98',
+    temp[56] = '32',
+    temp[64] = '6:1',
+    temp[65] = '35',
+    temp[66] = '52',
+    temp[67] = '78',
+    temp[68] = '79',
+    temp[71] = '81',
+    temp[73] = '82',
+    temp[74] = '83',
+    temp[76] = '84',
+    temp[80] = '6:2',
+    temp[81] = '50',
+    temp[82] = '64',
+    temp[83] = '71',
+    temp[84] = '65',
+    temp[85] = '96',
+    temp[86] = '101',
+    temp[98] = '64',
+    temp[99] = '71',
+    temp[100] = '76',
+    temp[101] = '98:1',
+    temp[103] = '86',
+    temp[104] = '87',
+    temp[105] = '88',
+    temp[106] = '89',
+    temp[107] = '29',
+    temp[108] = '33',
+    temp[113] = '35:15',
+    temp[114] = '35:7',
+    temp[117] = '17:1',
+    temp[118] = '17:2',
+    temp[120] = '91',
+    temp[122] = '92',
+    temp[125] = '100',
+    temp[126] = '99',
+    temp[128] = '66',
+    temp[129] = '35:14',
+    temp[130] = '35:6',
+    temp[131] = '94',
+    temp[137] = '103',
+    temp[145] = '22',
+    temp[146] = '35:13',
+    temp[147] = '35:5',
+    temp[161] = '21',
+    temp[162] = '35:12',
+    temp[163] = '35:4',
+    temp[164] = '27',
+    temp[178] = '35:11',
+    temp[179] = '35:3',
+    temp[193] = '24',
+    temp[194] = '35:10',
+    temp[195] = '35:2',
+    temp[196] = '28',
+    temp[209] = '121',
+    temp[210] = '35:9',
+    temp[211] = '35:1',
+    temp[223] = '9',
+    temp[226] = '35:8',
+    temp[238] = '11'
+    
+    fixed = new String();
+    for(index in temp) {
+      y = Math.floor(index/16);
+      x = (index-(y*16))-1;
+      fixed += '\ncase \'' + temp[index] + '\':\n x = \'' + x + '\';\n y = \'' + y + '\';';
+    }
+    console.log(fixed);
+  }
+  
+  function textureDefinition(blockid) {
+    switch (blockid) {
+      case   '0':
+      case   '1':
+      case   '2':
+      case   '3':
+      case   '4':
+      case   '5':
+      case   '6':
+      case   '6:1':
+      case   '6:2':
+      case   '7':
+      case   '8':
+      case   '9':
+      case  '10':
+      case  '11':
+      case  '12':
+      case  '13':
+      case  '14':
+      case  '15':
+      case  '16':
+      case  '17':
+      case  '17:1':
+      case  '17:2':
+      case  '18':
+      case  '18:1':
+      case  '18:2':
+      case  '19':
+      case  '20':
+      case  '21':
+      case  '22':
+      case  '23':
+      case  '24':
+      case  '25':
+      case  '26':
+      case  '27':
+      case  '28':
+      case  '29':
+      case  '30':
+      case  '31':
+      case  '31:1':
+      case  '31:2':
+      case  '32':
+      case  '33':
+      case  '34':
+      case  '35':
+      case  '35:1':
+      case  '35:2':
+      case  '35:3':
+      case  '35:4':
+      case  '35:5':
+      case  '35:6':
+      case  '35:7':
+      case  '35:8':
+      case  '35:9':
+      case  '35:10':
+      case  '35:11':
+      case  '35:12':
+      case  '35:13':
+      case  '35:14':
+      case  '35:15':
+      case  '36':
+      case  '37':
+      case  '38':
+      case  '39':
+      case  '40':
+      case  '41':
+      case  '42':
+      case  '43':
+      case  '43:1':
+      case  '43:2':
+      case  '43:3':
+      case  '43:4':
+      case  '43:5':
+      case  '44':
+      case  '44:1':
+      case  '44:2':
+      case  '44:3':
+      case  '44:4':
+      case  '44:5':
+      case  '45':
+      case  '46':
+      case  '47':
+      case  '48':
+      case  '49':
+      case  '50':
+      case  '51':
+      case  '52':
+      case  '53':
+      case  '54':
+      case  '55':
+      case  '56':
+      case  '57':
+      case  '58':
+      case  '59':
+      case  '60':
+      case  '61':
+      case  '62':
+      case  '63':
+      case  '64':
+      case  '65':
+      case  '66':
+      case  '67':
+      case  '68':
+      case  '69':
+      case  '70':
+      case  '71':
+      case  '72':
+      case  '73':
+      case  '74':
+      case  '75':
+      case  '76':
+      case  '77':
+      case  '78':
+      case  '79':
+      case  '80':
+      case  '81':
+      case  '82':
+      case  '83':
+      case  '84':
+      case  '85':
+      case  '86':
+      case  '87':
+      case  '88':
+      case  '89':
+      case  '90':
+      case  '91':
+      case  '92':
+      case  '93':
+      case  '94':
+      case  '95':
+      case  '96':
+      case  '97':
+      case  '98':
+      case  '98:1':
+      case  '98:2':
+      case  '99':
+      case  '100':
+      case  '101':
+      case  '102':
+      case  '103':
+      case  '104':
+      case  '105':
+      case  '106':
+      case  '107':
+      case  '108':
+      case  '109':
+      case  '110':
+      case  '111':
+      case  '112':
+      case  '113':
+      case  '114':
+      case  '115':
+      case  '116':
+      case  '117':
+      case  '118':
+      case  '119':
+      case  '120':
+      case  '121':
+      case  '122':
+    }
+  }
 
 function structureBuild() {
   (function ($) {
@@ -186,10 +452,11 @@ function structureBuild() {
        * @return string as either ↑, →, ↓ or ←
        */
       function rotationSymbol(rotation) {
-             if (rotation == '0') { return '↑'; }
-        else if (rotation == '1') { return '→'; }
-        else if (rotation == '2') { return '↓'; }
-        else { return '←'; }
+             if (rotation == '0') { symbol = '\u2191'; }
+        else if (rotation == '1') { symbol = '\u2192'; }
+        else if (rotation == '2') { symbol = '\u2193'; }
+        else { symbol = '\u2190'; }
+        return symbol;
       }
       
 

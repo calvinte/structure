@@ -52,7 +52,7 @@ function structure_node_content_form($node, $form_state) {
       '#weight' => -5,
     );
   }
-  /*
+
   $form['block_type'] = array(
     '#type' => 'radios', 
     '#title' => t('Block Type'), 
@@ -218,9 +218,8 @@ function structure_node_content_form($node, $form_state) {
       '122'   => t('Dragon Egg'),
       ),
     );
-   * 
-   */
      
+  /*
   $form['block_type'] = array(
     '#type' => 'radios', 
     '#title' => t('Block Type'), 
@@ -482,6 +481,8 @@ function structure_node_content_form($node, $form_state) {
       //255 => t('Unknown'),
       ),
     );
+   * 
+   */
     
     $form['controls'] = array(
     	'#prefix' => '<div class="controls">',
@@ -603,11 +604,6 @@ function structure_view($node, $view_mode) {
 
     $node->content['mc_3d']['canvas'] = array(
       '#markup' => '<div class="canvas-wrapper"><span class="enable-3d-warning">If you are using Google Chrome or Mozilla Firefox you can <a href="#enable3d" class="enable-3d">enable 3d</a>.</span></div>',
-    );
-  }
-
-  return $node;
-}>.</span></div>',
     );
   }
 
