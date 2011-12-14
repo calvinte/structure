@@ -60,344 +60,503 @@ window.onload=function(){
   function textureDefinition(blockid) {
     switch (blockid) {
       case '0':
+        break;
       case '1':
         x = '1'
         y = '0'
+        break;
       case '2':
         x = '0'
         y = '0'
+        break;
       case '3':
+        break;
       case '4':
         x = '0'
         y = '1'
+        break;
       case '5':
+        break;
       case '6':
         x = '-1'
         y = '1'
+        break;
       case '6:1':
         x = '-1'
         y = '4'
+        break;
       case '6:2':
         x = '-1'
         y = '5'
+        break;
       case '7':
         x = '1'
         y = '1'
+        break;
       case '8':
+        break;
       case '9':
         x = '14'
         y = '13'
+        break;
       case '10':
+        break;
       case '11':
         x = '13'
         y = '14'
+        break;
       case '12':
         x = '2'
         y = '1'
+        break;
       case '13':
         x = '3'
         y = '1'
+        break;
       case '14':
         x = '0'
         y = '2'
+        break;
       case '15':
         x = '1'
         y = '2'
+        break;
       case '16':
         x = '2'
         y = '2'
+        break;
       case '17':
         x = '5'
         y = '1'
+        break;
       case '17:1':
         x = '4'
         y = '7'
+        break;
       case '17:2':
         x = '5'
         y = '7'
+        break;
       case '18':
+        break;
       case '18:1':
+        break;
       case '18:2':
+        break;
       case '19':
         x = '0'
         y = '3'
+        break;
       case '20':
         x = '1'
         y = '3'
+        break;
       case '21':
         x = '0'
         y = '10'
+        break;
       case '22':
         x = '0'
         y = '9'
+        break;
       case '23':
         x = '14'
         y = '2'
+        break;
       case '24':
         x = '0'
         y = '12'
+        break;
       case '25':
+        break;
       case '26':
+        break;
       case '27':
         x = '3'
         y = '10'
+        break;
       case '28':
         x = '3'
         y = '12'
+        break;
       case '29':
         x = '10'
         y = '6'
+        break;
       case '30':
+        break;
       case '31':
+        break;
       case '31:1':
+        break;
       case '31:2':
+        break;
       case '32':
         x = '7'
         y = '3'
+        break;
       case '33':
         x = '11'
         y = '6'
+        break;
       case '34':
+        break;
       case '35':
         x = '0'
         y = '4'
+        break;
       case '35:1':
         x = '2'
         y = '13'
+        break;
       case '35:2':
         x = '2'
         y = '12'
+        break;
       case '35:3':
         x = '2'
         y = '11'
+        break;
       case '35:4':
         x = '2'
         y = '10'
+        break;
       case '35:5':
         x = '2'
         y = '9'
+        break;
       case '35:6':
         x = '1'
         y = '8'
+        break;
       case '35:7':
         x = '1'
         y = '7'
+        break;
       case '35:8':
         x = '1'
         y = '14'
+        break;
       case '35:9':
         x = '1'
         y = '13'
+        break;
       case '35:10':
         x = '1'
         y = '12'
+        break;
       case '35:11':
         x = '1'
         y = '11'
+        break;
       case '35:12':
         x = '1'
         y = '10'
+        break;
       case '35:13':
         x = '1'
         y = '9'
+        break;
       case '35:14':
         x = '0'
         y = '8'
+        break;
       case '35:15':
         x = '0'
         y = '7'
+        break;
       case '36':
+        break;
       case '37':
         x = '13'
         y = '0'
+        break;
       case '38':
         x = '12'
         y = '0'
+        break;
       case '39':
         x = '13'
         y = '1'
+        break;
       case '40':
         x = '12'
         y = '1'
+        break;
       case '41':
         x = '7'
         y = '1'
+        break;
       case '42':
         x = '6'
         y = '1'
+        break;
       case '43':
         x = '5'
         y = '0'
+        break;
       case '43:1':
+        break;
       case '43:2':
+        break;
       case '43:3':
+        break;
       case '43:4':
+        break;
       case '43:5':
+        break;
       case '44':
+        break;
       case '44:1':
+        break;
       case '44:2':
+        break;
       case '44:3':
+        break;
       case '44:4':
+        break;
       case '44:5':
+        break;
       case '45':
         x = '7'
         y = '0'
+        break;
       case '46':
         x = '8'
         y = '0'
+        break;
       case '47':
         x = '3'
         y = '2'
+        break;
       case '48':
+        break;
       case '49':
         x = '5'
         y = '2'
+        break;
       case '50':
         x = '0'
         y = '5'
+        break;
       case '51':
+        break;
       case '52':
         x = '1'
         y = '4'
+        break;
       case '53':
+        break;
       case '54':
         x = '11'
         y = '1'
+        break;
       case '55':
+        break;
       case '56':
         x = '2'
         y = '3'
+        break;
       case '57':
         x = '8'
         y = '1'
+        break;
       case '58':
         x = '11'
         y = '2'
+        break;
       case '59':
+        break;
       case '60':
+        break;
       case '61':
         x = '12'
         y = '2'
+        break;
       case '62':
+        break;
       case '63':
+        break;
       case '64':
         x = '1'
         y = '6'
+        break;
       case '65':
         x = '3'
         y = '5'
+        break;
       case '66':
         x = '-1'
         y = '8'
+        break;
       case '67':
+        break;
       case '68':
+        break;
       case '69':
+        break;
       case '70':
         x = '6'
         y = '0'
+        break;
       case '71':
         x = '2'
         y = '6'
+        break;
       case '72':
+        break;
       case '73':
         x = '3'
         y = '3'
+        break;
       case '74':
+        break;
       case '75':
+        break;
       case '76':
         x = '3'
         y = '6'
+        break;
       case '77':
+        break;
       case '78':
         x = '2'
         y = '4'
+        break;
       case '79':
         x = '3'
         y = '4'
+        break;
       case '80':
+        break;
       case '81':
         x = '6'
         y = '4'
+        break;
       case '82':
         x = '8'
         y = '4'
+        break;
       case '83':
         x = '9'
         y = '4'
+        break;
       case '84':
         x = '11'
         y = '4'
+        break;
       case '85':
+        break;
       case '86':
         x = '6'
         y = '6'
+        break;
       case '87':
         x = '7'
         y = '6'
+        break;
       case '88':
         x = '8'
         y = '6'
+        break;
       case '89':
         x = '9'
         y = '6'
+        break;
       case '90':
+        break;
       case '91':
         x = '7'
         y = '7'
+        break;
       case '92':
         x = '9'
         y = '7'
+        break;
       case '93':
+        break;
       case '94':
         x = '2'
         y = '8'
+        break;
       case '95':
+        break;
       case '96':
         x = '4'
         y = '5'
+        break;
       case '97':
+        break;
       case '98':
         x = '6'
         y = '3'
+        break;
       case '98:1':
         x = '4'
         y = '6'
+        break;
       case '98:2':
+        break;
       case '99':
         x = '13'
         y = '7'
+        break;
       case '100':
         x = '12'
         y = '7'
+        break;
       case '101':
         x = '5'
         y = '5'
+        break;
       case '102':
+        break;
       case '103':
         x = '8'
         y = '8'
+        break;
       case '104':
+        break;
       case '105':
+        break;
       case '106':
+        break;
       case '107':
+        break;
       case '108':
+        break;
       case '109':
+        break;
       case '110':
+        break;
       case '111':
+        break;
       case '112':
+        break;
       case '113':
+        break;
       case '114':
+        break;
       case '115':
+        break;
       case '116':
+        break;
       case '117':
+        break;
       case '118':
+        break;
       case '119':
+        break;
       case '120':
+        break;
       case '121':
         x = '0'
         y = '13'
+        break;
       case '122':
     }
+    
+    return new Array(x*16,y*16);
   }
 
 function structureBuild() {
@@ -490,7 +649,9 @@ function structureBuild() {
               if($(this).attr('style')){
                 $(this).attr('oldstyle', $(this).attr('style'));
               }
-              $(this).css('background-image', 'url(' + '\'/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + $('input:radio[name=block_type]:checked').val() + '.png\')');
+              backgroundPosition = textureDefinition($('input:radio[name=block_type]:checked').val());
+              $(this).css('background-image', 'url(' + '\'/' + Drupal.settings.structurePath + '/sprites/mc-sprite.png\')');
+              $(this).css('background-position', '-' + backgroundPosition[0] + 'px -' + backgroundPosition[1] + 'px');
               $(this).css('opacity', '1');
               $(this).addClass('ui-unselecting')
           });
@@ -630,8 +791,10 @@ function structureBuild() {
         for (var i = 0; blocks[i]; i++) {
            // If there is a matching .xy-grid .mc-blocks element style it
             if($('#Z'+ blocks[i][0] + '_X'+ blocks[i][1] + '_Y' + blocks[i][2]).length == 1){
+              backgroundPosition = textureDefinition(blocks[i][3]);
               $('#Z'+ blocks[i][0] + '_X'+ blocks[i][1] + '_Y' + blocks[i][2]).attr('style', '\n\
-              background-image: url(\'/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + blocks[i][3] + '.png\');\n\
+              background-image: url(' + '\'/' + Drupal.settings.structurePath + '/sprites/mc-sprite.png\');\n\
+              background-position: -' + backgroundPosition[0] + 'px -' + backgroundPosition[1] + 'px;\n\
               transform:rotate(' + blocks[i][4]*90 + 'deg);\n\
               -ms-transform:rotate(' + blocks[i][4]*90 + 'deg);\n\
               -moz-transform:rotate(' + blocks[i][4]*90 + 'deg);\n\
