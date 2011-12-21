@@ -59,147 +59,161 @@ window.onload=function(){
   
   function textureDefinition(blockid) {
     switch (blockid) {
-      case '0':
+      case '0': //air
         break;
-      case '1':
+      case '1': //stone
         x = '1'
         y = '0'
         break;
-      case '2':
+      case '2': //grass
         x = '0'
         y = '0'
         break;
-      case '3':
+      case '3': //dirt
+        x = '2'
+        y = '0'
         break;
-      case '4':
+      case '4': //cobblestone
         x = '0'
         y = '1'
         break;
-      case '5':
+      case '5': //wooden plank
+        x = '4';
+        y = '0';
         break;
-      case '6':
+      case '6': //sapling
         x = '-1'
         y = '1'
         break;
-      case '6:1':
+      case '6:1': //sapling(pine)
         x = '-1'
         y = '4'
         break;
-      case '6:2':
+      case '6:2': //sapling(birch)
         x = '-1'
         y = '5'
         break;
-      case '7':
+      case '7': //bedrock
         x = '1'
         y = '1'
         break;
-      case '8':
+      case '8': //water (no spread)
         break;
-      case '9':
+      case '9': //water
         x = '14'
         y = '13'
         break;
-      case '10':
+      case '10': //lava
         break;
-      case '11':
+      case '11': //lava (no spread)
         x = '13'
         y = '14'
         break;
-      case '12':
+      case '12': //sand
         x = '2'
         y = '1'
         break;
-      case '13':
+      case '13': //gravel
         x = '3'
         y = '1'
         break;
-      case '14':
+      case '14': //gold ore
         x = '0'
         y = '2'
         break;
-      case '15':
+      case '15': //iron ore
         x = '1'
         y = '2'
         break;
-      case '16':
+      case '16': //coal ore
         x = '2'
         y = '2'
         break;
-      case '17':
-        x = '5'
+      case '17': //wood
+        x = '4'
         y = '1'
         break;
-      case '17:1':
+      case '17:1': //wood (pine)
         x = '4'
         y = '7'
         break;
-      case '17:2':
+      case '17:2': //wood (birch)
         x = '5'
         y = '7'
         break;
-      case '18':
+      case '18': //leaves
+        x = '5';
+        y = '8';
         break;
-      case '18:1':
+      case '18:1': //leaves (pine)
+        x = '5';
+        y = '8';
         break;
-      case '18:2':
+      case '18:2': // leaves (birch)
+        x = '5';
+        y = '8';
         break;
-      case '19':
+      case '19': //sponge
         x = '0'
         y = '3'
         break;
-      case '20':
+      case '20': //glass
         x = '1'
         y = '3'
         break;
-      case '21':
+      case '21': //lapis lazuli ore
         x = '0'
         y = '10'
         break;
-      case '22':
+      case '22': //lapis lazuli block
         x = '0'
         y = '9'
         break;
-      case '23':
+      case '23': //dispenser
         x = '14'
         y = '2'
         break;
-      case '24':
+      case '24': //sandstone
         x = '0'
         y = '12'
         break;
-      case '25':
+      case '25': //note block
+        x = '4';
+        y = '10';
         break;
-      case '26':
+      case '26': //bed
+        x = '6';
+        y = '8';
         break;
-      case '27':
+      case '27': //powered rail
         x = '3'
         y = '10'
         break;
-      case '28':
+      case '28': //detector rail
         x = '3'
         y = '12'
         break;
-      case '29':
+      case '29': // sticky piston
         x = '10'
         y = '6'
         break;
-      case '30':
+      case '30': //web
         break;
-      case '31':
+      case '31': //Tall Grass (Dead Shrub)
         break;
-      case '31:1':
+      case '31:1': // Tall Grass
         break;
-      case '31:2':
+      case '31:2': //Tall Grass (Fern)
         break;
-      case '32':
+      case '32': //Dead Shrub
         x = '7'
         y = '3'
         break;
-      case '33':
+      case '33': //Piston
         x = '11'
         y = '6'
         break;
-      case '34':
+      case '34': //Piston (Head)
         break;
       case '35':
         x = '0'
