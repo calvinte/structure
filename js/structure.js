@@ -215,159 +215,185 @@ window.onload=function(){
         break;
       case '34': //Piston (Head)
         break;
-      case '35':
+      case '35': //wool
         x = '0'
         y = '4'
         break;
-      case '35:1':
+      case '35:1': //orange wool
         x = '2'
         y = '13'
         break;
-      case '35:2':
+      case '35:2': //magenta wool
         x = '2'
         y = '12'
         break;
-      case '35:3':
+      case '35:3': //light blue wool
         x = '2'
         y = '11'
         break;
-      case '35:4':
+      case '35:4': //yellow wool
         x = '2'
         y = '10'
         break;
-      case '35:5':
+      case '35:5': //lime wool
         x = '2'
         y = '9'
         break;
-      case '35:6':
+      case '35:6': // pink wool
         x = '1'
         y = '8'
         break;
-      case '35:7':
+      case '35:7': //grey wool
         x = '1'
         y = '7'
         break;
-      case '35:8':
+      case '35:8': //light grey wool
         x = '1'
         y = '14'
         break;
-      case '35:9':
+      case '35:9': //cyan wool
         x = '1'
         y = '13'
         break;
-      case '35:10':
+      case '35:10': //purple wool
         x = '1'
         y = '12'
         break;
-      case '35:11':
+      case '35:11': //blue wool
         x = '1'
         y = '11'
         break;
-      case '35:12':
+      case '35:12': //brown wool
         x = '1'
         y = '10'
         break;
-      case '35:13':
+      case '35:13': //green wool
         x = '1'
         y = '9'
         break;
-      case '35:14':
+      case '35:14': //red wool
         x = '0'
         y = '8'
         break;
-      case '35:15':
+      case '35:15': //black wool
         x = '0'
         y = '7'
         break;
-      case '36':
+      case '36': //unknown
         break;
-      case '37':
+      case '37': //dandelion
         x = '13'
         y = '0'
         break;
-      case '38':
+      case '38': //rose
         x = '12'
         y = '0'
         break;
-      case '39':
+      case '39': //brown mushroom
         x = '13'
         y = '1'
         break;
-      case '40':
+      case '40': //red mushroom
         x = '12'
         y = '1'
         break;
-      case '41':
+      case '41': //block of gold
         x = '7'
         y = '1'
         break;
-      case '42':
+      case '42': //block of iron
         x = '6'
         y = '1'
         break;
-      case '43':
+      case '43': //stone slab (double)
         x = '5'
         y = '0'
         break;
-      case '43:1':
+      case '43:1': //sandstone slab (double)
+        x = '0'
+        y = '12'
         break;
-      case '43:2':
-        break;
-      case '43:3':
-        break;
-      case '43:4':
-        break;
-      case '43:5':
-        break;
-      case '44':
-        break;
-      case '44:1':
-        break;
-      case '44:2':
-        break;
-      case '44:3':
-        break;
-      case '44:4':
-        break;
-      case '44:5':
-        break;
-      case '45':
-        x = '7'
+      case '43:2': //wooden slab (double)
+        x = '4'
         y = '0'
         break;
-      case '46':
+      case '43:3': //cobblestone  slab (double)
+        x = '0'
+        y = '1'
+        break;
+      case '43:4': //brick slab (double)
         x = '8'
         y = '0'
         break;
-      case '47':
+      case '43:5': //stone brick slab (double)
+        x = '6'
+        y = '3'
+        break;
+      case '44': //stone slab
+        x = '5'
+        y = '0'
+        break;
+      case '44:1': //sandstone slab
+        x = '0'
+        y = '12'
+        break;
+      case '44:2': //wooden slab
+        x = '4'
+        y = '0'
+        break;
+      case '44:3': //cobblestone  slab
+        x = '0'
+        y = '1'
+        break;
+      case '44:4': //brick slab
+        x = '8'
+        y = '0'
+        break;
+      case '44:5': //stone brick slab
+        x = '6'
+        y = '3'
+        break;
+      case '45': //brick
+        x = '7'
+        y = '0'
+        break;
+      case '46': //tnt
+        x = '8'
+        y = '0'
+        break;
+      case '47': //bookcase
         x = '3'
         y = '2'
         break;
-      case '48':
+      case '48': //moss stone
+        x = '4';
+        y = '2';
         break;
-      case '49':
+      case '49': //obsidian
         x = '5'
         y = '2'
         break;
-      case '50':
+      case '50': //torch
         x = '0'
         y = '5'
         break;
-      case '51':
+      case '51': //fire
         break;
-      case '52':
+      case '52': //mob spawner
         x = '1'
         y = '4'
         break;
-      case '53':
+      case '53': //wooden stairs
+        x = '4';
+        y = '0';
         break;
-      case '54':
+      case '54': //chest
         x = '11'
         y = '1'
         break;
-      case '55':
+      case '55': //redstone wire
         break;
-      case '56':
+      case '56': //diamond ore
         x = '2'
         y = '3'
         break;
