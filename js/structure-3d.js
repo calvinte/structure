@@ -202,62 +202,27 @@ function blockGeometry(blockId) {
  */
 function blockTexture(textureId) {
   function sides(left,right,top,bottom,front,back) {
-    function baseTexture(texture) {
-        texture = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/mc-sprite.png');
-        texture.wrapS = THREE.ClampToEdgeWrapping;
-        texture.wrapT = THREE.ClampToEdgeWrapping;
-        texture.magFilter = THREE.NearestFilter;
-        texture.minFilter = THREE.LinearMipMapLinearFilter;
-        texture.repeat.x = .0625;
-        texture.repeat.y = .0625;
-        texturePosition = spritePosition(left);
-        texture.offset.x = texturePosition[0]/256;
-        texture.offset.y = texturePosition[1]/256;
-        return texture;
+    materials = new Array;
+    sides = new Array(left,right,top,bottom,front,back);
+    for (var i=0;i<=5;i++) {
+      if (!sides[i]) {
+        materials = materials[0];
+        i = 5;
+        break;
+      }
+      texture = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/mc-sprite.png');
+      texture.wrapS = THREE.ClampToEdgeWrapping;
+      texture.wrapT = THREE.ClampToEdgeWrapping;
+      texture.magFilter = THREE.NearestFilter;
+      texture.minFilter = THREE.LinearMipMapLinearFilter;
+      texture.repeat.x = .0625;
+      texture.repeat.y = .0625;
+      texturePosition = spritePosition(sides[i]);
+      texture.offset.x = texturePosition[0]/256;
+      texture.offset.y = texturePosition[1]/256;
+      materials.push(new THREE.MeshLambertMaterial( {map:texture, transparent: true} ));
     }
-    if (left) {
-      var textureLeft = baseTexture(left);
-      var materialLeft = new THREE.MeshLambertMaterial( {map:textureLeft, transparent: true} );
-    }
-    if (right) {
-      rightPosition = spritePosition(right);
-      var textureLeft = baseTexture(textureRight);
-      var materialRight    = new THREE.MeshLambertMaterial( {map:textureRight, transparent: true} );
-    }
-    
-    if (top) {
-      topPosition = spritePosition(right);
-      var textureLeft = baseTexture(textureRight);
-      var materialTop    = new THREE.MeshLambertMaterial( {map:textureTop, transparent: true} );
-    }
-    
-    if (bottom) {
-      bottomPosition = spritePosition(bottom);
-      var textureLeft = baseTexture(textureBottom);
-      var materialBottom    = new THREE.MeshLambertMaterial( {map:textureBottom, transparent: true} );
-    }
-    
-    if (front) {
-      frontPosition = spritePosition(front);
-      var textureLeft = baseTexture(textureFront);
-      var materialFront    = new THREE.MeshLambertMaterial( {map:textureFront, transparent: true} );
-    }
-    
-    if (back) {
-      backPosition = spritePosition(back);
-      var textureLeft = baseTexture(textureBack);
-      var materialBack    = new THREE.MeshLambertMaterial( {map:textureBack, transparent: true} );
-    }
-    
-    if (left && !right && !top && !bottom && !front && !back) {
-      console.log(materialLeft);
-      return materialLeft;
-      
-    }
-    else {
-      return new Array(materialLeft,materialRight,materialTop,materialBottom,materialFront,materialBack);
-    }
-    
+    return materials;
   }
   
   switch (textureId) {
