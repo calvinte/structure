@@ -201,9 +201,9 @@ function blockGeometry(blockId) {
  * @return THREE.MeshLambertMaterial or array of six THREE.MeshLambertMaterial depending on textureId
  */
 function blockTexture(textureId) {
-  function sides(left,right,top,bottom,front,back) {
+  function sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide) {
     materials = new Array;
-    sides = new Array(left,right,top,bottom,front,back);
+    sides = new Array(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
     for (var i=0;i<=5;i++) {
       if (!sides[i]) {
         materials = materials[0];
@@ -217,18 +217,30 @@ function blockTexture(textureId) {
       texture.minFilter = THREE.LinearMipMapLinearFilter;
       texture.repeat.x = .0625;
       texture.repeat.y = .0625;
-      texturePosition = spritePosition(sides[i]);
-      texture.offset.x = texturePosition[0]/256;
-      texture.offset.y = texturePosition[1]/256;
+      texturePosition = sides[i];
+      texture.offset.x = texturePosition[0]/16;
+      texture.offset.y = texturePosition[1]/16;
       materials.push(new THREE.MeshLambertMaterial( {map:texture, transparent: true} ));
     }
     return materials;
   }
   
   switch (textureId) {
-    default:
-      //wildcard
-      return sides(textureId);
+    case '58': //Crafting Table
+      leftSide = Array(11,3);
+      rightSide = Array(12,3);
+      topSide = Array(11,2);
+      bottomSide = Array(11,2);
+      frontSide = Array(11,3);
+      backSide = Array(12,3);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+      
+    default: //wildcard
+      material = sides(spritePosition(textureId));
+      material.map.offset.x /= 16;
+      material.map.offset.y /= 16;
+      return material;
   }
   
 }

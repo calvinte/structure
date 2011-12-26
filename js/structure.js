@@ -2,6 +2,7 @@ blocks = new Array();
 var currentZ = new Number;
 var currentX = new Number;
 var currentY = new Number;
+var currentVersion = 1;
 var rotation = 0;
 var enable3d = false;
 var ready = false;
@@ -50,6 +51,12 @@ window.onload=function(){
         block = block.split(']');
         blocks[i] = block;
       }
+      
+      //check version
+      if (blocks[1] != 'version: ' + currentVersion) {
+        return updateBlocks();
+      }
+      
     }
     endTime = new Date().getTime();
     console.log('Execution time of loadBlocks(): ' + (Number(endTime) - Number(startTime)));
