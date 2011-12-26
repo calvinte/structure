@@ -57,7 +57,7 @@ window.onload=function(){
     return blocks;
   }
   
-  function textureDefinition(blockid) {
+  function spritePosition(blockid) {
     x = new Number;
     y = new Number;
     switch (blockid) {
@@ -66,10 +66,10 @@ window.onload=function(){
       case '1': //stone
         x = '1';
         y = '0';
-        break;
+        break;  
       case '2': //grass
         x = '0';
-        y = '3';
+        y = '0';
         break;
       case '3': //dirt
         x = '2';
@@ -716,7 +716,7 @@ function structureBuild() {
               if($(this).attr('style')){
                 $(this).attr('oldstyle', $(this).attr('style'));
               }
-              backgroundPosition = textureDefinition($('input:radio[name=block_type]:checked').val());
+              backgroundPosition = spritePosition($('input:radio[name=block_type]:checked').val());
               $(this).css('background-image', 'url(' + '\'/' + Drupal.settings.structurePath + '/sprites/mc-sprite.png\')');
               $(this).css('background-position', '-' + backgroundPosition[0] + 'px -' + backgroundPosition[1] + 'px');
               $(this).css('opacity', '1');
@@ -858,7 +858,7 @@ function structureBuild() {
         for (var i = 0; blocks[i]; i++) {
            // If there is a matching .xy-grid .mc-blocks element style it
             if($('#Z'+ blocks[i][0] + '_X'+ blocks[i][1] + '_Y' + blocks[i][2]).length == 1){
-              backgroundPosition = textureDefinition(blocks[i][3]);
+              backgroundPosition = spritePosition(blocks[i][3]);
               $('#Z'+ blocks[i][0] + '_X'+ blocks[i][1] + '_Y' + blocks[i][2]).attr('style', '\n\
               background-image: url(' + '\'/' + Drupal.settings.structurePath + '/sprites/mc-sprite.png\');\n\
               background-position: -' + backgroundPosition[0] + 'px -' + backgroundPosition[1] + 'px;\n\
