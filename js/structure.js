@@ -142,7 +142,7 @@ function structureBuild() {
           for (var j = 0; block[j]; j++) {
             block[j] = '[' + block[j] + ']';
           }
-        blockstr += block.slice(0,4).toString().replace(/,/g, '') + ',';
+        blockstr += block.slice(0,5).toString().replace(/,/g, '') + ',';
         }
         blockstr = '[version: ' + currentVersion + '],' + blockstr;
         $('#edit-field-structurearray-und-0-value').val(blockstr);
@@ -354,35 +354,6 @@ function structureBuild() {
   })(jQuery); 
 }
 
-function updateBlocks(blocks) {
-  if (blocks[0][0] != 'version: ' + currentVersion){
-    if (blocks[0][0].indexOf('version: ') >= 0) {
-      blocksVersion = blocks[0][0].replace(/[^\d]/g, '');
-    }
-    else {
-      blocks.unshift('version: 0');
-      blocksVersion = 0;
-    }
-    
-    for (blocksVersion; blocksVersion<currentVersion; blocksVersion++) {
-      console.log(blocksVersion);
-      switch (blocksVersion) {
-        case '0':
-          blocks = blocksUpdate_0(blocks);
-        break;
-      }
-    }
-    
-  }
-  
-  function blocksUpdate_0(blocks) {
-    //do stuff
-    return blocks;
-  }
-  blocks.splice(0,1);
-  return blocks;
-}
-
 function spritePosition(blockid) {
   x = new Number;
   y = new Number;
@@ -506,8 +477,8 @@ function spritePosition(blockid) {
       y = '12';
       break;
     case '25': //note block
-      x = '4';
-      y = '10';
+      x = '10';
+      y = '4';
       break;
     case '26': //bed
       x = '6';

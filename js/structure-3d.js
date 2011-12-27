@@ -181,6 +181,7 @@ function generateBlock(blockId) {
 }
 
 function blockGeometry(blockId) {
+  /*
   if (blockId == 81) {
     //torch
     return new Array(2,10,2);
@@ -189,9 +190,9 @@ function blockGeometry(blockId) {
     //bed
     return new Array(16,9,16);
   }
-  else {
+  else {*/
     return new Array(16,16,16);
-  }
+  //}
 }
 
 /* Provide texture for block
@@ -225,14 +226,195 @@ function blockTexture(textureId) {
     return materials;
   }
   
-  switch (textureId) {
+  switch (textureId) {    
+    
+    case '2': //Grass
+      leftSide =   Array(3,0);
+      rightSide =  Array(3,0);
+      topSide =    Array(0,0);
+      bottomSide = Array(2,0);
+      frontSide =  Array(3,0);
+      backSide =   Array(3,0);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+  
+    case '17': //Wood
+      leftSide =   Array(4,1);
+      rightSide =  Array(4,1);
+      topSide =    Array(5,1);
+      bottomSide = Array(5,1);
+      frontSide =  Array(4,1);
+      backSide =   Array(4,1);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+    
+    case '17:1': //Wood (Pine)
+      leftSide =   Array(4,7);
+      rightSide =  Array(4,7);
+      topSide =    Array(5,1);
+      bottomSide = Array(5,1);
+      frontSide =  Array(4,7);
+      backSide =   Array(4,7);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+    
+    case '17:2': //Wood (Birch)
+      leftSide =   Array(5,7);
+      rightSide =  Array(5,7);
+      topSide =    Array(5,1);
+      bottomSide = Array(5,1);
+      frontSide =  Array(5,7);
+      backSide =   Array(5,7);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break
+      
+    case '23': //Dispenser
+      leftSide =   Array(13,2);
+      rightSide =  Array(13,2);
+      topSide =    Array(14,3);
+      bottomSide = Array(14,3);
+      frontSide =  Array(14,2);
+      backSide =   Array(13,2);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+      
+    case '29': //Sticky Piston
+      leftSide =   Array(12,6);
+      rightSide =  Array(12,6);
+      topSide =    Array(10,6);
+      bottomSide = Array(13,6);
+      frontSide =  Array(12,6);
+      backSide =   Array(12,6);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+    
+    case '33': //Piston
+      leftSide =   Array(12,6);
+      rightSide =  Array(12,6);
+      topSide =    Array(11,6);
+      bottomSide = Array(13,6);
+      frontSide =  Array(12,6);
+      backSide =   Array(12,6);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+    
+    case '46': //TNT
+      leftSide =   Array(8, 0);
+      rightSide =  Array(8, 0);
+      topSide =    Array(9, 0);
+      bottomSide = Array(10,0);
+      frontSide =  Array(8, 0);
+      backSide =   Array(8, 0);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+    
+    case '47': //Bookshelf
+      leftSide =   Array(3,2);
+      rightSide =  Array(3,2);
+      topSide =    Array(4,0);
+      bottomSide = Array(4,0);
+      frontSide =  Array(3,2);
+      backSide =   Array(3,2);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+    
+    case '54': //Chest
+      leftSide =   Array(10,1);
+      rightSide =  Array(10,1);
+      topSide =    Array(9, 1);
+      bottomSide = Array(9, 1);
+      frontSide =  Array(11,1);
+      backSide =   Array(10,1);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+     
     case '58': //Crafting Table
-      leftSide = Array(11,3);
-      rightSide = Array(12,3);
-      topSide = Array(11,2);
+      leftSide =   Array(11,3);
+      rightSide =  Array(12,3);
+      topSide =    Array(11,2);
       bottomSide = Array(11,2);
-      frontSide = Array(11,3);
-      backSide = Array(12,3);
+      frontSide =  Array(11,3);
+      backSide =   Array(12,3);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+    
+    case '61': //Furnace
+      leftSide =   Array(13,2);
+      rightSide =  Array(13,2);
+      topSide =    Array(14,3);
+      bottomSide = Array(14,3);
+      frontSide =  Array(12,2);
+      backSide =   Array(13,2);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+      
+    case '62': //Furnace (Smelting)
+      leftSide =   Array(13,2);
+      rightSide =  Array(13,2);
+      topSide =    Array(14,3);
+      bottomSide = Array(14,3);
+      frontSide =  Array(13,3);
+      backSide =   Array(13,2);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+      
+    case '81': //Cactus
+      leftSide =   Array(6,4);
+      rightSide =  Array(6,4);
+      topSide =    Array(5,4);
+      bottomSide = Array(5,4);
+      frontSide =  Array(6,4);
+      backSide =   Array(6,4);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+          
+    case '84': //Jukebox
+      leftSide =   Array(10,4);
+      rightSide =  Array(10,4);
+      topSide =    Array(11,4);
+      bottomSide = Array(10,4);
+      frontSide =  Array(10,4);
+      backSide =   Array(10,4);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+    
+    case '86': //Pumpkin
+      leftSide =   Array(6,7);
+      rightSide =  Array(6,7);
+      topSide =    Array(6,6);
+      bottomSide = Array(6,7);
+      frontSide =  Array(7,7);
+      backSide =   Array(6,7);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+          
+    case '91': //Jack-o-Lantern
+      leftSide =   Array(6,7);
+      rightSide =  Array(6,7);
+      topSide =    Array(6,6);
+      bottomSide = Array(6,7);
+      frontSide =  Array(8,7);
+      backSide =   Array(6,7);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+         
+    case '92': //Cake (Block)
+      leftSide =   Array(10,7);
+      rightSide =  Array(10,7);
+      topSide =    Array(9, 7);
+      bottomSide = Array(11,7);
+      frontSide =  Array(10,7);
+      backSide =   Array(10,7);
+      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+      
+    case '103': //Melon (Block)
+      leftSide =   Array(8,8);
+      rightSide =  Array(8,8);
+      topSide =    Array(9,8);
+      bottomSide = Array(8,8);
+      frontSide =  Array(8,8);
+      backSide =   Array(8,8);
       return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
       break;
       
