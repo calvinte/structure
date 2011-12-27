@@ -181,18 +181,16 @@ function generateBlock(blockId) {
 }
 
 function blockGeometry(blockId) {
-  /*
-  if (blockId == 81) {
-    //torch
-    return new Array(2,10,2);
+  switch (blockId) {
+    case '50': //torch
+      return new Array(2,10,2);
+      break;
+    case '26': //bed
+      return new Array(32,6,16);
+      break;
+    default:
+      return new Array(16,16,16);
   }
-  else if (blockId == 135 || blockId == 136 ) {
-    //bed
-    return new Array(16,9,16);
-  }
-  else {*/
-    return new Array(16,16,16);
-  //}
 }
 
 /* Provide texture for block
@@ -276,6 +274,34 @@ function blockTexture(textureId) {
       frontSide =  Array(14,2);
       backSide =   Array(13,2);
       return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+      break;
+      
+    case '26': //bed
+      leftSide   = Array(8,9);
+      rightSide  = Array(6,9);
+      topSide    = Array(8,8);
+      bottomSide = Array(8,8);
+      frontSide  = Array(8,10);
+      backSide   = Array(5,10);
+      materials   = sides(backSide,frontSide,topSide,bottomSide,leftSide,rightSide);
+      
+      materials[0].map.offset.y -= 9/256;
+      materials[0].map.repeat.y = 9/256;
+      
+      materials[1].map.offset.y -= 9/256;
+      materials[1].map.repeat.y =  9/256;
+      
+      materials[2].map.repeat.x = -32/256;
+      materials[3].map.repeat.x = -32/256;
+      
+      materials[4].map.repeat.x =  -32/256;
+      materials[4].map.repeat.y =  9/256;
+      materials[4].map.offset.y += 7/256;
+      
+      materials[5].map.repeat.x =  32/256;
+      materials[5].map.repeat.y =  9/256;
+      materials[5].map.offset.y += 7/256;
+      return materials;
       break;
       
     case '29': //Sticky Piston
