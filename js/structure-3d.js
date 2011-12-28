@@ -88,22 +88,320 @@ function drawGrid(scene, Z, grid) {
  * @renturn block as array with additional paramater of THREE.Mesh object
  */
 function drawBlock(block) {
+  
+  function generateMaterials(leftSide,rightSide,topSide,bottomSide,frontSide,backSide) {
+    materials = new Array;
+    sides = new Array(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
+    for (var i=0;i<=5;i++) {
+      if (!sides[i]) {
+        materials = materials[0];
+        i = 5;
+        break;
+      }
+      texture = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/mc-sprite.png');
+      texture.wrapS = THREE.ClampToEdgeWrapping;
+      texture.wrapT = THREE.ClampToEdgeWrapping;
+      texture.magFilter = THREE.NearestFilter;
+      texture.minFilter = THREE.LinearMipMapLinearFilter;
+      texture.repeat.x = .0625;
+      texture.repeat.y = .0625;
+      texture.offset.x = sides[i][0]/16;
+      texture.offset.y = sides[i][1]/16;
+      materials.push(new THREE.MeshLambertMaterial( {map:texture, transparent: true} ));
+    }
+    return materials;
+  }
+  
   if (block[3] !=  0) {
     size = 16;
     
-    var Cube = generateBlock(block[3]);
+    BlockOffset = new Array(0,0,0);
+  
+    switch (block[3]) {    
+
+      case '2': //Grass
+        BlockMaterial =  generateMaterials(
+          leftSide =   Array(3,0),
+          rightSide =  Array(3,0),
+          topSide =    Array(0,0),
+          bottomSide = Array(2,0),
+          frontSide =  Array(3,0),
+          backSide =   Array(3,0));
+        BlockGeometry = new Array(16,16,16);
+        break;
+
+      case '17': //Wood
+        BlockMaterial =  generateMaterials(
+          leftSide =   Array(4,1),
+          rightSide =  Array(4,1),
+          topSide =    Array(5,1),
+          bottomSide = Array(5,1),
+          frontSide =  Array(4,1),
+          backSide =   Array(4,1));
+        BlockGeometry = new Array(16,16,16);
+        break;
+
+      case '17:1': //Wood (Pine)
+        BlockMaterial =  generateMaterials(
+          leftSide =   Array(4,7),
+          rightSide =  Array(4,7),
+          topSide =    Array(5,1),
+          bottomSide = Array(5,1),
+          frontSide =  Array(4,7),
+          backSide =   Array(4,7));
+        BlockGeometry = new Array(16,16,16);
+        break;
+
+      case '17:2': //Wood (Birch)
+        BlockMaterial =  generateMaterials(
+          leftSide =   Array(5,7),
+          rightSide =  Array(5,7),
+          topSide =    Array(5,1),
+          bottomSide = Array(5,1),
+          frontSide =  Array(5,7),
+          backSide =   Array(5,7));
+        break
+
+      case '23': //Dispenser
+        BlockMaterial =  generateMaterials(
+          leftSide =   Array(13,2),
+          rightSide =  Array(13,2),
+          topSide =    Array(14,3),
+          bottomSide = Array(14,3),
+          frontSide =  Array(14,2),
+          backSide =   Array(13,2));
+        BlockGeometry = new Array(16,16,16);
+        break;
+
+      case '26': //bed
+        materials   = generateMaterials(
+          leftSide   = Array(8,9),
+          rightSide  = Array(6,9),
+          topSide    = Array(8,8),
+          bottomSide = Array(8,8),
+          frontSide  = Array(8,10),
+          backSide   = Array(5,10));
+
+        materials[0].map.offset.y -= 9/256;
+        materials[0].map.repeat.y = 9/256;
+
+        materials[1].map.offset.y -= 9/256;
+        materials[1].map.repeat.y =  9/256;
+
+        materials[2].map.repeat.x = -32/256;
+
+        materials[3].map.repeat.x = -32/256;
+
+        materials[4].map.repeat.x =  -32/256;
+        materials[4].map.repeat.y =  9/256;
+        materials[4].map.offset.y += 7/256;
+
+        materials[5].map.repeat.x =  32/256;
+        materials[5].map.repeat.y =  9/256;
+        materials[5].map.offset.y += 7/256;
+        BlockMaterial =  materials;
+        
+        BlockOffset[0] = 3;
+        BlockOffset[2] = 8;
+        
+        BlockGeometry = new Array(32,6,16);
+        break;
+
+      case '29': //Sticky Piston
+        BlockMaterial =  generateMaterials(
+          leftSide =   Array(12,6),
+          rightSide =  Array(12,6),
+          topSide =    Array(10,6),
+          bottomSide = Array(13,6),
+          frontSide =  Array(12,6),
+          backSide =   Array(12,6));
+        BlockGeometry = new Array(16,16,16);
+        break;
+
+      case '33': //Piston
+        BlockMaterial =  generateMaterials(
+          leftSide =   Array(12,6),
+          rightSide =  Array(12,6),
+          topSide =    Array(11,6),
+          bottomSide = Array(13,6),
+          frontSide =  Array(12,6),
+          backSide =   Array(12,6));
+        BlockGeometry = new Array(16,16,16);
+        break;
+
+      case '46': //TNT
+        BlockMaterial =  generateMaterials(
+          leftSide =   Array(8, 0),
+          rightSide =  Array(8, 0),
+          topSide =    Array(9, 0),
+          bottomSide = Array(10,0),
+          frontSide =  Array(8, 0),
+          backSide =   Array(8, 0));
+        BlockGeometry = new Array(16,16,16);
+        break;
+
+      case '47': //Bookshelf
+        BlockMaterial =  generateMaterials(
+          leftSide =   Array(3,2),
+          rightSide =  Array(3,2),
+          topSide =    Array(4,0),
+          bottomSide = Array(4,0),
+          frontSide =  Array(3,2),
+          backSide =   Array(3,2));
+        BlockGeometry = new Array(16,16,16);
+        break;
+      
+      case '50': //torch 
+        material = generateMaterials(spritePosition(block[3]));
+        material.map.offset.x /= 16;
+        material.map.offset.y /= 16;
+        material.map.repeat.x = 2/256;
+        material.map.repeat.y = 14/256;
+        material.map.offset.x += 7/256;
+        BlockMaterial =  material;
+        BlockGeometry = new Array(2,16,2);
+        break
+      
+      case '54': //Chest
+        BlockMaterial =  generateMaterials(
+          leftSide =   Array(10,1),
+          rightSide =  Array(10,1),
+          topSide =    Array(9, 1),
+          bottomSide = Array(9, 1),
+          frontSide =  Array(11,1),
+          backSide =   Array(10,1));
+        BlockGeometry = new Array(16,16,16);
+        break;
+
+      case '58': //Crafting Table
+        BlockMaterial =  generateMaterials(
+          leftSide =   Array(11,3),
+          rightSide =  Array(12,3),
+          topSide =    Array(11,2),
+          bottomSide = Array(11,2),
+          frontSide =  Array(11,3),
+          backSide =   Array(12,3));
+        BlockGeometry = new Array(16,16,16);
+        break;
+
+      case '61': //Furnace
+        BlockMaterial =  generateMaterials(
+          leftSide =   Array(13,2),
+          rightSide =  Array(13,2),
+          topSide =    Array(14,3),
+          bottomSide = Array(14,3),
+          frontSide =  Array(12,2),
+          backSide =   Array(13,2));
+        BlockGeometry = new Array(16,16,16);
+        break;
+
+      case '62': //Furnace (Smelting)
+        BlockMaterial =  generateMaterials(
+          leftSide =   Array(13,2),
+          rightSide =  Array(13,2),
+          topSide =    Array(14,3),
+          bottomSide = Array(14,3),
+          frontSide =  Array(13,3),
+          backSide =   Array(13,2));
+        BlockGeometry = new Array(16,16,16);
+        break;
+
+      case '81': //Cactus
+        BlockMaterial =  generateMaterials(
+          leftSide =   Array(6,4),
+          rightSide =  Array(6,4),
+          topSide =    Array(5,4),
+          bottomSide = Array(5,4),
+          frontSide =  Array(6,4),
+          backSide =   Array(6,4));
+        BlockGeometry = new Array(16,16,16);
+        break;
+
+      case '84': //Jukebox
+        BlockMaterial =  generateMaterials(
+          leftSide =   Array(10,4),
+          rightSide =  Array(10,4),
+          topSide =    Array(11,4),
+          bottomSide = Array(10,4),
+          frontSide =  Array(10,4),
+          backSide =   Array(10,4));
+        BlockGeometry = new Array(16,16,16);
+        break;
+
+      case '86': //Pumpkin
+        BlockMaterial = generateMaterials(
+            leftSide    = Array(6,7),
+            rightSide   = Array(6,7),
+            topSide     = Array(6,6),
+            bottomSide  = Array(6,7),
+            frontSide   = Array(7,7),
+            backSide    = Array(6,7));
+        BlockGeometry = new Array(16,16,16);
+        break;
+
+      case '91': //Jack-o-Lantern
+        BlockMaterial =  generateMaterials(
+          leftSide =   Array(6,7),
+          rightSide =  Array(6,7),
+          topSide =    Array(6,6),
+          bottomSide = Array(6,7),
+          frontSide =  Array(8,7),
+          backSide =   Array(6,7));
+        BlockGeometry = new Array(16,16,16);
+        break;
+
+      case '92': //Cake (Block)
+        BlockMaterial =  generateMaterials(
+          leftSide =   Array(10,7),
+          rightSide =  Array(10,7),
+          topSide =    Array(9, 7),
+          bottomSide = Array(11,7),
+          frontSide =  Array(10,7),
+          backSide =   Array(10,7));
+        BlockGeometry = new Array(16,16,16);
+        break;
+
+      case '103': //Melon (Block)
+        BlockMaterial =  generateMaterials(
+          leftSide =   Array(8,8),
+          rightSide =  Array(8,8),
+          topSide =    Array(9,8),
+          bottomSide = Array(8,8),
+          frontSide =  Array(8,8),
+          backSide =   Array(8,8));
+        BlockGeometry = new Array(16,16,16);
+        break;
+
+      default: //wildcard
+        material = generateMaterials(spritePosition(block[3]));
+        material.map.offset.x /= 16;
+        material.map.offset.y /= 16;
+        BlockMaterial =  material;
+        BlockGeometry = new Array(16,16,16);
+    }
+    
+    var Cube = new THREE.Mesh(
+      new THREE.CubeGeometry(
+        BlockGeometry[0],
+        BlockGeometry[1],
+        BlockGeometry[2],
+        1,1,1,
+        BlockMaterial
+      ), 
+      new THREE.MeshFaceMaterial()
+    );
+
+    Cube.position.y -= BlockOffset[0];
+    Cube.position.x -= BlockOffset[1];
+    Cube.position.z -= BlockOffset[2];
     
     //position
     Cube.position['y'] += (block[0]*size);
     Cube.position['x'] += (block[2]-8)*-size-8;
     Cube.position['z'] += (block[1]-8)*size+8;
     
-    if (block[4] == 1 || block[4] == 3) {
-      Cube.rotation['y'] = ((block[4]*90)+90)*(Math.PI / 180);
-    }
-    else {
-      Cube.rotation['y'] = ((block[4]*90)-90)*(Math.PI / 180);
-    }
+    //rotation
+    Cube.rotation['y'] = ((block[4]*90)-90)*(Math.PI / 180);
         
     //draw
     scene.add(Cube);
@@ -161,294 +459,4 @@ function addLights() {
  */
 function killBlock(Cube) {
   scene.remove(Cube);
-}
-
-function generateBlock(blockId) {
-  if (blockId == 81) {
-    //create cube
-    var BlockMaterial = blockTexture(blockId);
-    var BlockGeometry = blockGeometry(blockId);
-    var Cube = new THREE.Mesh(new THREE.CubeGeometry(BlockGeometry[0],BlockGeometry[1],BlockGeometry[2],1,1,1,BlockMaterial), new THREE.MeshFaceMaterial());
-    Cube.position['y'] -= 3;
-    return Cube;
-  }
-  else {
-    //create cube
-    var BlockMaterial = blockTexture(blockId);
-    var BlockGeometry = blockGeometry(blockId);
-    return new THREE.Mesh(new THREE.CubeGeometry(BlockGeometry[0],BlockGeometry[1],BlockGeometry[2],1,1,1,BlockMaterial), new THREE.MeshFaceMaterial());
-  }
-}
-
-function blockGeometry(blockId) {
-  switch (blockId) {
-    case '50': //torch
-      return new Array(2,10,2);
-      break;
-    case '26': //bed
-      return new Array(32,6,16);
-      break;
-    default:
-      return new Array(16,16,16);
-  }
-}
-
-/* Provide texture for block
- * 
- * @param textureId as Number representing block id
- * 
- * @return THREE.MeshLambertMaterial or array of six THREE.MeshLambertMaterial depending on textureId
- */
-function blockTexture(textureId) {
-  function sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide) {
-    materials = new Array;
-    sides = new Array(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-    for (var i=0;i<=5;i++) {
-      if (!sides[i]) {
-        materials = materials[0];
-        i = 5;
-        break;
-      }
-      texture = THREE.ImageUtils.loadTexture('/' + Drupal.settings.structurePath + '/mc-sprite.png');
-      texture.wrapS = THREE.ClampToEdgeWrapping;
-      texture.wrapT = THREE.ClampToEdgeWrapping;
-      texture.magFilter = THREE.NearestFilter;
-      texture.minFilter = THREE.LinearMipMapLinearFilter;
-      texture.repeat.x = .0625;
-      texture.repeat.y = .0625;
-      texturePosition = sides[i];
-      texture.offset.x = texturePosition[0]/16;
-      texture.offset.y = texturePosition[1]/16;
-      materials.push(new THREE.MeshLambertMaterial( {map:texture, transparent: true} ));
-    }
-    return materials;
-  }
-  
-  switch (textureId) {    
-    
-    case '2': //Grass
-      leftSide =   Array(3,0);
-      rightSide =  Array(3,0);
-      topSide =    Array(0,0);
-      bottomSide = Array(2,0);
-      frontSide =  Array(3,0);
-      backSide =   Array(3,0);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break;
-  
-    case '17': //Wood
-      leftSide =   Array(4,1);
-      rightSide =  Array(4,1);
-      topSide =    Array(5,1);
-      bottomSide = Array(5,1);
-      frontSide =  Array(4,1);
-      backSide =   Array(4,1);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break;
-    
-    case '17:1': //Wood (Pine)
-      leftSide =   Array(4,7);
-      rightSide =  Array(4,7);
-      topSide =    Array(5,1);
-      bottomSide = Array(5,1);
-      frontSide =  Array(4,7);
-      backSide =   Array(4,7);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break;
-    
-    case '17:2': //Wood (Birch)
-      leftSide =   Array(5,7);
-      rightSide =  Array(5,7);
-      topSide =    Array(5,1);
-      bottomSide = Array(5,1);
-      frontSide =  Array(5,7);
-      backSide =   Array(5,7);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break
-      
-    case '23': //Dispenser
-      leftSide =   Array(13,2);
-      rightSide =  Array(13,2);
-      topSide =    Array(14,3);
-      bottomSide = Array(14,3);
-      frontSide =  Array(14,2);
-      backSide =   Array(13,2);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break;
-      
-    case '26': //bed
-      leftSide   = Array(8,9);
-      rightSide  = Array(6,9);
-      topSide    = Array(8,8);
-      bottomSide = Array(8,8);
-      frontSide  = Array(8,10);
-      backSide   = Array(5,10);
-      materials   = sides(backSide,frontSide,topSide,bottomSide,leftSide,rightSide);
-      
-      materials[0].map.offset.y -= 9/256;
-      materials[0].map.repeat.y = 9/256;
-      
-      materials[1].map.offset.y -= 9/256;
-      materials[1].map.repeat.y =  9/256;
-      
-      materials[2].map.repeat.x = -32/256;
-      materials[3].map.repeat.x = -32/256;
-      
-      materials[4].map.repeat.x =  -32/256;
-      materials[4].map.repeat.y =  9/256;
-      materials[4].map.offset.y += 7/256;
-      
-      materials[5].map.repeat.x =  32/256;
-      materials[5].map.repeat.y =  9/256;
-      materials[5].map.offset.y += 7/256;
-      return materials;
-      break;
-      
-    case '29': //Sticky Piston
-      leftSide =   Array(12,6);
-      rightSide =  Array(12,6);
-      topSide =    Array(10,6);
-      bottomSide = Array(13,6);
-      frontSide =  Array(12,6);
-      backSide =   Array(12,6);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break;
-    
-    case '33': //Piston
-      leftSide =   Array(12,6);
-      rightSide =  Array(12,6);
-      topSide =    Array(11,6);
-      bottomSide = Array(13,6);
-      frontSide =  Array(12,6);
-      backSide =   Array(12,6);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break;
-    
-    case '46': //TNT
-      leftSide =   Array(8, 0);
-      rightSide =  Array(8, 0);
-      topSide =    Array(9, 0);
-      bottomSide = Array(10,0);
-      frontSide =  Array(8, 0);
-      backSide =   Array(8, 0);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break;
-    
-    case '47': //Bookshelf
-      leftSide =   Array(3,2);
-      rightSide =  Array(3,2);
-      topSide =    Array(4,0);
-      bottomSide = Array(4,0);
-      frontSide =  Array(3,2);
-      backSide =   Array(3,2);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break;
-    
-    case '54': //Chest
-      leftSide =   Array(10,1);
-      rightSide =  Array(10,1);
-      topSide =    Array(9, 1);
-      bottomSide = Array(9, 1);
-      frontSide =  Array(11,1);
-      backSide =   Array(10,1);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break;
-     
-    case '58': //Crafting Table
-      leftSide =   Array(11,3);
-      rightSide =  Array(12,3);
-      topSide =    Array(11,2);
-      bottomSide = Array(11,2);
-      frontSide =  Array(11,3);
-      backSide =   Array(12,3);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break;
-    
-    case '61': //Furnace
-      leftSide =   Array(13,2);
-      rightSide =  Array(13,2);
-      topSide =    Array(14,3);
-      bottomSide = Array(14,3);
-      frontSide =  Array(12,2);
-      backSide =   Array(13,2);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break;
-      
-    case '62': //Furnace (Smelting)
-      leftSide =   Array(13,2);
-      rightSide =  Array(13,2);
-      topSide =    Array(14,3);
-      bottomSide = Array(14,3);
-      frontSide =  Array(13,3);
-      backSide =   Array(13,2);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break;
-      
-    case '81': //Cactus
-      leftSide =   Array(6,4);
-      rightSide =  Array(6,4);
-      topSide =    Array(5,4);
-      bottomSide = Array(5,4);
-      frontSide =  Array(6,4);
-      backSide =   Array(6,4);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break;
-          
-    case '84': //Jukebox
-      leftSide =   Array(10,4);
-      rightSide =  Array(10,4);
-      topSide =    Array(11,4);
-      bottomSide = Array(10,4);
-      frontSide =  Array(10,4);
-      backSide =   Array(10,4);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break;
-    
-    case '86': //Pumpkin
-      leftSide =   Array(6,7);
-      rightSide =  Array(6,7);
-      topSide =    Array(6,6);
-      bottomSide = Array(6,7);
-      frontSide =  Array(7,7);
-      backSide =   Array(6,7);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break;
-          
-    case '91': //Jack-o-Lantern
-      leftSide =   Array(6,7);
-      rightSide =  Array(6,7);
-      topSide =    Array(6,6);
-      bottomSide = Array(6,7);
-      frontSide =  Array(8,7);
-      backSide =   Array(6,7);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break;
-         
-    case '92': //Cake (Block)
-      leftSide =   Array(10,7);
-      rightSide =  Array(10,7);
-      topSide =    Array(9, 7);
-      bottomSide = Array(11,7);
-      frontSide =  Array(10,7);
-      backSide =   Array(10,7);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break;
-      
-    case '103': //Melon (Block)
-      leftSide =   Array(8,8);
-      rightSide =  Array(8,8);
-      topSide =    Array(9,8);
-      bottomSide = Array(8,8);
-      frontSide =  Array(8,8);
-      backSide =   Array(8,8);
-      return sides(leftSide,rightSide,topSide,bottomSide,frontSide,backSide);
-      break;
-      
-    default: //wildcard
-      material = sides(spritePosition(textureId));
-      material.map.offset.x /= 16;
-      material.map.offset.y /= 16;
-      return material;
-  }
-  
 }
