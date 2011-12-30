@@ -301,11 +301,11 @@ function structureBuild() {
               $('#Z'+ blocks[i][0] + '_X'+ blocks[i][1] + '_Y' + blocks[i][2]).attr('style', '\n\
               background-image: url(' + '\'/' + Drupal.settings.structurePath + '/sprites/mc-sprite.png\');\n\
               background-position: -' + backgroundPosition[0] + 'px -' + backgroundPosition[1] + 'px;\n\
-              transform:rotate(' + blocks[i][4]*90 + 'deg);\n\
-              -ms-transform:rotate(' + blocks[i][4]*90 + 'deg);\n\
-              -moz-transform:rotate(' + blocks[i][4]*90 + 'deg);\n\
-              -webkit-transform:rotate(' + blocks[i][4]*90 + 'deg);\n\
-              -o-transform:rotate(' + blocks[i][4]*90 + 'deg);\n\
+              transform:rotate(' + -blocks[i][4]*90 + 'deg);\n\
+              -ms-transform:rotate(' + -blocks[i][4]*90 + 'deg);\n\
+              -moz-transform:rotate(' + -blocks[i][4]*90 + 'deg);\n\
+              -webkit-transform:rotate(' + -blocks[i][4]*90 + 'deg);\n\
+              -o-transform:rotate(' + -blocks[i][4]*90 + 'deg);\n\
               opacity: 1;');
             }
            /* if there is not a matching .xy-grid .mc-blocks element, see if
@@ -319,11 +319,11 @@ function structureBuild() {
                     ($('#Z'+ (Number(blocks[i][0])+j) + '_X'+ blocks[i][1] + '_Y' + blocks[i][2]).css('opacity')<(.5 - (j/10))))) {
                     $('#Z'+ (Number(blocks[i][0])+j) + '_X'+ blocks[i][1] + '_Y' + blocks[i][2]).attr('style', '\n\
                   background-image: url(\'/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + blocks[i][3] + '.png\');\n\
-                  transform:rotate(' + blocks[i][4]*90 + 'deg);\n\
-                  -ms-transform:rotate(' + blocks[i][4]*90 + 'deg);\n\
-                  -moz-transform:rotate(' + blocks[i][4]*90 + 'deg);\n\
-                  -webkit-transform:rotate(' + blocks[i][4]*90 + 'deg);\n\
-                  -o-transform:rotate(' + blocks[i][4]*90 + 'deg);\n\
+                  transform:rotate(' + -blocks[i][4]*90 + 'deg);\n\
+                  -ms-transform:rotate(' + -[i][4]*90 + 'deg);\n\
+                  -moz-transform:rotate(' + -blocks[i][4]*90 + 'deg);\n\
+                  -webkit-transform:rotate(' + -blocks[i][4]*90 + 'deg);\n\
+                  -o-transform:rotate(' + -blocks[i][4]*90 + 'deg);\n\
                   opacity: ' + (.5 - (j/10)) + ' ;');
                 break;
               }

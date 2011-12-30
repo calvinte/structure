@@ -127,7 +127,6 @@ function drawBlock(block) {
           bottomSide = Array(2,0),
           frontSide =  Array(3,0),
           backSide =   Array(3,0));
-        BlockGeometry = new Array(16,16,16);
         break;
 
       case '17': //Wood
@@ -138,7 +137,6 @@ function drawBlock(block) {
           bottomSide = Array(5,1),
           frontSide =  Array(4,1),
           backSide =   Array(4,1));
-        BlockGeometry = new Array(16,16,16);
         break;
 
       case '17:1': //Wood (Pine)
@@ -149,7 +147,6 @@ function drawBlock(block) {
           bottomSide = Array(5,1),
           frontSide =  Array(4,7),
           backSide =   Array(4,7));
-        BlockGeometry = new Array(16,16,16);
         break;
 
       case '17:2': //Wood (Birch)
@@ -170,17 +167,16 @@ function drawBlock(block) {
           bottomSide = Array(14,3),
           frontSide =  Array(14,2),
           backSide =   Array(13,2));
-        BlockGeometry = new Array(16,16,16);
         break;
 
       case '26': //bed
         materials   = generateMaterials(
-          leftSide   = Array(8,9),
-          rightSide  = Array(6,9),
-          topSide    = Array(8,8),
-          bottomSide = Array(8,8),
           frontSide  = Array(8,10),
-          backSide   = Array(5,10));
+          backSide   = Array(5,10),
+          topSide    = Array(6,8),
+          bottomSide = Array(8,8),
+          leftSide   = Array(6,9),
+          rightSide  = Array(8,9));
 
         materials[0].map.offset.y -= 9/256;
         materials[0].map.repeat.y = 9/256;
@@ -188,21 +184,37 @@ function drawBlock(block) {
         materials[1].map.offset.y -= 9/256;
         materials[1].map.repeat.y =  9/256;
 
-        materials[2].map.repeat.x = -32/256;
+        materials[2].map.repeat.x = 32/256;
 
         materials[3].map.repeat.x = -32/256;
 
-        materials[4].map.repeat.x =  -32/256;
+        materials[4].map.repeat.x =  32/256;
         materials[4].map.repeat.y =  9/256;
         materials[4].map.offset.y += 7/256;
 
-        materials[5].map.repeat.x =  32/256;
+        materials[5].map.repeat.x =  -32/256;
         materials[5].map.repeat.y =  9/256;
         materials[5].map.offset.y += 7/256;
         BlockMaterial =  materials;
         
-        BlockOffset[0] = 3;
-        BlockOffset[2] = 8;
+        switch (block[4]) {
+          case '0':
+            BlockOffset[0] = 3;
+            BlockOffset[2] = -8;
+            break;
+          case '1':
+            BlockOffset[0] = 3;
+            BlockOffset[1] = -8;
+            break;
+          case '2':
+            BlockOffset[0] = 3;
+            BlockOffset[2] = +8;
+            break;
+          case '3':
+            BlockOffset[0] = 3;
+            BlockOffset[1] = +8;
+            break;
+        }
         
         BlockGeometry = new Array(32,6,16);
         break;
@@ -215,7 +227,6 @@ function drawBlock(block) {
           bottomSide = Array(13,6),
           frontSide =  Array(12,6),
           backSide =   Array(12,6));
-        BlockGeometry = new Array(16,16,16);
         break;
 
       case '33': //Piston
@@ -226,7 +237,6 @@ function drawBlock(block) {
           bottomSide = Array(13,6),
           frontSide =  Array(12,6),
           backSide =   Array(12,6));
-        BlockGeometry = new Array(16,16,16);
         break;
 
       case '46': //TNT
@@ -237,7 +247,6 @@ function drawBlock(block) {
           bottomSide = Array(10,0),
           frontSide =  Array(8, 0),
           backSide =   Array(8, 0));
-        BlockGeometry = new Array(16,16,16);
         break;
 
       case '47': //Bookshelf
@@ -248,7 +257,6 @@ function drawBlock(block) {
           bottomSide = Array(4,0),
           frontSide =  Array(3,2),
           backSide =   Array(3,2));
-        BlockGeometry = new Array(16,16,16);
         break;
       
       case '50': //torch 
@@ -270,7 +278,6 @@ function drawBlock(block) {
           bottomSide = Array(9, 1),
           frontSide =  Array(11,1),
           backSide =   Array(10,1));
-        BlockGeometry = new Array(16,16,16);
         break;
 
       case '58': //Crafting Table
@@ -281,7 +288,6 @@ function drawBlock(block) {
           bottomSide = Array(11,2),
           frontSide =  Array(11,3),
           backSide =   Array(12,3));
-        BlockGeometry = new Array(16,16,16);
         break;
 
       case '61': //Furnace
@@ -292,7 +298,6 @@ function drawBlock(block) {
           bottomSide = Array(14,3),
           frontSide =  Array(12,2),
           backSide =   Array(13,2));
-        BlockGeometry = new Array(16,16,16);
         break;
 
       case '62': //Furnace (Smelting)
@@ -303,7 +308,6 @@ function drawBlock(block) {
           bottomSide = Array(14,3),
           frontSide =  Array(13,3),
           backSide =   Array(13,2));
-        BlockGeometry = new Array(16,16,16);
         break;
 
       case '81': //Cactus
@@ -314,7 +318,6 @@ function drawBlock(block) {
           bottomSide = Array(5,4),
           frontSide =  Array(6,4),
           backSide =   Array(6,4));
-        BlockGeometry = new Array(16,16,16);
         break;
 
       case '84': //Jukebox
@@ -325,7 +328,6 @@ function drawBlock(block) {
           bottomSide = Array(10,4),
           frontSide =  Array(10,4),
           backSide =   Array(10,4));
-        BlockGeometry = new Array(16,16,16);
         break;
 
       case '86': //Pumpkin
@@ -336,7 +338,6 @@ function drawBlock(block) {
             bottomSide  = Array(6,7),
             frontSide   = Array(7,7),
             backSide    = Array(6,7));
-        BlockGeometry = new Array(16,16,16);
         break;
 
       case '91': //Jack-o-Lantern
@@ -347,7 +348,6 @@ function drawBlock(block) {
           bottomSide = Array(6,7),
           frontSide =  Array(8,7),
           backSide =   Array(6,7));
-        BlockGeometry = new Array(16,16,16);
         break;
 
       case '92': //Cake (Block)
@@ -358,7 +358,6 @@ function drawBlock(block) {
           bottomSide = Array(11,7),
           frontSide =  Array(10,7),
           backSide =   Array(10,7));
-        BlockGeometry = new Array(16,16,16);
         break;
 
       case '103': //Melon (Block)
@@ -369,7 +368,6 @@ function drawBlock(block) {
           bottomSide = Array(8,8),
           frontSide =  Array(8,8),
           backSide =   Array(8,8));
-        BlockGeometry = new Array(16,16,16);
         break;
 
       default: //wildcard
@@ -379,6 +377,8 @@ function drawBlock(block) {
         BlockMaterial =  material;
         BlockGeometry = new Array(16,16,16);
     }
+    
+    !BlockGeometry ? BlockGeometry = Array(16,16,16) : '';
     
     var Cube = new THREE.Mesh(
       new THREE.CubeGeometry(
