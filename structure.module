@@ -23,6 +23,11 @@ function structure_form($node, $form_state) {
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/RequestAnimationFrame.js');
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure.js');
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure-3d.js');
+  drupal_add_js(drupal_get_path('module', 'structure') . '/js/base64_decode.js');
+  drupal_add_js('window["com"] = {mordritch: {mcSim:{}}};', 'inline');
+  drupal_add_js(drupal_get_path('module', 'structure') . '/js/JsNbtParser/js/NbtParser.js');
+  drupal_add_js(drupal_get_path('module', 'structure') . '/js/JsNbtParser/js/binary-parser.js');
+  drupal_add_js(drupal_get_path('module', 'structure') . '/js/JsNbtParser/js/World_Schematic.js');
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/update.js');
   drupal_add_js(array('structurePath' => drupal_get_path('module', 'structure')), 'setting');
   if (isset($node->field_structurearray['und']['0']['value'])) {
@@ -38,8 +43,7 @@ function structure_form($node, $form_state) {
  */
 
 function structure_node_content_form($node, $form_state) {
-  // It is impossible to define a content type without implementing hook_form()
-  // @todo: remove this requirement.
+  
   $form = array();
   $type = node_type_get_type($node);
   
@@ -219,271 +223,6 @@ function structure_node_content_form($node, $form_state) {
       '122'   => t('Dragon Egg'),
       ),
     );
-     
-  /*
-  $form['block_type'] = array(
-    '#type' => 'radios', 
-    '#title' => t('Block Type'), 
-    '#required' => TRUE, 
-    '#options' => array(
-        0  => t('Air'),
-        1  => t('Grass'), 
-        2  => t('Stone'),
-        3  => t('Dirt'),
-      //4  => t('Grass Side'),
-        5  => t('Wooden Plank'),
-        6  => t('Double Slabs'),
-        7  => t('Stone Pressure Plate'),
-        8  => t('Bricks'),
-        9  => t('TNT'),
-      //10  => t('TNT Top'),
-      //11  => t('TNT Bottom'),
-      //12  => t('Spider Web'),
-        13  => t('Rose'),
-        14  => t('Dandelion'),
-      //15  => t('Unknown'),
-        16  => t('Sapling'),
-        17 => t('Cobblestone'),
-        18 => t('Bedrock'),
-        19 => t('Sand'),
-        20 => t('Gravel'),
-        22 => t('Wood'),
-        23 => t('Iron Block'),
-        24 => t('Gold Block'),
-        25 => t('Diamond Block'),
-        28 => t('Chest'),
-        29 => t('Red Mushroom'),
-        30 => t('Brown Mushroom'),
-      //31 => t('Unknown'),
-      //32 => t('Unknown'),
-        33 => t('Gold Ore'),
-        34 => t('Iron Ore'),
-        35 => t('Coal Ore'),
-        36 => t('Bookshelf'),
-        37 => t('Mossy Cobblestone'),
-        38 => t('Obsidian'),
-      //39 => t('Unknown'),
-      //40 => t('Unknown'),
-      //41 => t('Unknown'),
-      //42 => t('Double Chest Front Left'),
-      //43 => t('Double Chest Front Right'),
-        44 => t('Crafting Table'),
-        45 => t('Furnace'),
-      //46 => t('Furnace Side'),
-        47 => t('Dispenser'),
-      //48 => t('Unknown'),
-        49 => t('Sponge'),
-        50 => t('Glass'),
-        51 => t('Diamond Ore'),
-        52 => t('Redstone Ore'),
-      //53 => t('Unknown'),
-      //54 => t('Unknown'),
-        55 => t('Stone Bricks'),
-        56 => t('Dead Bush'),
-      //57 => t('Unknown'),
-      //58 => t('Double Chest Back Left'),
-      //59 => t('Double Chest Back Right'),
-      //60 => t('Crafting Table Side'),
-      //61 => t('Crafting Table Side'),
-      //62 => t('Furnace Lit'),
-      //63 => t('Furnace Bottom'),
-        64 => t('Spruce Sappling'),
-        65 => t('White Wool'),
-        66 => t('Monster Spawner'),
-        67 => t('Snow'),
-        68 => t('Ice'),
-        69 => t('Snowy Dirt'),
-      //70 => t('Cactus Top'),
-        71 => t('Cactus'),
-      //72 => t('Cactus Cut'),
-        73 => t('Clay'),
-        74 => t('Sugar Cane'),
-      //75 => t('Jukebox Side'),
-        76 => t('Jukebox'),
-      //77 => t('Unknown'),
-      //78 => t('Unknown'),
-      //79 => t('Unknown'),
-        80 => t('Birch Sapling'),
-        81 => t('Torch'),
-        82 => t('Wood Door Top'),
-        83 => t('Iron Door Top'),
-        84 => t('Ladder'),
-        85 => t('Trap Door'),
-        86 => t('Iron Bars'),
-      //87 => t(''),
-      //88 => t('Unknown'),
-      //89 => t('Unknown'),
-      //90 => t('Wheat 1'),
-      //91 => t('Wheat 2'),
-      //92 => t('Wheat 3'),
-      //93 => t('Wheat 4'),
-      //94 => t('Wheat 5'),
-      //95 => t('Wheat 6'),
-        96 => t('Wheat'),
-      //97 => t('Redstone Torch Off'),
-        98 => t('Wooden Door Bottom'),
-        99 => t('Metal Door Bottom'),
-        100 => t('Redstone Torch'),
-        101 => t('Mossy Stone Bricks'),
-      //102 => t('Unknown'),
-        103 => t('Pumpkin'),
-        104 => t('Netherrack'),
-        105 => t('Soul Sand'),
-        106 => t('Glowstone'),
-        107 => t('Sticky Piston'),
-        108 => t('Piston'),
-      //108 => t('Piston Side'),
-      //109 => t('Piston Back'),
-      //110 => t('Piston Front'),
-      //111 => t('Unknown'),
-        112 => t('Rails Turning'),
-        113 => t('Black Wool'),
-        114 => t('Dark Grey Wool'),
-      //115 => t('Unknown'),
-      //116 => t('Spruce Wood'),
-        117 => t('Spruce Wood'),
-        118 => t('Birch Wood'),
-      //119 => t('Jack \'O Lantern'),
-        120 => t('Jack \'O Lantern'),
-      //121 => t('cake top'),
-        122 => t('Cake'),
-      //123 => t('Unknown'),
-      //124 => t('Unknown'),
-        125 => t('Huge Red Mushroom Block'),
-        126 => t('Huge Brown Mushroom Block'),
-      //127 => t('Unknown'),
-        128 => t('Rails'),
-        129 => t('Red Wool'),
-        130 => t('Pink Wool'),
-        131 => t('Redstone Repeater'),
-      //132 => t('Unknown'),
-      //133 => t('Unknown'),
-      //134 => t('Unknown'),
-        135 => t('Bed 2'),
-        136 => t('Bed 1'),
-        137 => t('Melon'),
-      //138 => t('Melon Top'),
-      //139 => t('Unknown'),
-      //140 => t('Unknown'),
-      //141 => t('Cake Inventory'),
-        142 => t('Huge Mushroom Stem Block'),
-      //143 => t('Huge Mushroom Stem Block Side'),
-      //144 => t('Unknown'),
-        145 => t('Lapis Block'),
-        146 => t('Dark Green Wool'),
-        147 => t('Lime Wool'),
-      //148 => t('Repeater On'),
-      //149 => t('Unknown'),
-      //150 => t('Foot of bed'),
-      //151 => t('side bed'),
-      //152 => t('side bed'),
-      //153 => t('head of bed'),
-      //154 => t('Unknown'),
-      //155 => t('Unknown'),
-      //156 => t('Unknown'),
-      //157 => t('Unknown'),
-      //158 => t('Unknown'),
-      //159 => t('Unknown'),
-      //160 => t('Unknown'),
-        161 => t('Lapis Ore'),
-        162 => t('Brown Wool'),
-        163 => t('Yellow Wool'),
-        164 => t('Powered Rail'),
-      //165 => t('Unknown'),
-      //166 => t('Unknown'),
-      //167 => t('Unknown'),
-      //168 => t('Unknown'),
-      //169 => t('Unknown'),
-      //170 => t('Unknown'),
-      //171 => t('Unknown'),
-      //172 => t('Unknown'),
-      //173 => t('Unknown'),
-      //174 => t('Unknown'),
-      //175 => t('Unknown'),
-      //176 => t('Unknown'),
-      //177 => t('Sandstone Top'),
-        178 => t('Blue Wool'),
-        179 => t('Light Blue Wool'),
-      //180 => t('Powered Rail On'),
-      //181 => t('Unknown'),
-      //182 => t('Unknown'),
-      //183 => t('Unknown'),
-      //184 => t('Unknown'),
-      //185 => t('Unknown'),
-      //186 => t('Unknown'),
-      //187 => t('Unknown'),
-      //188 => t('Unknown'),
-      //189 => t('Unknown'),
-      //190 => t('Unknown'),
-      //191 => t('Unknown'),
-      //192 => t('Unknown'),
-        193 => t('Sandstone'),
-        194 => t('Purple Wool'),
-        195 => t('Magenta Wool'),
-        196 => t('Detector Rail'),
-      //197 => t('Unknown'),
-      //198 => t('Unknown'),
-      //199 => t('Unknown'),
-      //200 => t('Unknown'),
-      //201 => t('Unknown'),
-      //202 => t('Unknown'),
-      //203 => t('Unknown'),
-      //204 => t('Unknown'),
-      //205 => t('Unknown'),
-      //206 => t('Unknown'),
-      //207 => t('Unknown'),
-      //208 => t('Unknown'),
-        209 => t('End Stone'),
-        210 => t('Cyan Wool'),
-        211 => t('Orange Wool'),
-      //212 => t('Unknown'),
-      //213 => t('Unknown'),
-      //214 => t('Unknown'),
-      //215 => t('Unknown'),
-      //216 => t('Unknown'),
-      //217 => t('Unknown'),
-      //218 => t('Unknown'),
-      //219 => t('Unknown'),
-      //220 => t('Unknown'),
-      //221 => t('Unknown'),
-      //222 => t('Unknown'),
-        223 => t('Water'),
-      //224 => t('Unknown'),
-      //225 => t('Unknown'),
-        226 => t('Light Grey Wool'),
-      //227 => t('Unknown'),
-      //228 => t('Unknown'),
-      //229 => t('Unknown'),
-      //230 => t('Unknown'),
-      //231 => t('Unknown'),
-      //232 => t('Unknown'),
-      //233 => t('Unknown'),
-      //234 => t('Unknown'),
-      //235 => t('Unknown'),
-      //236 => t('Unknown'),
-      //237 => t('Unknown'),
-        238 => t('Lava'),
-      //239 => t('lava'),
-      //240 => t('lava'),
-      //241 => t('Unknown'),
-      //242 => t('Unknown'),
-      //243 => t('Unknown'),
-      //244 => t('Unknown'),
-      //245 => t('Unknown'),
-      //246 => t('Unknown'),
-      //247 => t('Unknown'),
-      //248 => t('Unknown'),
-      //249 => t('Unknown'),
-      //250 => t('Unknown'),
-      //251 => t('Unknown'),
-      //252 => t('Unknown'),
-      //253 => t('Unknown'),
-      //254 => t('Unknown'),
-      //255 => t('Unknown'),
-      ),
-    );
-   * 
-   */
     
     $form['controls'] = array(
     	'#prefix' => '<div class="controls">',
@@ -539,8 +278,54 @@ function structure_node_content_form($node, $form_state) {
     $form['mc_3d']['canvas'] = array(
       '#markup' => '<div class="canvas-wrapper"><span class="enable-3d-warning">If you are using Google Chrome or Mozilla Firefox you can <a href="#enable3d" class="enable-3d">enable 3d</a>.</span></div>',
     );
+    
+    $form['file'] = array(
+      '#type' => 'file',
+      '#title' => t('Schematic File Upload'),
+      '#description' => 'Optionally upload a .schematic file. This will erase any other changes made on this page.',
+      '#size' => 22,
+      '#prefix' => '<div id="upload-wrapper">',
+    );
+    
+    $form['upload'] = array(
+      '#type' => 'button',
+      '#value' => 'Upload',
+      '#tree' => TRUE,
+      '#ajax' => array(
+        'callback' => 'structure_node_content_form_ajax',
+        'wrapper' => 'upload-wrapper',
+      ),
+      '#suffix' => '</div>',
+    );
 
   return $form;
+}
+
+function structure_node_content_form_ajax($form, &$form_state) {
+
+  function bin2asc ($binary) {
+    $val = 0;
+
+    for ($i = strlen($binary) - 1; $i >= 0; $i--) {
+        $ch = substr($binary, $i, 1);
+        $val = ($val << 8) | ord($ch);
+    }
+
+    return $val;
+  }
+  
+  $file = file_save_upload('file', array(
+    'file_validate_extensions' => array('schematic'),
+  ));
+  
+  $filename =  file_directory_temp() . $file->filename;
+  ob_start("ob_gzhandler");
+  $schematic = readFileAsBinary($filename);
+  drupal_add_js(array('schematicFile' =>  base64_encode($schematic)), 'setting');
+  
+  unset($form['file']);
+  
+  return t('File uploaded successfully.');
 }
 
 /**
@@ -610,4 +395,17 @@ function structure_view($node, $view_mode) {
   }
 
   return $node;
+}
+
+/**
+ * Reads a file and deflates it if it's gzencoded.
+ * 
+ * @param	{String} $filename  The name of the file to read
+ * @return	{String}
+ */
+function readFileAsBinary($filename) {
+    $handle = gzopen($filename, "rb"); //using gzopen auto detects whether or not the file is compressed
+    $contents = stream_get_contents($handle);
+    
+    return $contents;
 }

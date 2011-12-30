@@ -6,9 +6,15 @@ var currentVersion = 1;
 var rotation = 0;
 var enable3d = false;
 var ready = false;
+var startTime = new Date();
+var endTime = new Date();
 
 window.onload=function(){
-  blocks = loadBlocks();
+  (function ($) {
+    $(document).ajaxComplete(function(){
+      blocks = loadNbtBlocks(base64_decode(Drupal.settings.schematicFile));
+    });
+  })(jQuery);
 
   if (Drupal.settings.structureMode == 'edit') {
     structureBuild();
@@ -25,9 +31,18 @@ window.onload=function(){
     });
   })(jQuery); 
   
-  var startTime = new Date();
-  var endTime = new Date();
 }
+
+function loadNbtBlocks(data) {
+  try {
+    window["nbtData"] = new com.mordritch.mcSim.NbtParser().decode(data);
+  } 
+  catch (e) {
+    console.log(e);
+  }
+  window["schematic"] = new com.mordritch.mcSim.World_Schematic(window["nbtData"]);
+}
+
 /* Provide blocks as array from document as string. This function will
 * be used to deserialize blocks data from the database
 * 
@@ -82,9 +97,7 @@ function structureBuild() {
         console.log('down');
         currentZ--;
         drawControls(currentZ, currentX, currentY, blocks);  
-        if (enable3d) {
-          grid = drawGrid(scene, currentZ, grid);
-        } 
+        enable3d ? grid = drawGrid(scene, currentZ, grid) : '';
         return false;
       });
 
