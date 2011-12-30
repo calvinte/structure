@@ -92,17 +92,15 @@ function structureBuild() {
         console.log('up');
         currentY++;
         drawControls(currentZ, currentX, currentY); 
-        if (enable3d) {
-          grid = drawGrid(scene, currentZ, grid);
-        }
+        if (enable3d) grid = drawGrid(scene, currentZ, grid);
         return false;
       });
 
       $('.down-z').click(function() {
         console.log('down');
         currentY--;
-        drawControls(currentZ, currentX, currentY);  
-        enable3d ? grid = drawGrid(scene, currentZ, grid) : '';
+        drawControls(currentZ, currentX, currentY);
+        if (enable3d) grid = drawGrid(scene, currentZ, grid);
         return false;
       });
 
@@ -173,11 +171,9 @@ function structureBuild() {
               if($(this).attr('style')){
                 $(this).attr('oldstyle', $(this).attr('style'));
               }
-              backgroundPosition = spritePosition($('input:radio[name=block_type]:checked').val());
-              $(this).css('background-image', 'url(' + '\'/' + Drupal.settings.structurePath + '/sprites/mc-sprite.png\')');
-              $(this).css('background-position', '-' + backgroundPosition[0] + 'px -' + backgroundPosition[1] + 'px');
-              $(this).css('opacity', '1');
-              $(this).addClass('ui-unselecting')
+              backgroundPosition = spritePosition(Number($('input:radio[name=block_type]:checked').val()));
+              $(this).attr('style', blockStyle('mc-sprite.png',backgroundPosition[0],backgroundPosition[1],1));
+              $(this).addClass('ui-unselecting');
           });
         },
         
@@ -198,12 +194,12 @@ function structureBuild() {
           $(".ui-selected", this).each(function(){
             $(this).removeAttr('oldstyle');
             $(this).removeClass('ui-unselecting');
-            block = identifyBlock(this);
             type = $('input:radio[name=block_type]:checked').val();
             $(this).attr('class', 'mc-block '+ type);
-            blocks = addBlock(blocks,block);
+            block = identifyBlock(this);
+            schematic.setBlockAndMetadata(block[0],block[1],block[2],block[3]);;
           });
-          drawControls(currentZ, currentX, currentY, blocks);
+          drawControls(currentZ, currentX, currentY);
         }
       });
       
@@ -219,61 +215,6 @@ function structureBuild() {
         else if (rotation == '2') { symbol = '\u2193'; }
         else { symbol = '\u2190'; }
         return symbol;
-      }
-      
-
-     /* Add array block to array blocks
-      * 
-      * @param blocks as array
-      * @param block as array
-      * @return blocks as array
-      */
-      function addBlock(blocks,block) {
-        startTime = new Date().getTime();
-
-        for(var i=0; blocks[i]; i++) {
-         /* 
-          * First run through all items in blocks array and 
-          * make sure that block is unique
-          */
-          if (block[0] == blocks[i][0]
-            && block[1] == blocks[i][1]
-            && block[2] == blocks[i][2]
-            && block[3] == blocks[i][3]
-            && block[3] == blocks[i][4]) {
-            //console.log('nothing to add');
-            return blocks;
-          }
-         /* 
-          * if block is unique make sure that there aren't any other blocks
-          * with the same coordinates, if there are remove them
-          */
-          else if (block[0] == blocks[i][0]
-                && block[1] == blocks[i][1]
-                && block[2] == blocks[i][2]) {
-            //console.log('killing block..');
-            if (enable3d) {
-              killBlock(blocks[i][5]);
-            }
-            blocks.splice(i,1);
-            break;
-          }
-        }
-
-       /*
-        * ensure that the block we're about to add isn't a 0 block (air)
-        */
-        if (block[3] !=  0) {
-          //console.log('adding block..');
-          blocks.push(block);
-          
-          if (enable3d) {
-            block = drawBlock(block);
-          }
-        }
-        endTime = new Date().getTime();
-        console.log('Execution time of addBlock(): ' + (Number(endTime) - Number(startTime)));
-        return blocks;
       }
       
       /**
@@ -330,13 +271,22 @@ function structureBuild() {
         endTime = new Date().getTime();
         console.log('Execution time of drawControls(): ' + (Number(endTime) - Number(startTime)));
         function newLine(){xcount = X;zcount ++;}
-        function blockStyle(image,x,y,opacity) {
-          return '\n\
-          background-image: url(' + '\'/' + Drupal.settings.structurePath + '/' + image + '\');\n\
-          background-position: -' + x + 'px -' + y + 'px;\n\
-          opacity: ' + opacity + ';';
-          
-        }
+      }
+      
+      /**
+       * Provides CSS used to style .mc-block elements
+       * 
+       * @param image as string representing pafrom module
+       * @param x representing offset from left of image
+       * @param y representing offset from left of image
+       * @param opacity as decimal 
+       * 
+       */
+      function blockStyle(image,x,y,opacity) {
+        return '\n\
+        background-image: url(' + '\'/' + Drupal.settings.structurePath + '/' + image + '\');\n\
+        background-position: -' + x + 'px -' + y + 'px;\n\
+        opacity: ' + opacity + ';';
       }
 
      /* Provide .xy-grid .mc-block element and return it as block array
@@ -350,7 +300,12 @@ function structureBuild() {
         id = $(thisblock).attr("id");
         coords = id.replace(/[^0-9-_.]/g, "");
         coords = coords.split("_");
-        return new Array (coords[0],coords[1],coords[2],$('input:radio[name=block_type]:checked').val(),rotation);
+        return new Array (
+            Number(coords[0]),
+            Number(coords[1]),
+            Number(coords[2]),
+            Number($('input:radio[name=block_type]:checked').val()),
+            rotation);
         endTime = new Date().getTime();
         console.log('Execution time of identifyBlock(): ' + (Number(endTime) - Number(startTime)));
       }
