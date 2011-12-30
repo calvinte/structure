@@ -1,11 +1,5 @@
-blocks = new Array();
-var currentZ = 0;
-var currentX = 0;
-var currentY = 0;
 var currentVersion = 1;
-var rotation = 0;
 var enable3d = false;
-var ready = false;
 var startTime = new Date();
 var endTime = new Date();
 
@@ -36,7 +30,7 @@ window.onload=function(){
 /**
  * Provide schematic object via Jonathan Lydall's JsNbtParser
  * 
- * @param binary as data
+ * @param data as binary
  */
 
 function loadNbtBlocks(data) {
@@ -85,6 +79,11 @@ function loadBlocks() {
   
 
 function structureBuild() {
+  var controlsExist = false;
+  var currentZ = 0;
+  var currentX = 0;
+  var currentY = 0;
+  var rotation = 0;
   (function ($) {
     $(document).ready(function(){
       drawControls(currentZ, currentX, currentY);
@@ -92,7 +91,7 @@ function structureBuild() {
       $('.up-z').click(function() {
         console.log('up');
         currentY++;
-        drawControls(currentZ, currentX, currentY, blocks); 
+        drawControls(currentZ, currentX, currentY); 
         if (enable3d) {
           grid = drawGrid(scene, currentZ, grid);
         }
@@ -276,111 +275,68 @@ function structureBuild() {
         console.log('Execution time of addBlock(): ' + (Number(endTime) - Number(startTime)));
         return blocks;
       }
-
-     /* Draw user interface controls on the screen
-      * 
-      * @param current Z position as number
-      * @param current X position as number
-      * @param current Y position as number
-      * @param blocks as array
-      */
+      
+      /**
+       * Draws user interface for adding blocks on the screen
+       * 
+       * @param Z representing current Z coordinate
+       * @param X representing current X coordinate
+       * @param Y representing current Y coordinate
+       */
       function drawControls(Z, X, Y) {
         startTime = new Date().getTime();
-        //console.log('drawing controls');
-       /* If there aren't any .xy-grid .mc-block elements then it's our first
-        * time through, create them
-        */
-        if ($('#structure-node-form .xy-grid .mc-block').length == 0) {
-          zcount = Z;xcount = X;ycount = Y;
-          for (var i=0;i<=255;i++) {
-            $('#structure-node-form .xy-grid').append('<div class="mc-block air" id="X'+ xcount + '_Y'+ ycount + '_Z' + zcount + '">');
-            if (xcount < X+15) { xcount++; }
-            else if (ycount < Y+15) { xcount = X;ycount ++; }
-            else { xcount = X;ycount = Y;zcount --; }
-          }
-        }
-
-       // Identify each .xy-grid .mc-block element and remove style attribute
-        zcount = Z;xcount = X;ycount = Y;
         
+        // If there aren't any .xy-grid .mc-block elements then it's our first
+        // time through, create them
+        if (!controlsExist) {
+          zcount=Z;xcount=X;ycount=Y;
+          for (var i=0;i<=255;i++) {
+            $('#structure-node-form .xy-grid').append('<div class="mc-block air" id="Z' + zcount + '_X'+ xcount + '_Y'+ ycount + '">');
+            xcount < X+15 ? xcount++ : newLine();
+          }
+          controlsExist = true;
+        }
+        
+        // re-declare our z/x/y counters
+        zcount=Z;xcount=X;ycount=Y;
+        // loop through all control elements
         $('#structure-node-form .xy-grid .mc-block').each(function() {
-          $(this).removeAttr('style');
-            
-          blockId = schematic.getBlockId(xcount,ycount,zcount);
-            if (blockId != 0) {
-              
-              backgroundPosition = spritePosition(blockId);
-              $(this).attr('style', '\n\
-              background-image: url(' + '\'/' + Drupal.settings.structurePath + '/mc-sprite.png\');\n\
-              background-position: -' + backgroundPosition[0] + 'px -' + backgroundPosition[1] + 'px;\n\
-              opacity: 1;');
-            }
-           /* if there is not a matching .xy-grid .mc-blocks element, see if
-            * there is a matching element on a lower Z-level and draw it in 
-            * with a slightly lesser opacity
-            */
-            else {
-              for(var j = 1; j<4; j++) {
-                blockId = schematic.getBlockId(xcount,ycount-j,zcount);
-
-                if  (blockId) {
-                  backgroundPosition = spritePosition(blockId);
-                  console.log(backgroundPosition);
-                  console.log(blockId);
-                  $(this).attr('style', '\n\
-                  background-image: url(' + '\'/' + Drupal.settings.structurePath + '/mc-sprite.png\');\n\
-                  background-position: -' + backgroundPosition[0] + 'px -' + backgroundPosition[1] + 'px;\n\
-                  opacity: ' + (.5 - (j/10)) + ';');
-                  break;
-                }
+          
+          $(this).removeAttr('style'); //remove old styling
+          blockId = schematic.getBlockId(xcount,ycount,zcount); //get the blockId
+          
+          if (blockId != 0) {
+            // add a style element to the .mc-block 
+            backgroundPosition = spritePosition(blockId);
+            $(this).attr('style', blockStyle('mc-sprite.png',backgroundPosition[0],backgroundPosition[1],1));
+          }
+          else {
+            // if there is not a matching .block, see if there is a matching 
+            // block on a lower level
+            for(var j = 1; j<5; j++) {
+              blockId = schematic.getBlockId(xcount,ycount-j,zcount);
+              if  (blockId) {
+                backgroundPosition = spritePosition(blockId);
+                opacity = .5 - (j/10);
+                $(this).attr('style', blockStyle('mc-sprite.png',backgroundPosition[0],backgroundPosition[1],opacity));
+                break; //don't continue looking for lower
               }
             }
+          }
           
           $(this).attr('id', 'X'+ xcount + '_Y'+ ycount + '_Z' + zcount);
-          if (xcount < X+15) { xcount++; }
-          else { xcount = X; zcount ++; }
-          
+          xcount < X+15 ? xcount++ : newLine();
         });
-
-       // loop through blocks and style .xy-grid .mc-blocks
-        for (var i = 0; blocks[i]; i++) {
-           // If there is a matching .xy-grid .mc-blocks element style it
-            if($('#Z'+ blocks[i][0] + '_X'+ blocks[i][1] + '_Y' + blocks[i][2]).length == 1){
-              backgroundPosition = spritePosition(blocks[i][3]);
-              $('#Z'+ blocks[i][0] + '_X'+ blocks[i][1] + '_Y' + blocks[i][2]).attr('style', '\n\
-              background-image: url(' + '\'/' + Drupal.settings.structurePath + '/sprites/mc-sprite.png\');\n\
-              background-position: -' + backgroundPosition[0] + 'px -' + backgroundPosition[1] + 'px;\n\
-              transform:rotate(' + -blocks[i][4]*90 + 'deg);\n\
-              -ms-transform:rotate(' + -blocks[i][4]*90 + 'deg);\n\
-              -moz-transform:rotate(' + -blocks[i][4]*90 + 'deg);\n\
-              -webkit-transform:rotate(' + -blocks[i][4]*90 + 'deg);\n\
-              -o-transform:rotate(' + -blocks[i][4]*90 + 'deg);\n\
-              opacity: 1;');
-            }
-           /* if there is not a matching .xy-grid .mc-blocks element, see if
-            * there is a matching element on a lower Z-level and draw it in 
-            * with a slightly lesser opacity
-            */
-            else {
-            for(var j = 0; j<4; j++) {
-                if  ($('#Z'+ (Number(blocks[i][0])+j) + '_X'+ blocks[i][1] + '_Y' + blocks[i][2]).length == 1 &&
-                  (!($('#Z'+ (Number(blocks[i][0])+j) + '_X'+ blocks[i][1] + '_Y' + blocks[i][2]).attr('style')) ||
-                    ($('#Z'+ (Number(blocks[i][0])+j) + '_X'+ blocks[i][1] + '_Y' + blocks[i][2]).css('opacity')<(.5 - (j/10))))) {
-                    $('#Z'+ (Number(blocks[i][0])+j) + '_X'+ blocks[i][1] + '_Y' + blocks[i][2]).attr('style', '\n\
-                  background-image: url(\'/' + Drupal.settings.structurePath + '/sprites/mc-sprite_' + blocks[i][3] + '.png\');\n\
-                  transform:rotate(' + -blocks[i][4]*90 + 'deg);\n\
-                  -ms-transform:rotate(' + -[i][4]*90 + 'deg);\n\
-                  -moz-transform:rotate(' + -blocks[i][4]*90 + 'deg);\n\
-                  -webkit-transform:rotate(' + -blocks[i][4]*90 + 'deg);\n\
-                  -o-transform:rotate(' + -blocks[i][4]*90 + 'deg);\n\
-                  opacity: ' + (.5 - (j/10)) + ' ;');
-                break;
-              }
-            }
-          }
-        }
         endTime = new Date().getTime();
         console.log('Execution time of drawControls(): ' + (Number(endTime) - Number(startTime)));
+        function newLine(){xcount = X;zcount ++;}
+        function blockStyle(image,x,y,opacity) {
+          return '\n\
+          background-image: url(' + '\'/' + Drupal.settings.structurePath + '/' + image + '\');\n\
+          background-position: -' + x + 'px -' + y + 'px;\n\
+          opacity: ' + opacity + ';';
+          
+        }
       }
 
      /* Provide .xy-grid .mc-block element and return it as block array
