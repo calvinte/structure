@@ -1,7 +1,7 @@
 blocks = new Array();
-var currentZ = new Number;
-var currentX = new Number;
-var currentY = new Number;
+var currentZ = 0;
+var currentX = 0;
+var currentY = 0;
 var currentVersion = 1;
 var rotation = 0;
 var enable3d = false;
@@ -12,13 +12,13 @@ var endTime = new Date();
 window.onload=function(){
   (function ($) {
     $(document).ajaxComplete(function(){
-      blocks = loadNbtBlocks(base64_decode(Drupal.settings.schematicFile));
+      loadNbtBlocks(base64_decode(Drupal.settings.schematicFile));
+
+      if (Drupal.settings.structureMode == 'edit') {
+        structureBuild();
+      }
     });
   })(jQuery);
-
-  if (Drupal.settings.structureMode == 'edit') {
-    structureBuild();
-  }
   
   (function ($) {
     $(document).ready(function(){
@@ -32,6 +32,12 @@ window.onload=function(){
   })(jQuery); 
   
 }
+
+/**
+ * Provide schematic object via Jonathan Lydall's JsNbtParser
+ * 
+ * @param binary as data
+ */
 
 function loadNbtBlocks(data) {
   try {
@@ -81,11 +87,11 @@ function loadBlocks() {
 function structureBuild() {
   (function ($) {
     $(document).ready(function(){
-      drawControls(currentZ, currentX, currentY, blocks);
+      drawControls(currentZ, currentX, currentY);
       
       $('.up-z').click(function() {
         console.log('up');
-        currentZ++;
+        currentY++;
         drawControls(currentZ, currentX, currentY, blocks); 
         if (enable3d) {
           grid = drawGrid(scene, currentZ, grid);
@@ -95,37 +101,37 @@ function structureBuild() {
 
       $('.down-z').click(function() {
         console.log('down');
-        currentZ--;
-        drawControls(currentZ, currentX, currentY, blocks);  
+        currentY--;
+        drawControls(currentZ, currentX, currentY);  
         enable3d ? grid = drawGrid(scene, currentZ, grid) : '';
         return false;
       });
 
       $('.north-y').click(function() {
         console.log('north');
-        currentY--;
-        drawControls(currentZ, currentX, currentY, blocks);  
+        currentZ--;
+        drawControls(currentZ, currentX, currentY);  
         return false;
       });
 
       $('.south-y').click(function() {
         console.log('south');
-        currentY++;
-        drawControls(currentZ, currentX, currentY, blocks);  
+        currentZ++;
+        drawControls(currentZ, currentX, currentY);  
         return false;
       });
 
       $('.east-x').click(function() {
         console.log('east');
         currentX++;
-        drawControls(currentZ, currentX, currentY, blocks);  
+        drawControls(currentZ, currentX, currentY);  
         return false;
       });
 
       $('.west-x').click(function() {
         console.log('west');
         currentX--;
-        drawControls(currentZ, currentX, currentY, blocks);  
+        drawControls(currentZ, currentX, currentY);  
         return false;
       });
       
@@ -278,7 +284,7 @@ function structureBuild() {
       * @param current Y position as number
       * @param blocks as array
       */
-      function drawControls(Z, X, Y, blocks) {
+      function drawControls(Z, X, Y) {
         startTime = new Date().getTime();
         //console.log('drawing controls');
        /* If there aren't any .xy-grid .mc-block elements then it's our first
@@ -287,7 +293,7 @@ function structureBuild() {
         if ($('#structure-node-form .xy-grid .mc-block').length == 0) {
           zcount = Z;xcount = X;ycount = Y;
           for (var i=0;i<=255;i++) {
-            $('#structure-node-form .xy-grid').append('<div class="mc-block air" id="Z'+ zcount + '_X'+ xcount + '_Y' + ycount + '">');
+            $('#structure-node-form .xy-grid').append('<div class="mc-block air" id="X'+ xcount + '_Y'+ ycount + '_Z' + zcount + '">');
             if (xcount < X+15) { xcount++; }
             else if (ycount < Y+15) { xcount = X;ycount ++; }
             else { xcount = X;ycount = Y;zcount --; }
@@ -296,14 +302,44 @@ function structureBuild() {
 
        // Identify each .xy-grid .mc-block element and remove style attribute
         zcount = Z;xcount = X;ycount = Y;
+        
         $('#structure-node-form .xy-grid .mc-block').each(function() {
-          $(this).attr('id', 'Z'+ zcount + '_X'+ xcount + '_Y' + ycount);
-
-          if (xcount < X+15) { xcount++; }
-          else if (ycount < Y+15) { xcount = X; ycount ++; }
-          else { xcount = X; ycount = Y; zcount --; }
-
           $(this).removeAttr('style');
+            
+          blockId = schematic.getBlockId(xcount,ycount,zcount);
+            if (blockId != 0) {
+              
+              backgroundPosition = spritePosition(blockId);
+              $(this).attr('style', '\n\
+              background-image: url(' + '\'/' + Drupal.settings.structurePath + '/mc-sprite.png\');\n\
+              background-position: -' + backgroundPosition[0] + 'px -' + backgroundPosition[1] + 'px;\n\
+              opacity: 1;');
+            }
+           /* if there is not a matching .xy-grid .mc-blocks element, see if
+            * there is a matching element on a lower Z-level and draw it in 
+            * with a slightly lesser opacity
+            */
+            else {
+              for(var j = 1; j<4; j++) {
+                blockId = schematic.getBlockId(xcount,ycount-j,zcount);
+
+                if  (blockId) {
+                  backgroundPosition = spritePosition(blockId);
+                  console.log(backgroundPosition);
+                  console.log(blockId);
+                  $(this).attr('style', '\n\
+                  background-image: url(' + '\'/' + Drupal.settings.structurePath + '/mc-sprite.png\');\n\
+                  background-position: -' + backgroundPosition[0] + 'px -' + backgroundPosition[1] + 'px;\n\
+                  opacity: ' + (.5 - (j/10)) + ';');
+                  break;
+                }
+              }
+            }
+          
+          $(this).attr('id', 'X'+ xcount + '_Y'+ ycount + '_Z' + zcount);
+          if (xcount < X+15) { xcount++; }
+          else { xcount = X; zcount ++; }
+          
         });
 
        // loop through blocks and style .xy-grid .mc-blocks
@@ -371,565 +407,565 @@ function spritePosition(blockid) {
   x = new Number;
   y = new Number;
   switch (blockid) {
-    case '0': //air
+    case 0: //air
       break;
-    case '1': //stone
+    case 1: //stone
       x = '1';
       y = '0';
       break;  
-    case '2': //grass
+    case 2: //grass
       x = '0';
       y = '0';
       break;
-    case '3': //dirt
+    case 3: //dirt
       x = '2';
       y = '0';
       break;
-    case '4': //cobblestone
+    case 4: //cobblestone
       x = '0';
       y = '1';
       break;
-    case '5': //wooden plank
+    case 5: //wooden plank
       x = '4';
       y = '0';
       break;
-    case '6': //sapling
+    case 6: //sapling
       x = '15';
       y = '1';
       break;
-    case '6:1': //sapling(pine)
+    //case 6:1: //sapling(pine)
       x = '15';
       y = '4';
       break;
-    case '6:2': //sapling(birch)
+    //case 6:2: //sapling(birch)
       x = '15';
       y = '5';
       break;
-    case '7': //bedrock
+    case 7: //bedrock
       x = '1';
       y = '1';
       break;
-    case '8': //water (no spread)
+    case 8: //water (no spread)
       break;
-    case '9': //water
+    case 9: //water
       x = '14';
       y = '13';
       break;
-    case '10': //lava
+    case 10: //lava
       break;
-    case '11': //lava (no spread)
+    case 11: //lava (no spread)
       x = '13';
       y = '14';
       break;
-    case '12': //sand
+    case 12: //sand
       x = '2';
       y = '1';
       break;
-    case '13': //gravel
+    case 13: //gravel
       x = '3';
       y = '1';
       break;
-    case '14': //gold ore
+    case 14: //gold ore
       x = '0';
       y = '2';
       break;
-    case '15': //iron ore
+    case 15: //iron ore
       x = '1';
       y = '2';
       break;
-    case '16': //coal ore
+    case 16: //coal ore
       x = '2';
       y = '2';
       break;
-    case '17': //wood
+    case 17: //wood
       x = '4';
       y = '1';
       break;
-    case '17:1': //wood (pine)
+    //case 17:1: //wood (pine)
       x = '4';
       y = '7';
       break;
-    case '17:2': //wood (birch)
+    //case 17:2: //wood (birch)
       x = '5';
       y = '7';
       break;
-    case '18': //leaves
+    case 18: //leaves
       x = '5';
       y = '8';
       break;
-    case '18:1': //leaves (pine)
+    //case 18:1: //leaves (pine)
       x = '5';
       y = '8';
       break;
-    case '18:2': // leaves (birch)
+    //case 18:2: // leaves (birch)
       x = '5';
       y = '8';
       break;
-    case '19': //sponge
+    case 19: //sponge
       x = '0';
       y = '3';
       break;
-    case '20': //glass
+    case 20: //glass
       x = '1';
       y = '3';
       break;
-    case '21': //lapis lazuli ore
+    case 21: //lapis lazuli ore
       x = '0';
       y = '10';
       break;
-    case '22': //lapis lazuli block
+    case 22: //lapis lazuli block
       x = '0';
       y = '9';
       break;
-    case '23': //dispenser
+    case 23: //dispenser
       x = '14';
       y = '2';
       break;
-    case '24': //sandstone
+    case 24: //sandstone
       x = '0';
       y = '12';
       break;
-    case '25': //note block
+    case 25: //note block
       x = '10';
       y = '4';
       break;
-    case '26': //bed
+    case 26: //bed
       x = '6';
       y = '8';
       break;
-    case '27': //powered rail
+    case 27: //powered rail
       x = '3';
       y = '10';
       break;
-    case '28': //detector rail
+    case 28: //detector rail
       x = '3';
       y = '12';
       break;
-    case '29': // sticky piston
+    case 29: // sticky piston
       x = '10';
       y = '6';
       break;
-    case '30': //web
+    case 30: //web
       x = '0';
       y = '11';
       break;
-    case '31': //Tall Grass (Dead Shrub)
+    case 31: //Tall Grass (Dead Shrub)
       break;
-    case '31:1': // Tall Grass
+    //case 31:1: // Tall Grass
       break;
-    case '31:2': //Tall Grass (Fern)
+    //case 31:2: //Tall Grass (Fern)
       break;
-    case '32': //Dead Shrub
+    case 32: //Dead Shrub
       x = '7';
       y = '3';
       break;
-    case '33': //Piston
+    case 33: //Piston
       x = '11';
       y = '6';
       break;
-    case '34': //Piston (Head)
+    case 34: //Piston (Head)
       x = '10';
       y = '6';
       break;
-    case '35': //wool
+    case 35: //wool
       x = '0';
       y = '4';
       break;
-    case '35:1': //orange wool
+    ///case 35:1: //orange wool
       x = '2';
       y = '13';
       break;
-    case '35:2': //magenta wool
+    //case 35:2: //magenta wool
       x = '2';
       y = '12';
       break;
-    case '35:3': //light blue wool
+    //case 35:3: //light blue wool
       x = '2';
       y = '11';
       break;
-    case '35:4': //yellow wool
+    //case 35:4: //yellow wool
       x = '2';
       y = '10';
       break;
-    case '35:5': //lime wool
+    //case 35:5: //lime wool
       x = '2';
       y = '9';
       break;
-    case '35:6': // pink wool
+    //case 35:6: // pink wool
       x = '1';
       y = '8';
       break;
-    case '35:7': //grey wool
+    //case 35:7: //grey wool
       x = '1';
       y = '7';
       break;
-    case '35:8': //light grey wool
+    //case 35:8: //light grey wool
       x = '1';
       y = '14';
       break;
-    case '35:9': //cyan wool
+    //case 35:9: //cyan wool
       x = '1';
       y = '13';
       break;
-    case '35:10': //purple wool
+    //case 35:10: //purple wool
       x = '1';
       y = '12';
       break;
-    case '35:11': //blue wool
+    //case 35:11: //blue wool
       x = '1';
       y = '11';
       break;
-    case '35:12': //brown wool
+    //case 35:12: //brown wool
       x = '1';
       y = '10';
       break;
-    case '35:13': //green wool
+    //case 35:13: //green wool
       x = '1';
       y = '9';
       break;
-    case '35:14': //red wool
+    //case 35:14: //red wool
       x = '0';
       y = '8';
       break;
-    case '35:15': //black wool
+    //case 35:15: //black wool
       x = '0';
       y = '7';
       break;
-    case '36': //unknown
+    case 36: //unknown
       break;
-    case '37': //dandelion
+    case 37: //dandelion
       x = '13';
       y = '0';
       break;
-    case '38': //rose
+    case 38: //rose
       x = '12';
       y = '0';
       break;
-    case '39': //brown mushroom
+    case 39: //brown mushroom
       x = '13';
       y = '1';
       break;
-    case '40': //red mushroom
+    case 40: //red mushroom
       x = '12';
       y = '1';
       break;
-    case '41': //block of gold
+    case 41: //block of gold
       x = '7';
       y = '1';
       break;
-    case '42': //block of iron
+    case 42: //block of iron
       x = '6';
       y = '1';
       break;
-    case '43': //stone slab (double)
+    case 43: //stone slab (double)
       x = '5';
       y = '0';
       break;
-    case '43:1': //sandstone slab (double)
+    //case 43:1: //sandstone slab (double)
       x = '0';
       y = '12';
       break;
-    case '43:2': //wooden slab (double)
+    //case 43:2: //wooden slab (double)
       x = '4';
       y = '0';
       break;
-    case '43:3': //cobblestone  slab (double)
+    //case 43:3: //cobblestone  slab (double)
       x = '0';
       y = '1';
       break;
-    case '43:4': //brick slab (double)
+   // case 43:4: //brick slab (double)
       x = '8';
       y = '0';
       break;
-    case '43:5': //stone brick slab (double)
+    //case 43:5: //stone brick slab (double)
       x = '6';
       y = '3';
       break;
-    case '44': //stone slab
+    //case 44: //stone slab
       x = '5';
       y = '0';
       break;
-    case '44:1': //sandstone slab
+    //case 44:1: //sandstone slab
       x = '0';
       y = '12';
       break;
-    case '44:2': //wooden slab
+    //case 44:2: //wooden slab
       x = '4';
       y = '0';
       break;
-    case '44:3': //cobblestone  slab
+    //case 44:3: //cobblestone  slab
       x = '0';
       y = '1';
       break;
-    case '44:4': //brick slab
+    //case 44:4: //brick slab
       x = '8';
       y = '0';
       break;
-    case '44:5': //stone brick slab
+    //case 44:5: //stone brick slab
       x = '6';
       y = '3';
       break;
-    case '45': //brick
+    case 45: //brick
       x = '7';
       y = '0';
       break;
-    case '46': //tnt
+    case 46: //tnt
       x = '8';
       y = '0';
       break;
-    case '47': //bookcase
+    case 47: //bookcase
       x = '3';
       y = '2';
       break;
-    case '48': //moss stone
+    case 48: //moss stone
       x = '4';
       y = '2';
       break;
-    case '49': //obsidian
+    case 49: //obsidian
       x = '5';
       y = '2';
       break;
-    case '50': //torch
+    case 50: //torch
       x = '0';
       y = '5';
       break;
-    case '51': //fire
+    case 51: //fire
       break;
-    case '52': //mob spawner
+    case 52: //mob spawner
       x = '1';
       y = '4';
       break;
-    case '53': //wooden stairs
+    case 53: //wooden stairs
       x = '4';
       y = '0';
       break;
-    case '54': //chest
+    case 54: //chest
       x = '11';
       y = '1';
       break;
-    case '55': //redstone wire
+    case 55: //redstone wire
       break;
-    case '56': //diamond ore
+    case 56: //diamond ore
       x = '2';
       y = '3';
       break;
-    case '57': //block of diamond
+    case 57: //block of diamond
       x = '8';
       y = '1';
       break;
-    case '58': //work bench
+    case 58: //work bench
       x = '11';
       y = '2';
       break;
-    case '59': //wheat (crop)
+    case 59: //wheat (crop)
       x = '15';
       y = '5';
       break;
-    case '60': //farmland
+    case 60: //farmland
       x = '6';
       y = '5';
       break;
-    case '61': // furnace
+    case 61: // furnace
       x = '12';
       y = '2';
       break;
-    case '62': // furnace (smelting)
+    case 62: // furnace (smelting)
       x = '13';
       y = '3';
       break;
-    case '63': // sign (block)
+    case 63: // sign (block)
       break;
-    case '64': // wood door (block)
+    case 64: // wood door (block)
       x = '1';
       y = '6';
       break;
-    case '65': // ladder
+    case 65: // ladder
       x = '3';
       y = '5';
       break;
-    case '66': // rails
+    case 66: // rails
       x = '0';
       y = '8';
       break;
-    case '67': // cobblestone stairs
+    case 67: // cobblestone stairs
       break;
-    case '68': // sign (wall block)
+    case 68: // sign (wall block)
       break;
-    case '69': // lever
+    case 69: // lever
       break;
-    case '70': // stone pressure plate
+    case 70: // stone pressure plate
       x = '6';
       y = '0';
       break;
-    case '71':// iron door (block)
+    case 71:// iron door (block)
       x = '2';
       y = '6';
       break;
-    case '72': // wooden pressure plate
+    case 72: // wooden pressure plate
       break;
-    case '73':  // redstone ore
+    case 73:  // redstone ore
       x = '3';
       y = '3';
       break;
-    case '74': // redstone ore (glowing)
+    case 74: // redstone ore (glowing)
       break;
-    case '75': // redstone torch (off)
+    case 75: // redstone torch (off)
       x = '3';
       y = '5';
       break;
-    case '76': // redstone torch
+    case 76: // redstone torch
       x = '3';
       y = '6';
       break;
-    case '77': // stone button
+    case 77: // stone button
       break;
-    case '78': // snow
+    case 78: // snow
       x = '2';
       y = '4';
       break;
-    case '79': // ice
+    case 79: // ice
       x = '3';
       y = '4';
       break;
-    case '80': // snow block
+    case 80: // snow block
       x = '2';
       y = '4';
       break;
-    case '81': // cactus
+    case 81: // cactus
       x = '6';
       y = '4';
       break;
-    case '82': // clay block
+    case 82: // clay block
       x = '8';
       y = '4';
       break;
-    case '83': // sugar cane (block)
+    case 83: // sugar cane (block)
       x = '9';
       y = '4';
       break;
-    case '84': // jukebox
+    case 84: // jukebox
       x = '11';
       y = '4';
       break;
-    case '85': // fence
+    case 85: // fence
       break;
-    case '86': // pumpkin
+    case 86: // pumpkin
       x = '7';
       y = '7';
       break;
-    case '87': // netherrack
+    case 87: // netherrack
       x = '7';
       y = '6';
       break;
-    case '88': // soul sand
+    case 88: // soul sand
       x = '8';
       y = '6';
       break;
-    case '89': // glowstone
+    case 89: // glowstone
       x = '9';
       y = '6';
       break;
-    case '90': // portal
+    case 90: // portal
       break;
-    case '91': // jack-o-lantern
+    case 91: // jack-o-lantern
       x = '8';
       y = '7';
       break;
-    case '92': // cake (block)
+    case 92: // cake (block)
       x = '9';
       y = '7';
       break;
-    case '93': // redstone repeater (block off)
+    case 93: // redstone repeater (block off)
       x = '3';
       y = '8';
       break;
-    case '94': // redstone repeater (block on)
+    case 94: // redstone repeater (block on)
       x = '3';
       y = '9';
       break;
-    case '95': // locked chest
+    case 95: // locked chest
       break;
-    case '96': // trapdoor
+    case 96: // trapdoor
       x = '4';
       y = '5';
       break;
-    case '97': // silverfish stone
+    case 97: // silverfish stone
       break;
-    case '98': // stone bricks
+    case 98: // stone bricks
       x = '6';
       y = '3';
       break;
-    case '98:1': // mossy stone bricks
+    //case 98:1: // mossy stone bricks
       x = '4';
       y = '6';
       break;
-    case '98:2': // cracked stone bricks
+    //case 98:2: // cracked stone bricks
       x = '2';
       y = '4';
       break;
-    case '99': // brown mushroom (block)
+    case 99: // brown mushroom (block)
       x = '13';
       y = '7';
       break;
-    case '100': // red mushroom (block)
+    case 100: // red mushroom (block)
       x = '12';
       y = '7';
       break;
-    case '101': // iron bars
+    case 101: // iron bars
       x = '5';
       y = '5';
       break;
-    case '102': // glass pane
+    case 102: // glass pane
       x = '1';
       y = '3';  
       break;
-    case '103': // melon (block)
+    case 103: // melon (block)
       x = '8';
       y = '8';
       break;
-    case '104': // pumpkin vine
+    case 104: // pumpkin vine
       break;
-    case '105': // melon vine
+    case 105: // melon vine
       break;
-    case '106': // vines
+    case 106: // vines
       break;
-    case '107': // fence gate
+    case 107: // fence gate
       break;
-    case '108': // brick stairs
+    case 108: // brick stairs
       x = '0';
       y = '7';
       break;
-    case '109': // stone brick stairs
+    case 109: // stone brick stairs
       x = '1';
       y = '0';
       break;
-    case '110': // mycelium
+    case 110: // mycelium
       break;
-    case '111': // lily pad
+    case 111: // lily pad
       break;
-    case '112': // nether brick
+    case 112: // nether brick
       break;
-    case '113': // nether brick fence
+    case 113: // nether brick fence
       break;
-    case '114': // nether brick stairs
+    case 114: // nether brick stairs
       break;
-    case '115': // nether wart
+    case 115: // nether wart
       break;
-    case '116': // enchantment table
+    case 116: // enchantment table
       break;
-    case '117': // brewing stand (block)
+    case 117: // brewing stand (block)
       break;
-    case '118': // cauldron (block)
+    case 118: // cauldron (block)
       break;
-    case '119': // end portal
+    case 119: // end portal
       break;
-    case '120': // end portal frame
+    case 120: // end portal frame
       break;
-    case '121': // end stone
+    case 121: // end stone
       x = '0';
       y = '13';
       break;
-    case '122': // dragon egg
+    case 122: // dragon egg
       break;
   }
 
