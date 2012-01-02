@@ -1,3 +1,4 @@
+window["com"] = {mordritch: {mcSim:{}}};
 var currentVersion = 1;
 var enable3d = false;
 var startTime = new Date();
@@ -5,8 +6,12 @@ var endTime = new Date();
 
 window.onload=function(){
   (function ($) {
+    if (Drupal.settings.structureArray)
+      loadNbtBlocks(base64_decode(Drupal.settings.structureArray));
     $(document).ajaxComplete(function(){
-      loadNbtBlocks(base64_decode(Drupal.settings.schematicFile));
+      Drupal.settings.schematicFile ? 
+        loadNbtBlocks(base64_decode(Drupal.settings.schematicFile)) :
+        loadNbtBlocks(base64_decode(Drupal.settings.structureArray));
 
       if (Drupal.settings.structureMode == 'edit') {
         structureBuild();
@@ -34,12 +39,7 @@ window.onload=function(){
  */
 
 function loadNbtBlocks(data) {
-  try {
-    window["nbtData"] = new com.mordritch.mcSim.NbtParser().decode(data);
-  } 
-  catch (e) {
-    console.log(e);
-  }
+  window["nbtData"] = new com.mordritch.mcSim.NbtParser().decode(data);
   window["schematic"] = new com.mordritch.mcSim.World_Schematic(window["nbtData"]);
 }
 
@@ -149,19 +149,14 @@ function structureBuild() {
         $('#edit-block-type .block-rotate').text('Rotation ' + rotationSymbol(rotation));
         return false;
       });
-
-      $('#edit-submit').click(function() {
-        var blockstr = new String;
+      
+      $('#structure-node-form').submit(function() {
+        window["nbtData"] = new com.mordritch.mcSim.NbtParser().encode(schematic.schematic);
+        window["nbtData"] = base64_encode(window["nbtData"]);
         $('#edit-field-structurearray-und-0-value').val('');
-        console.log(blocks);
-        for (var i = 0, block; block = blocks[i]; i++) {
-          for (var j = 0; block[j]; j++) {
-            block[j] = '[' + block[j] + ']';
-          }
-        blockstr += block.slice(0,5).toString().replace(/,/g, '') + ',';
-        }
-        blockstr = '[version: ' + currentVersion + '],' + blockstr;
-        $('#edit-field-structurearray-und-0-value').val(blockstr);
+        $('#edit-field-structurearray-und-0-value').val(nbtData);
+        alert($('#edit-field-structurearray-und-0-value').val());
+        return true;
       });
 
       $('#structure-node-form .xy-grid').selectable({
@@ -197,7 +192,8 @@ function structureBuild() {
             type = $('input:radio[name=block_type]:checked').val();
             $(this).attr('class', 'mc-block '+ type);
             block = identifyBlock(this);
-            schematic.setBlockAndMetadata(block[0],block[1],block[2],block[3]);;
+            schematic.setBlockAndMetadata(block[0],block[1],block[2],block[3]);
+            if (enable3d) block = drawBlock(block);
           });
           drawControls(currentZ, currentX, currentY);
         }
@@ -286,7 +282,8 @@ function structureBuild() {
         return '\n\
         background-image: url(' + '\'/' + Drupal.settings.structurePath + '/' + image + '\');\n\
         background-position: -' + x + 'px -' + y + 'px;\n\
-        opacity: ' + opacity + ';';
+        opacity: ' + opacity + ';\n\
+        background-color: #090;';
       }
 
      /* Provide .xy-grid .mc-block element and return it as block array

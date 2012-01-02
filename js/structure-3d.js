@@ -5,14 +5,23 @@ function initiate3d() {
     $(document).ready(function(){
       startTime = new Date().getTime();
       
+      initiated = false;
+      
       container = $('#mc-3d .canvas-wrapper');
       container.empty();
 
       scene = new THREE.Scene();
 
-      camera = new THREE.PerspectiveCamera( 45, container.innerWidth()/container.innerHeight(), 1, 2000 );
+      camera = new THREE.PerspectiveCamera( 45, container.innerWidth()/container.innerHeight(), .001, 20000 );
       camera.position.set( 0, 200, 200 );
-
+      
+      //controls = new THREE.FirstPersonControls(camera);
+      
+      //controls.movementSpeed = 100;
+      //controls.lookSpeed = 0.125;
+      //controls.noFly = true;
+      //controls.lookVertical = false;
+      
       renderer = new THREE.WebGLRenderer();
       renderer.setSize( container.innerWidth() ,container.innerHeight() );
       $('#mc-3d .canvas-wrapper').append( renderer.domElement );
@@ -41,10 +50,39 @@ function initiate3d() {
       });
       
       //execution time ~1ms/block in Chrome on 111126
-      for(var i=0; blocks[i]; i++) {
-        drawBlock(blocks[i], scene);
+      xsize = schematic.getSizeX();
+      ysize = schematic.getSizeY();
+      zsize = schematic.getSizeZ();
+      blocksLength = xsize*ysize*zsize;
+      var xcount = 0;
+      var ycount = 0;
+      var zcount = 0;
+      geometryMesh = new Array();
+      geometryMerge = new Array();
+      
+      for(var i=0; i<blocksLength; i++) {
+        blockId = schematic.getBlockId(xcount,ycount,zcount);
+        drawBlock(Array(xcount,ycount,zcount,blockId,0));
+        xcount < xsize ? xcount++ : newLine();
+      }
+      function newLine(){
+        if (zcount < zsize) {
+          xcount = 0;
+          zcount ++;
+        }
+        else return newLayer();
+      }
+      function newLayer(){
+        xcount = 0;
+        zcount = 0;
+        ycount++
       }
       
+      for(var i=0; i<geometryMesh.length; i++) {
+        if (geometryMesh[i]) scene.add(geometryMesh[i]);
+      }
+      
+      initiated = true;
       endTime = new Date().getTime();
       console.log('Execution time of initiate3d(): ' + (Number(endTime) - Number(startTime)));
     });
@@ -63,7 +101,7 @@ function drawGrid(scene, Z, grid) {
   if(grid) {
     scene.remove(grid);
   }
-  var grid_material = new THREE.LineBasicMaterial( { color: 0x000000, opacity: 0.2 } ),
+  var grid_material = new THREE.LineBasicMaterial( {color: 0x000000, opacity: 0.2} ),
           geometry = new THREE.Geometry(),
               floor = -8 + (Z*16), step = 16;
 
@@ -116,10 +154,11 @@ function drawBlock(block) {
     size = 16;
     
     BlockOffset = new Array(0,0,0);
+    BlockGeometry = new Array(16,16,16);
   
     switch (block[3]) {    
 
-      case '2': //Grass
+      case 2: //Grass
         BlockMaterial =  generateMaterials(
           leftSide =   Array(3,0),
           rightSide =  Array(3,0),
@@ -129,7 +168,7 @@ function drawBlock(block) {
           backSide =   Array(3,0));
         break;
 
-      case '17': //Wood
+      case 17: //Wood
         BlockMaterial =  generateMaterials(
           leftSide =   Array(4,1),
           rightSide =  Array(4,1),
@@ -139,7 +178,7 @@ function drawBlock(block) {
           backSide =   Array(4,1));
         break;
 
-      case '17:1': //Wood (Pine)
+      //case 17:1: //Wood (Pine)
         BlockMaterial =  generateMaterials(
           leftSide =   Array(4,7),
           rightSide =  Array(4,7),
@@ -149,7 +188,7 @@ function drawBlock(block) {
           backSide =   Array(4,7));
         break;
 
-      case '17:2': //Wood (Birch)
+      //case 17:2: //Wood (Birch)
         BlockMaterial =  generateMaterials(
           leftSide =   Array(5,7),
           rightSide =  Array(5,7),
@@ -159,7 +198,7 @@ function drawBlock(block) {
           backSide =   Array(5,7));
         break
 
-      case '23': //Dispenser
+      case 23: //Dispenser
         BlockMaterial =  generateMaterials(
           leftSide =   Array(13,2),
           rightSide =  Array(13,2),
@@ -169,7 +208,7 @@ function drawBlock(block) {
           backSide =   Array(13,2));
         break;
 
-      case '26': //bed
+      case 26: //bed
         materials   = generateMaterials(
           frontSide  = Array(8,10),
           backSide   = Array(5,10),
@@ -198,19 +237,19 @@ function drawBlock(block) {
         BlockMaterial =  materials;
         
         switch (block[4]) {
-          case '0':
+          case 0:
             BlockOffset[0] = 3;
             BlockOffset[2] = -8;
             break;
-          case '1':
+          case 1:
             BlockOffset[0] = 3;
             BlockOffset[1] = -8;
             break;
-          case '2':
+          case 2:
             BlockOffset[0] = 3;
             BlockOffset[2] = +8;
             break;
-          case '3':
+          case 3:
             BlockOffset[0] = 3;
             BlockOffset[1] = +8;
             break;
@@ -219,7 +258,7 @@ function drawBlock(block) {
         BlockGeometry = new Array(32,6,16);
         break;
 
-      case '29': //Sticky Piston
+      case 29: //Sticky Piston
         BlockMaterial =  generateMaterials(
           leftSide =   Array(12,6),
           rightSide =  Array(12,6),
@@ -229,7 +268,7 @@ function drawBlock(block) {
           backSide =   Array(12,6));
         break;
 
-      case '33': //Piston
+      case 33: //Piston
         BlockMaterial =  generateMaterials(
           leftSide =   Array(12,6),
           rightSide =  Array(12,6),
@@ -239,7 +278,7 @@ function drawBlock(block) {
           backSide =   Array(12,6));
         break;
 
-      case '46': //TNT
+      case 46: //TNT
         BlockMaterial =  generateMaterials(
           leftSide =   Array(8, 0),
           rightSide =  Array(8, 0),
@@ -249,7 +288,7 @@ function drawBlock(block) {
           backSide =   Array(8, 0));
         break;
 
-      case '47': //Bookshelf
+      case 47: //Bookshelf
         BlockMaterial =  generateMaterials(
           leftSide =   Array(3,2),
           rightSide =  Array(3,2),
@@ -259,7 +298,7 @@ function drawBlock(block) {
           backSide =   Array(3,2));
         break;
       
-      case '50': //torch 
+      case 50: //torch 
         material = generateMaterials(spritePosition(block[3]));
         material.map.offset.x /= 16;
         material.map.offset.y /= 16;
@@ -270,7 +309,7 @@ function drawBlock(block) {
         BlockGeometry = new Array(2,16,2);
         break
       
-      case '54': //Chest
+      case 54: //Chest
         BlockMaterial =  generateMaterials(
           leftSide =   Array(10,1),
           rightSide =  Array(10,1),
@@ -280,7 +319,7 @@ function drawBlock(block) {
           backSide =   Array(10,1));
         break;
 
-      case '58': //Crafting Table
+      case 58: //Crafting Table
         BlockMaterial =  generateMaterials(
           leftSide =   Array(11,3),
           rightSide =  Array(12,3),
@@ -290,7 +329,7 @@ function drawBlock(block) {
           backSide =   Array(12,3));
         break;
 
-      case '61': //Furnace
+      case 61: //Furnace
         BlockMaterial =  generateMaterials(
           leftSide =   Array(13,2),
           rightSide =  Array(13,2),
@@ -300,7 +339,7 @@ function drawBlock(block) {
           backSide =   Array(13,2));
         break;
 
-      case '62': //Furnace (Smelting)
+      case 62: //Furnace (Smelting)
         BlockMaterial =  generateMaterials(
           leftSide =   Array(13,2),
           rightSide =  Array(13,2),
@@ -310,7 +349,7 @@ function drawBlock(block) {
           backSide =   Array(13,2));
         break;
 
-      case '81': //Cactus
+      case 81: //Cactus
         BlockMaterial =  generateMaterials(
           leftSide =   Array(6,4),
           rightSide =  Array(6,4),
@@ -320,7 +359,7 @@ function drawBlock(block) {
           backSide =   Array(6,4));
         break;
 
-      case '84': //Jukebox
+      case 84: //Jukebox
         BlockMaterial =  generateMaterials(
           leftSide =   Array(10,4),
           rightSide =  Array(10,4),
@@ -330,7 +369,7 @@ function drawBlock(block) {
           backSide =   Array(10,4));
         break;
 
-      case '86': //Pumpkin
+      case 86: //Pumpkin
         BlockMaterial = generateMaterials(
             leftSide    = Array(6,7),
             rightSide   = Array(6,7),
@@ -340,7 +379,7 @@ function drawBlock(block) {
             backSide    = Array(6,7));
         break;
 
-      case '91': //Jack-o-Lantern
+      case 91: //Jack-o-Lantern
         BlockMaterial =  generateMaterials(
           leftSide =   Array(6,7),
           rightSide =  Array(6,7),
@@ -350,7 +389,7 @@ function drawBlock(block) {
           backSide =   Array(6,7));
         break;
 
-      case '92': //Cake (Block)
+      case 92: //Cake (Block)
         BlockMaterial =  generateMaterials(
           leftSide =   Array(10,7),
           rightSide =  Array(10,7),
@@ -360,7 +399,7 @@ function drawBlock(block) {
           backSide =   Array(10,7));
         break;
 
-      case '103': //Melon (Block)
+      case 103: //Melon (Block)
         BlockMaterial =  generateMaterials(
           leftSide =   Array(8,8),
           rightSide =  Array(8,8),
@@ -378,17 +417,13 @@ function drawBlock(block) {
         BlockGeometry = new Array(16,16,16);
     }
     
-    !BlockGeometry ? BlockGeometry = Array(16,16,16) : '';
-    
     var Cube = new THREE.Mesh(
       new THREE.CubeGeometry(
         BlockGeometry[0],
         BlockGeometry[1],
         BlockGeometry[2],
-        1,1,1,
-        BlockMaterial
-      ), 
-      new THREE.MeshFaceMaterial()
+        1,1,1
+      )
     );
 
     Cube.position.y -= BlockOffset[0];
@@ -396,15 +431,21 @@ function drawBlock(block) {
     Cube.position.z -= BlockOffset[2];
     
     //position
-    Cube.position['y'] += (block[0]*size);
-    Cube.position['x'] += (block[2]-8)*-size-8;
-    Cube.position['z'] += (block[1]-8)*size+8;
+    Cube.position['x'] += (block[0]-7.5)*size;
+    Cube.position['z'] += (block[2]-7.5)*size;
+    Cube.position['y'] += block[1]*size;
     
     //rotation
     Cube.rotation['y'] = ((block[4]*90)-90)*(Math.PI / 180);
-        
-    //draw
-    scene.add(Cube);
+  
+    if (!geometryMerge[block[3]]) geometryMerge[block[3]] = new THREE.Geometry();
+    if (geometryMesh[block[3]]) scene.remove(geometryMesh[block[3]]);
+    
+    THREE.GeometryUtils.merge(geometryMerge[block[3]], Cube);
+    
+    geometryMesh[block[3]] = new THREE.Mesh(geometryMerge[block[3]], BlockMaterial);
+
+    if (initiated) scene.add(geometryMesh[block[3]]);
 
     block[5] = Cube;
   }
@@ -426,7 +467,7 @@ function render() {
   camera.position.x = Math.cos( timer ) * 300;
   camera.position.z = Math.sin( timer ) * 300;
   camera.lookAt( scene.position );
-  
+  //controls.update();
   renderer.render( scene, camera );
 }
 
