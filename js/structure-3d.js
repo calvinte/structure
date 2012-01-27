@@ -35,7 +35,6 @@ function initiate3d() {
       addLights();
 
       var currentZoom = new Number;
-      var currentZoom = new Number;
 
       $('#mc-3d .zoom-in').click(function() {
         console.log('zooming in' + currentZoom);

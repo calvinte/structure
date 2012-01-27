@@ -5,29 +5,36 @@ var startTime = new Date();
 var endTime = new Date();
 
 window.onload=function(){
-  (function ($) {
-    if (Drupal.settings.structureArray)
-      loadNbtBlocks(base64_decode(Drupal.settings.structureArray));
-    $(document).ajaxComplete(function(){
-      Drupal.settings.schematicFile ? 
-        loadNbtBlocks(base64_decode(Drupal.settings.schematicFile)) :
-        loadNbtBlocks(base64_decode(Drupal.settings.structureArray));
-
-      if (Drupal.settings.structureMode == 'edit') {
-        structureBuild();
-      }
-    });
-  })(jQuery);
   
   (function ($) {
     $(document).ready(function(){
+      
+      if (Drupal.settings.structureArray)
+        loadNbtBlocks(base64_decode(Drupal.settings.structureArray));
+      else {
+        window["schematic"] = new com.mordritch.mcSim.World_Schematic();
+        schematic.makeNew(16,1,16);
+      }
+      
       $('a.enable-3d').click(function() {
         initiate3d();
         enable3d = true;
         return false;
       });
-            
+
+      if (Drupal.settings.structureMode == 'edit') {
+        structureBuild();
+      }            
     });
+      
+    $(document).ajaxComplete(function(){
+      
+      Drupal.settings.schematicFile ? 
+        loadNbtBlocks(base64_decode(Drupal.settings.schematicFile)) :
+        loadNbtBlocks(base64_decode(Drupal.settings.structureArray));
+
+    });
+
   })(jQuery); 
   
 }
