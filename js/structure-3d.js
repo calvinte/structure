@@ -429,23 +429,26 @@ function drawBlock(block) {
     Cube.position.x -= BlockOffset[1];
     Cube.position.z -= BlockOffset[2];
     
-    //position
+    // position
     Cube.position['x'] += (block[0]-7.5)*size;
     Cube.position['z'] += (block[2]-7.5)*size;
     Cube.position['y'] += block[1]*size;
     
     //rotation
     Cube.rotation['y'] = ((block[4]*90)-90)*(Math.PI / 180);
-  
-    if (!geometryMerge[block[3]]) geometryMerge[block[3]] = new THREE.Geometry();
-    if (geometryMesh[block[3]]) scene.remove(geometryMesh[block[3]]);
     
+    // If no geometry for this block type exists, create it
+    if (typeof geometryMerge[block[3]] == 'undefined') geometryMerge[block[3]] = new THREE.Geometry();
+    
+    // If we've already created a geometry for this block type, remove it
+    if (typeof geometryMesh[block[3]] != 'undefined') scene.remove(geometryMesh[block[3]]);
+        
     THREE.GeometryUtils.merge(geometryMerge[block[3]], Cube);
     
     geometryMesh[block[3]] = new THREE.Mesh(geometryMerge[block[3]], BlockMaterial);
-
-    if (initiated) scene.add(geometryMesh[block[3]]);
-
+    
+    scene.add(geometryMesh[block[3]]);
+    
     block[5] = Cube;
   }
   return block;
