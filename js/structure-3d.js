@@ -39,6 +39,13 @@ function initiate3d() {
         scene: scene
     };
     
+    /**
+     * @param x
+     * @param y
+     * @param z
+     * @return Three.js Materials
+     * Function 
+     */
     three.getBlockMaterials = function(x, y, z) {
       blockId = schematic.getBlockId(x, y, z);
       return spriteMapper(
@@ -46,6 +53,12 @@ function initiate3d() {
       )
     }
     
+    /**
+     * @param x
+     * @param y
+     * @param z
+     * @return Three.js object representing cube at position x,y,z
+     */
     three.getBlockObject = function(x, y, z) {
       Cube = new THREE.Mesh(
         new THREE.CubeGeometry(
@@ -58,12 +71,27 @@ function initiate3d() {
       Cube.position = {x:x*16, y:y*16, z:z*16}
       return Cube;
     }
-
+    
+    /**
+     * @param x
+     * @param y
+     * @param z
+     * 
+     * Function removes block from position x,y,z
+     */
     three.removeBlockFromScene = function(x, y, z) {
       Cube = this.getBlockObject(x, y, z);
       three.scene.remove(Cube);
     }
     
+    /**
+     * @param x
+     * @param y
+     * @param z
+     * 
+     * Function adds block to position x,y,z. 
+     * Removes any block in it's place
+     */
     three.addBlockToScene = function(x, y, z) {
       this.removeBlockFromScene(x, y, z);
       Cube = this.getBlockObject(x, y, z);
