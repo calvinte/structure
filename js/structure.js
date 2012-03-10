@@ -200,7 +200,7 @@ function structureBuild() {
             $(this).attr('class', 'mc-block '+ type);
             block = identifyBlock(this);
             schematic.setBlockAndMetadata(block[0],block[1],block[2],block[3]);
-            if (enable3d) block = drawBlock(block);
+            if (enable3d) schematic.addBlockToScene(block[0],block[1],block[2],block[3]);
           });
           drawControls(currentZ, currentX, currentY);
         }
