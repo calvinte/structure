@@ -132,6 +132,7 @@ function render() {
 
 /**
  * @param paramaters as object
+ * @return materials as three.js object
  *  
  *  Prepare the object in 
  *  the following format:
