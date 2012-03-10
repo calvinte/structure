@@ -21,8 +21,6 @@ function initiate3d() {
 
     // camera
     var camera = new THREE.PerspectiveCamera(45, container.innerWidth() / container.innerHeight(), 1, 1000);
-    camera.position.y = (schematic.getSizeX() + schematic.getSizeY() +  schematic.getSizeZ())*16;
-    camera.lookAt( scene.position );
     scene.add(camera);
 
     // add subtle ambient lighting
@@ -41,14 +39,14 @@ function initiate3d() {
         scene: scene
     };
     
-    schematic.getBlockMaterials = function(x, y, z) {
-      blockId = this.getBlockId(x, y, z);
+    three.getBlockMaterials = function(x, y, z) {
+      blockId = schematic.getBlockId(x, y, z);
       return spriteMapper(
         blockTexture(blockId)
       )
     }
     
-    schematic.getBlockObject = function(x, y, z) {
+    three.getBlockObject = function(x, y, z) {
       Cube = new THREE.Mesh(
         new THREE.CubeGeometry(
           16, 16, 16,
@@ -61,15 +59,15 @@ function initiate3d() {
       return Cube;
     }
 
-    schematic.removeBlockFromScene = function(x, y, z) {
+    three.removeBlockFromScene = function(x, y, z) {
       Cube = this.getBlockObject(x, y, z);
       three.scene.remove(Cube);
     }
     
-    schematic.addBlockToScene = function(x, y, z) {
+    three.addBlockToScene = function(x, y, z) {
       this.removeBlockFromScene(x, y, z);
       Cube = this.getBlockObject(x, y, z);
-      three.scene.add(Cube);
+      this.scene.add(Cube);
     }
     
     animate();
@@ -77,20 +75,23 @@ function initiate3d() {
   })(jQuery); 
 }
 
-/* Animate THREE.Scene
+/* 
+ * Animate THREE.Scene
  */
 function animate() {
   requestAnimationFrame( animate );
   render();
 }
 
-/* Render THREE.Scene
+/*
+ * Render THREE.Scene
  */
 function render() {
-  var timer = new Date().getTime() * 0.0001;
-
-  three.camera.position.x = Math.cos( timer ) * schematic.getSizeX()*16;
-  three.camera.position.z = Math.sin( timer ) * schematic.getSizeZ()*16;
+  var timer = new Date().getTime() * 0.0005;
+  // position of camera determined by size of schematic
+  three.camera.position.y = (schematic.getSizeX() + schematic.getSizeY() +  schematic.getSizeZ())*8;
+  three.camera.position.x = Math.sin( timer ) * schematic.getSizeX()*16;
+  three.camera.position.z = Math.cos( timer ) * schematic.getSizeZ()*16;
   three.camera.lookAt({
     x:schematic.getSizeX()*8,
     y:schematic.getSizeY()*8, 
