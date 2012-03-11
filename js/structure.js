@@ -4,47 +4,44 @@ var enable3d = false;
 var startTime = new Date();
 var endTime = new Date();
 
-window.onload=function(){
-  
-  (function ($) {
-    $(document).ready(function(){
-      
-      if (Drupal.settings.structureArray)
-        loadNbtBlocks(base64_decode(Drupal.settings.structureArray));
-      else {
-        window["schematic"] = new com.mordritch.mcSim.World_Schematic();
-        schematic.makeNew(16,1,16);
-      }
-      
-      $('a.enable-3d').click(function() {
-        initiate3d();
-        enable3d = true;
-        return false;
-      });
+(function ($) {
+  $(document).ready(function(){
 
-      if (Drupal.settings.structureMode == 'edit') {
-        structureBuild();
-      }            
-    });
-      
-    $(document).ajaxComplete(function(){
-      
-      Drupal.settings.schematicFile ? 
-        loadNbtBlocks(base64_decode(Drupal.settings.schematicFile)) :
-        loadNbtBlocks(base64_decode(Drupal.settings.structureArray));
+    if (Drupal.settings.structureArray)
+      loadNbtBlocks(base64_decode(Drupal.settings.structureArray));
+    else {
+      window["schematic"] = new com.mordritch.mcSim.World_Schematic();
+      schematic.makeNew(16,1,16);
+    }
 
+    $('a.enable-3d').click(function() {
+      initiate3d();
+      enable3d = true;
+      return false;
     });
 
-  })(jQuery); 
+    if (Drupal.settings.structureMode == 'edit') {
+      structureBuild();
+    }            
+  });
   
-}
+  // when file is uploaded
+  $(document).ajaxComplete(function(){
+    // see if the file exists
+    if (Drupal.settings.schematicFile)
+      loadNbtBlocks(base64_decode(Drupal.settings.schematicFile));
+    // @TODO figure out what this line does..
+    else
+      loadNbtBlocks(base64_decode(Drupal.settings.structureArray));
+  });
+
+})(jQuery); 
 
 /**
  * Provide schematic object via Jonathan Lydall's JsNbtParser
  * 
  * @param data as binary
  */
-
 function loadNbtBlocks(data) {
   window["nbtData"] = new com.mordritch.mcSim.NbtParser().decode(data);
   window["schematic"] = new com.mordritch.mcSim.World_Schematic(window["nbtData"]);
@@ -150,8 +147,8 @@ function structureBuild() {
       });
       
       $('a.block-rotate').click(function(){
-        if (rotation < 3) { rotation++ }
-        else { rotation = 0; }
+        if (rotation < 3) {rotation++}
+        else {rotation = 0;}
         $('#edit-block-type .block-rotate').attr('class', 'block-rotate rotation-' + rotation);
         $('#edit-block-type .block-rotate').text('Rotation ' + rotationSymbol(rotation));
         return false;
@@ -193,19 +190,34 @@ function structureBuild() {
         },
 
         stop: function(event, ui){
+          var offsetX = 0;
+          var offsetY = 0;
+          var offsetZ = 0;
           $(".ui-selected", this).each(function(){
             $(this).removeAttr('oldstyle');
             $(this).removeClass('ui-unselecting');
             type = $('input:radio[name=block_type]:checked').val();
             $(this).attr('class', 'mc-block '+ type);
             block = identifyBlock(this);
-            schematic.setBlockAndMetadata(block[0],block[1],block[2],block[3]);
-            if (enable3d) schematic.addBlockToScene(block[0],block[1],block[2],block[3]);
+            schematic.forceSetBlockAndMetadata(block[0]+offsetX,block[1]+offsetY,block[2]+offsetZ,block[3]);
+            
+            if ( block[0] < 0 && block[0] * -1 > offsetX ) offsetX = block[0] * -1;
+            if ( block[1] < 0 && block[1] * -1 > offsetY ) offsetY = block[1] * -1;
+            if ( block[2] < 0 && block[2] * -1 > offsetZ ) offsetZ = block[2] * -1;
+            
+            console.log(offsetX);
+            
+            if (enable3d) three.addBlockToScene(block[0],block[1],block[2]);
           });
+          
+            
+          if (block[0] < 0) currentX += offsetX;
+          if (block[1] < 0) currentY += offsetY;
+          if (block[2] < 0) currentZ += offsetZ;
           drawControls(currentZ, currentX, currentY);
         }
       });
-      
+            
       /* Small helper function to determine which arrow symobl to print
        * 
        * @param rotation
@@ -213,10 +225,10 @@ function structureBuild() {
        * @return string as either ↑, →, ↓ or ←
        */
       function rotationSymbol(rotation) {
-             if (rotation == '0') { symbol = '\u2191'; }
-        else if (rotation == '1') { symbol = '\u2192'; }
-        else if (rotation == '2') { symbol = '\u2193'; }
-        else { symbol = '\u2190'; }
+             if (rotation == '0') symbol = '\u2191';
+        else if (rotation == '1') symbol = '\u2192';
+        else if (rotation == '2') symbol = '\u2193';
+        else symbol = '\u2190';
         return symbol;
       }
       
@@ -299,7 +311,6 @@ function structureBuild() {
       * @return new Array as structured block (X,Y,Z,TYPE)
       */
       function identifyBlock(thisblock) {
-        startTime = new Date().getTime();
         //isolate the coordinates
         id = $(thisblock).attr("id");
         coords = id.replace(/[^0-9-_.]/g, "");
@@ -310,8 +321,6 @@ function structureBuild() {
             Number(coords[2]),
             Number($('input:radio[name=block_type]:checked').val()),
             rotation);
-        endTime = new Date().getTime();
-        console.log('Execution time of identifyBlock(): ' + (Number(endTime) - Number(startTime)));
       }
 
     });

@@ -1,7 +1,7 @@
 var three = new Object;
 
 /**
- *
+ * Function that initates 3d/three.js
  */
 function initiate3d() {
   (function ($) {
@@ -190,7 +190,6 @@ function spriteMapper(paramaters) {
 
 /**
  * @param blockId as integer
- * 
  * @return object paramaters as required by spriteMapper()
  *  
  */
