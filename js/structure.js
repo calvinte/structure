@@ -28,11 +28,14 @@ var endTime = new Date();
   // when file is uploaded
   $(document).ajaxComplete(function(){
     // see if the file exists
-    if (Drupal.settings.schematicFile)
+    if (Drupal.settings.schematicFile) {
       loadNbtBlocks(base64_decode(Drupal.settings.schematicFile));
-    // @TODO figure out what this line does..
-    else
+      if (enable3d) three.addSchematicToScene();
+    }
+    else {
+      // @TODO figure out what this line does..
       loadNbtBlocks(base64_decode(Drupal.settings.structureArray));
+    }
   });
 
 })(jQuery); 
@@ -96,7 +99,7 @@ function structureBuild() {
         console.log('up');
         currentY++;
         drawControls(currentZ, currentX, currentY); 
-        if (enable3d) grid = drawGrid(scene, currentZ, grid);
+        //if (enable3d) grid = drawGrid(scene, currentZ, grid);
         return false;
       });
 
@@ -104,7 +107,7 @@ function structureBuild() {
         console.log('down');
         currentY--;
         drawControls(currentZ, currentX, currentY);
-        if (enable3d) grid = drawGrid(scene, currentZ, grid);
+        //if (enable3d) grid = drawGrid(scene, currentZ, grid);
         return false;
       });
 
@@ -201,16 +204,18 @@ function structureBuild() {
             block = identifyBlock(this);
             schematic.forceSetBlockAndMetadata(block[0]+offsetX,block[1]+offsetY,block[2]+offsetZ,block[3]);
             
+            // Because forceSetBlockAndMetadata() changed the dimensions of
+            // the schematics on the fly we need to account for that
             if ( block[0] < 0 && block[0] * -1 > offsetX ) offsetX = block[0] * -1;
             if ( block[1] < 0 && block[1] * -1 > offsetY ) offsetY = block[1] * -1;
             if ( block[2] < 0 && block[2] * -1 > offsetZ ) offsetZ = block[2] * -1;
             
-            console.log(offsetX);
-            
+            // If 3d is enabled, draw the block on the canvas
             if (enable3d) three.addBlockToScene(block[0],block[1],block[2]);
           });
           
-            
+          // Change the currentX to match the new schematic position
+          //  before we run drawControls() 
           if (block[0] < 0) currentX += offsetX;
           if (block[1] < 0) currentY += offsetY;
           if (block[2] < 0) currentZ += offsetZ;

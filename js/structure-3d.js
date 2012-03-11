@@ -39,6 +39,12 @@ function initiate3d() {
         scene: scene
     };
     
+    // array used to store three.js mesh objects for later use
+    // as opposed to regenerating them every time
+    three.meshCache = new Object();
+    
+    three.structure = new THREE.Geometry();
+    
     /**
      * @param x
      * @param y
@@ -47,10 +53,9 @@ function initiate3d() {
      * Function 
      */
     three.getBlockMaterials = function(x, y, z) {
-      blockId = schematic.getBlockId(x, y, z);
       return spriteMapper(
-        blockTexture(blockId)
-      )
+        blockTexture(schematic.getBlockId(x, y, z))
+      );
     }
     
     /**
@@ -59,17 +64,16 @@ function initiate3d() {
      * @param z
      * @return Three.js object representing cube at position x,y,z
      */
-    three.getBlockObject = function(x, y, z) {
-      Cube = new THREE.Mesh(
+    three.generateBlockObject = function(x, y, z) {
+      this.meshCache[schematic.getBlockId(x, y, z)] = new THREE.Mesh(
         new THREE.CubeGeometry(
           16, 16, 16,
           1, 1, 1,
           this.getBlockMaterials(x, y, z)
         ),
-        new THREE.MeshFaceMaterial()
+        new THREE.MeshFaceMaterial(),
+        false
       );
-      Cube.position = {x:x*16, y:y*16, z:z*16}
-      return Cube;
     }
     
     /**
@@ -80,8 +84,10 @@ function initiate3d() {
      * Function removes block from position x,y,z
      */
     three.removeBlockFromScene = function(x, y, z) {
-      Cube = this.getBlockObject(x, y, z);
-      three.scene.remove(Cube);
+      if (schematic.getBlockId(x, y, z) != 0) {
+        var Cube = this.generateBlockObject(x, y, z);
+        three.scene.remove(Cube);
+      }
     }
     
     /**
@@ -93,9 +99,34 @@ function initiate3d() {
      * Removes any block in it's place
      */
     three.addBlockToScene = function(x, y, z) {
-      this.removeBlockFromScene(x, y, z);
-      Cube = this.getBlockObject(x, y, z);
-      this.scene.add(Cube);
+      blockId = schematic.getBlockId(x, y, z);
+      
+      if ( blockId != 0 ) {
+        // first check if we already have a mesh for this id cached
+        // if we don't, then generate one
+        if ( this.meshCache[blockId] == undefined) {
+          this.generateBlockObject(x, y, z);
+        }
+
+        this.meshCache[blockId].position = {x:x*16, y:y*16, z:z*16};
+        THREE.GeometryUtils.merge(three.structure, this.meshCache[blockId]);
+      }
+    }
+    
+    three.addSchematicToScene = function() {
+      var xLimit = schematic.getSizeX();
+      var yLimit = schematic.getSizeY();
+      var zLimit = schematic.getSizeZ();
+      
+      for (var xRow = 0; xRow < xLimit; xRow++) {
+        for (var yRow = 0; yRow < yLimit; yRow++) {
+          for (var zRow = 0; zRow < zLimit; zRow++) {
+            this.addBlockToScene(xRow, yRow, zRow);
+          }
+        }
+      }
+      var mesh = new THREE.Mesh( three.structure, new THREE.MeshFaceMaterial() );
+      scene.add( mesh );
     }
     
     animate();
@@ -117,14 +148,16 @@ function animate() {
 function render() {
   var timer = new Date().getTime() * 0.0005;
   // position of camera determined by size of schematic
-  three.camera.position.y = (schematic.getSizeX() + schematic.getSizeY() +  schematic.getSizeZ())*8;
-  three.camera.position.x = Math.sin( timer ) * schematic.getSizeX()*16;
-  three.camera.position.z = Math.cos( timer ) * schematic.getSizeZ()*16;
+  var distance = ((schematic.getSizeX() + schematic.getSizeZ() + schematic.getSizeY())/3)*16;
+  three.camera.position.y = distance;
+  three.camera.position.x = Math.sin( timer ) * distance;
+  three.camera.position.z = Math.cos( timer ) * distance;
   three.camera.lookAt({
-    x:schematic.getSizeX()*8,
-    y:schematic.getSizeY()*8, 
-    z:schematic.getSizeZ()*8
+    x:(schematic.getSizeX()*16)/2,
+    y:0,
+    z:(schematic.getSizeZ()*16)/2
   });
+
   //controls.update();
   three.renderer.render( three.scene, three.camera );
 }
