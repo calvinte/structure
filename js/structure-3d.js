@@ -110,7 +110,7 @@ function initiate3d() {
         chunkId = this.getChunkId(x, y, z);
 
         this.meshCache[blockId].position = {x:x*16, y:y*16, z:z*16};
-        THREE.GeometryUtils.merge( this.chunkCache[chunkId], this.meshCache[blockId] );
+        THREE.GeometryUtils.merge( this.chunkCache[chunkId].geometry, this.meshCache[blockId] );
       }
     }
     
@@ -131,6 +131,14 @@ function initiate3d() {
       return chunkId.split('-')[2];
     }
     
+    three.newChunk = function(chunkId) {
+      return this.chunkCache[chunkId] = 
+        new THREE.Mesh(
+          new THREE.Geometry(),
+          new THREE.MeshFaceMaterial()
+        );
+    }
+    
     three.addChunkToScene = function(chunkId) {
       var x = this.getChunkX(chunkId);
       var y = this.getChunkY(chunkId);
@@ -138,14 +146,16 @@ function initiate3d() {
       var xLimit = x + 16;
       var yLimit = y + 16;
       var zLimit = z + 16;
-      
+            
       // check if the chunk exists, if not create it
       if ( this.chunkCache[chunkId] == undefined )
-         this.chunkCache[chunkId] = new THREE.Geometry();
+         this.chunkCache[chunkId] = three.newChunk(chunkId);
       // remove the chunk if it already exists
-      else
+      else {
         this.scene.remove( this.chunkCache[chunkId] );
-      
+        this.chunkCache[chunkId] = three.newChunk(chunkId);
+      }
+
       // create every block in the chunk
       for (var xRow = x; xRow < xLimit; xRow++) {
         for (var yRow = y; yRow < yLimit; yRow++) {
@@ -156,8 +166,13 @@ function initiate3d() {
       }
       
       // create a mesh from the chunk and draw it on the scene
-      var mesh = new THREE.Mesh( this.chunkCache[chunkId], new THREE.MeshFaceMaterial() );
-      this.scene.add( mesh );
+      this.scene.add( this.chunkCache[chunkId] );
+    }
+    
+    three.addBlockToScene = function(x, y, z) {
+      this.addChunkToScene(
+        this.getChunkId(x, y, z)
+      );
     }
     
     /**
