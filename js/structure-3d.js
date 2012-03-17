@@ -140,6 +140,7 @@ function initiate3d() {
     }
     
     three.addChunkToScene = function(chunkId) {
+      // get the bounds of the chunk
       var x = this.getChunkX(chunkId);
       var y = this.getChunkY(chunkId);
       var z = this.getChunkZ(chunkId);
@@ -173,6 +174,18 @@ function initiate3d() {
       this.addChunkToScene(
         this.getChunkId(x, y, z)
       );
+    }
+  
+    three.addBlocksToScene = function(blocks) {
+      var chunks = new Object();
+      for (block in blocks) {
+        // break blocks up by chunk
+        chunks[three.getChunkId(blocks[block].x, blocks[block].y, blocks[block].z)] = new Object();
+      }
+      for (chunk in chunks) {
+        // draws blocks on a per-chunk basis
+        this.addChunkToScene(chunk);
+      }
     }
     
     /**

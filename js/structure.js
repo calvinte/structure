@@ -196,12 +196,13 @@ function structureBuild() {
           var offsetX = 0;
           var offsetY = 0;
           var offsetZ = 0;
+          var blocks = new Array();
           $(".ui-selected", this).each(function(){
             $(this).removeAttr('oldstyle');
             $(this).removeClass('ui-unselecting');
             type = $('input:radio[name=block_type]:checked').val();
             $(this).attr('class', 'mc-block '+ type);
-            block = identifyBlock(this);
+            var block = identifyBlock(this);
             schematic.forceSetBlockAndMetadata(block[0]+offsetX,block[1]+offsetY,block[2]+offsetZ,block[3]);
             
             // Because forceSetBlockAndMetadata() changed the dimensions of
@@ -211,8 +212,13 @@ function structureBuild() {
             if ( block[2] < 0 && block[2] * -1 > offsetZ ) offsetZ = block[2] * -1;
             
             // If 3d is enabled, draw the block on the canvas
-            if (enable3d) three.addBlockToScene(block[0],block[1],block[2]);
+            if (enable3d) blocks[$(this).attr('id')] = new Object({
+              x : block[0], 
+              y : block[1], 
+              z : block[2] 
+            });
           });
+          if (enable3d) three.addBlocksToScene(blocks);
           
           // Change the currentX to match the new schematic position
           //  before we run drawControls() 
