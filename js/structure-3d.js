@@ -43,7 +43,7 @@ function initiate3d() {
     // as opposed to regenerating them every time
     three.meshCache = new Object();
     
-    three.structure = new THREE.Geometry();
+    three.chunkCache = new Object()
     
     /**
      * @param x
@@ -98,7 +98,7 @@ function initiate3d() {
      * Function adds block to position x,y,z. 
      * Removes any block in it's place
      */
-    three.addBlockToScene = function(x, y, z) {
+    three.addBlockToChunkCache = function(x, y, z) {
       blockId = schematic.getBlockId(x, y, z);
       
       if ( blockId != 0 ) {
@@ -107,26 +107,85 @@ function initiate3d() {
         if ( this.meshCache[blockId] == undefined) {
           this.generateBlockObject(x, y, z);
         }
+        chunkId = this.getChunkId(x, y, z);
 
         this.meshCache[blockId].position = {x:x*16, y:y*16, z:z*16};
-        THREE.GeometryUtils.merge(three.structure, this.meshCache[blockId]);
+        THREE.GeometryUtils.merge( this.chunkCache[chunkId], this.meshCache[blockId] );
       }
     }
     
+    three.getChunkId = function(x, y, z){
+      var chunkPosition = schematic.getBlockChunkPosition(x, y, z);
+      return chunkPosition.x + '-' + chunkPosition.y + '-' + chunkPosition.z;
+    }
+    
+    three.getChunkX = function(chunkId) {
+      return chunkId.split('-')[0];
+    }
+    
+    three.getChunkY = function(chunkId) {
+      return chunkId.split('-')[1];
+    }
+    
+    three.getChunkZ = function(chunkId) {
+      return chunkId.split('-')[2];
+    }
+    
+    three.addChunkToScene = function(chunkId) {
+      var x = this.getChunkX(chunkId);
+      var y = this.getChunkY(chunkId);
+      var z = this.getChunkZ(chunkId);
+      var xLimit = x + 16;
+      var yLimit = y + 16;
+      var zLimit = z + 16;
+      
+      // check if the chunk exists, if not create it
+      if ( this.chunkCache[chunkId] == undefined )
+         this.chunkCache[chunkId] = new THREE.Geometry();
+      // remove the chunk if it already exists
+      else
+        this.scene.remove( this.chunkCache[chunkId] );
+      
+      // create every block in the chunk
+      for (var xRow = x; xRow < xLimit; xRow++) {
+        for (var yRow = y; yRow < yLimit; yRow++) {
+          for (var zRow = z; zRow < zLimit; zRow++) {
+            this.addBlockToChunkCache(xRow, yRow, zRow);
+          }
+        }
+      }
+      
+      // create a mesh from the chunk and draw it on the scene
+      var mesh = new THREE.Mesh( this.chunkCache[chunkId], new THREE.MeshFaceMaterial() );
+      this.scene.add( mesh );
+    }
+    
+    /**
+     * Function recursivly looks through entire schematic and
+     * draws all chunks that if finds, one at a time
+     */
     three.addSchematicToScene = function() {
-      var xLimit = schematic.getSizeX();
-      var yLimit = schematic.getSizeY();
-      var zLimit = schematic.getSizeZ();
+      if ( three.scene.children[THREE.Mesh] != undefined )
+        this.scene.remove( mesh );
+      
+      var xLimit = Math.ceil(schematic.getSizeX() / 16);
+      var yLimit = Math.ceil(schematic.getSizeY() / 16);
+      var zLimit = Math.ceil(schematic.getSizeZ() / 16);
       
       for (var xRow = 0; xRow < xLimit; xRow++) {
         for (var yRow = 0; yRow < yLimit; yRow++) {
           for (var zRow = 0; zRow < zLimit; zRow++) {
-            this.addBlockToScene(xRow, yRow, zRow);
+            
+            this.addChunkToScene(
+              this.getChunkId (
+                xRow * 16, 
+                yRow * 16, 
+                zRow * 16
+              )
+            );
           }
         }
       }
-      var mesh = new THREE.Mesh( three.structure, new THREE.MeshFaceMaterial() );
-      scene.add( mesh );
     }
     
     animate();
