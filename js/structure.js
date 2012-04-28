@@ -11,7 +11,7 @@ var endTime = new Date();
       loadNbtBlocks(base64_decode(Drupal.settings.structureArray));
     else {
       window["schematic"] = new com.mordritch.mcSim.World_Schematic();
-      schematic.makeNew(16,1,16);
+      schematic.makeNew(16,16,16);
     }
 
     $('a.enable-3d').click(function() {
@@ -56,7 +56,6 @@ function loadNbtBlocks(data) {
 * @return blocks as array
 */
 function loadBlocks() {
-  startTime = new Date().getTime();
   var blocks = new Array();
 
   // load blocks from page element
@@ -78,8 +77,6 @@ function loadBlocks() {
     blocks = updateBlocks(blocks);
 
   }
-  endTime = new Date().getTime();
-  console.log('Execution time of loadBlocks(): ' + (Number(endTime) - Number(startTime)));
 
   return blocks;
 }
@@ -223,6 +220,7 @@ function structureBuild() {
               z : block[2]
             });
           });
+
           if (enable3d) three.addBlocksToScene(blocks);
 
           // Change the currentX to match the new schematic position
@@ -256,8 +254,6 @@ function structureBuild() {
        * @param Y representing current Y coordinate
        */
       function drawControls(Z, X, Y) {
-        startTime = new Date().getTime();
-
         // If there aren't any .xy-grid .mc-block elements then it's our first
         // time through, create them
         if (!controlsExist) {
@@ -299,8 +295,6 @@ function structureBuild() {
           $(this).attr('id', 'X'+ xcount + '_Y'+ ycount + '_Z' + zcount);
           xcount < X+15 ? xcount++ : newLine();
         });
-        endTime = new Date().getTime();
-        console.log('Execution time of drawControls(): ' + (Number(endTime) - Number(startTime)));
         function newLine(){xcount = X;zcount ++;}
       }
 
@@ -361,8 +355,6 @@ function spritePosition(blockid) {
       x = '2';
       y = '0';
       break;
-    case 4: //cobblestone
-      x = '0';
       y = '1';
       break;
     case 5: //wooden plank

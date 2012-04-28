@@ -105,7 +105,7 @@ function initiate3d() {
     three.addBlockToChunkCache = function(x, y, z) {
       blockId = schematic.getBlockId(x, y, z);
 
-      if ( blockId != 0 ) {
+      if ( blockId != 0 && blockId != undefined ) {
         // first check if we already have a mesh for this id cached
         // if we don't, then generate one
         if ( this.meshCache[blockId] == undefined) {
@@ -162,9 +162,9 @@ function initiate3d() {
       }
 
       // create every block in the chunk
-      for (var xRow = x; xRow < xLimit; xRow++) {
-        for (var yRow = y; yRow < yLimit; yRow++) {
-          for (var zRow = z; zRow < zLimit; zRow++) {
+      for (var xRow = Number(x); xRow < xLimit; xRow++) {
+        for (var yRow = Number(y); yRow < yLimit; yRow++) {
+          for (var zRow = Number(z); zRow < zLimit; zRow++) {
             this.addBlockToChunkCache(xRow, yRow, zRow);
           }
         }
@@ -184,7 +184,11 @@ function initiate3d() {
       var chunks = new Object();
       for (block in blocks) {
         // break blocks up by chunk
-        chunks[three.getChunkId(blocks[block].x, blocks[block].y, blocks[block].z)] = new Object();
+        chunks[three.getChunkId(
+          blocks[block].x,
+          blocks[block].y,
+          blocks[block].z
+        )] = new Object();
       }
       for (chunk in chunks) {
         // draws blocks on a per-chunk basis
@@ -271,7 +275,7 @@ function render() {
   xMax = schematic.getSizeX()*16;
   yMax = schematic.getSizeY()*16;
   zMax = schematic.getSizeZ()*16;
-  //console.log(timer);
+
   var distance = Math.sqrt(Math.pow(xMax, 2) + Math.pow(yMax, 2)) * 1.5;
 
   three.camera.position.x = (Math.sin( timer ) * distance) + xMax/2;
