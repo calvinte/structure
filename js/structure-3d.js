@@ -190,6 +190,7 @@ function initiate3d() {
         )] = new Object();
       }
       for (chunk in chunks) {
+        console.log(chunk);
         // draws blocks on a per-chunk basis
         this.addChunkToScene(chunk);
       }
@@ -282,7 +283,7 @@ function render() {
   three.camera.position.z = (Math.cos( timer ) * distance) + zMax/2;
   three.camera.lookAt({
     x:xMax/2,
-    y:0,
+    y:yMax/2,
     z:zMax/2
   });
 

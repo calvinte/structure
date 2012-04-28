@@ -215,9 +215,9 @@ function structureBuild() {
 
             // If 3d is enabled, draw the block on the canvas
             if (enable3d) blocks[$(this).attr('id')] = new Object({
-              x : block[0],
-              y : block[1],
-              z : block[2]
+              x : block[0] + offsetX,
+              y : block[1] + offsetY,
+              z : block[2] + offsetZ
             });
           });
 
