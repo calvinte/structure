@@ -222,12 +222,12 @@ function structureBuild() {
           });
 
           if (enable3d) three.addBlocksToScene(blocks);
-
           // Change the currentX to match the new schematic position
           //  before we run drawControls()
-          if (block[0] < 0) currentX += offsetX;
-          if (block[1] < 0) currentY += offsetY;
-          if (block[2] < 0) currentZ += offsetZ;
+          currentX += offsetX;
+          currentY += offsetY;
+          currentZ += offsetZ;
+          console.log(currentX, currentY, currentZ);
           drawControls(currentZ, currentX, currentY);
         }
       });
