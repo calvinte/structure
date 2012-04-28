@@ -201,9 +201,9 @@ function structureBuild() {
             var block = identifyBlock(this);
 
             schematic.forceSetBlockAndMetadata(
-              block[0]+offsetX,
-              block[1]+offsetY,
-              block[2]+offsetZ,
+              block[0] + offsetX,
+              block[1] + offsetY,
+              block[2] + offsetZ,
               block[3]
             );
 
@@ -228,6 +228,14 @@ function structureBuild() {
           currentY += offsetY;
           currentZ += offsetZ;
           drawControls(currentZ, currentX, currentY);
+
+          // If the schematic has been offset we need to redraw
+          // the entire schematic
+          // @TODO optimize this
+          if (offsetX || offsetY || offsetZ) {
+            if (enable3d) three.addSchematicToScene();
+          }
+
         }
       });
 

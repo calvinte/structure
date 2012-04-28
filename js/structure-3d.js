@@ -21,33 +21,26 @@ function initiate3d() {
 
     // camera
     var camera = new THREE.PerspectiveCamera(45, container.innerWidth() / container.innerHeight(), 1, 10000);
-    scene.add(camera);
 
     // add subtle ambient lighting
     var ambientLight = new THREE.AmbientLight(0x555555);
-    scene.add(ambientLight);
 
     // add directional light source
     var directionalLight = new THREE.DirectionalLight(0xffffff);
     directionalLight.position.set(1, 1, 1).normalize();
-    scene.add(directionalLight);
 
     var grid = drawGrid();
-    scene.add(grid);
 
     // create wrapper object that contains three.js objects
     three = {
         renderer: renderer,
         camera: camera,
+        light1: ambientLight,
+        light2: directionalLight,
         scene: scene,
         grid: grid,
+        meshCache: new Object(),
     };
-
-    // object used to store three.js mesh objects for later use
-    // as opposed to regenerating them every time
-    three.meshCache = new Object();
-
-    three.chunkCache = new Object()
 
     /**
      * @param x
@@ -190,7 +183,6 @@ function initiate3d() {
         )] = new Object();
       }
       for (chunk in chunks) {
-        console.log(chunk);
         // draws blocks on a per-chunk basis
         this.addChunkToScene(chunk);
       }
@@ -201,8 +193,14 @@ function initiate3d() {
      * draws all chunks that if finds, one at a time
      */
     three.addSchematicToScene = function() {
-      if (three.scene.children[THREE.Mesh] != undefined)
-        this.scene.remove(mesh);
+      this.scene = new THREE.Scene();
+      this.scene.add(this.light1);
+      this.scene.add(this.light2);
+      this.scene.add(this.grid);
+      // Need to clear the chunk cache because it's
+      // based on position
+      // @TODO base chunk cache on unique ids
+      three.chunkCache = new Object()
 
       var xLimit = Math.ceil(schematic.getSizeX() / 16);
       var yLimit = Math.ceil(schematic.getSizeY() / 16);
@@ -223,6 +221,10 @@ function initiate3d() {
         }
       }
     }
+
+    // object used to store three.js mesh objects for later use
+    // as opposed to regenerating them every time
+    three.addSchematicToScene();
 
     animate();
 
