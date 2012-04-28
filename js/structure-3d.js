@@ -5,11 +5,11 @@ var three = new Object;
  */
 function initiate3d() {
   (function ($) {
-    
+
     // container
     container = $('#mc-3d .canvas-wrapper');
     container.empty();
-    
+
     // renderer
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(container.innerWidth(), container.innerHeight());
@@ -38,13 +38,13 @@ function initiate3d() {
         camera: camera,
         scene: scene
     };
-    
+
     // array used to store three.js mesh objects for later use
     // as opposed to regenerating them every time
     three.meshCache = new Object();
-    
+
     three.chunkCache = new Object()
-    
+
     /**
      * @param x
      * @param y
@@ -57,7 +57,7 @@ function initiate3d() {
         blockTexture(schematic.getBlockId(x, y, z))
       );
     }
-    
+
     /**
      * @param x
      * @param y
@@ -75,7 +75,7 @@ function initiate3d() {
         false
       );
     }
-    
+
     /**
      * @param x
      * @param y
@@ -89,7 +89,7 @@ function initiate3d() {
         three.scene.remove(Cube);
       }
     }
-    
+
     /**
      * @param x
      * @param y
@@ -100,7 +100,7 @@ function initiate3d() {
      */
     three.addBlockToChunkCache = function(x, y, z) {
       blockId = schematic.getBlockId(x, y, z);
-      
+
       if ( blockId != 0 ) {
         // first check if we already have a mesh for this id cached
         // if we don't, then generate one
@@ -113,24 +113,24 @@ function initiate3d() {
         THREE.GeometryUtils.merge( this.chunkCache[chunkId].geometry, this.meshCache[blockId] );
       }
     }
-    
+
     three.getChunkId = function(x, y, z){
       var chunkPosition = schematic.getBlockChunkPosition(x, y, z);
       return chunkPosition.x + '-' + chunkPosition.y + '-' + chunkPosition.z;
     }
-    
+
     three.getChunkX = function(chunkId) {
       return chunkId.split('-')[0];
     }
-    
+
     three.getChunkY = function(chunkId) {
       return chunkId.split('-')[1];
     }
-    
+
     three.getChunkZ = function(chunkId) {
       return chunkId.split('-')[2];
     }
-    
+
     three.newChunk = function(chunkId) {
       return this.chunkCache[chunkId] = 
         new THREE.Mesh(
@@ -138,7 +138,7 @@ function initiate3d() {
           new THREE.MeshFaceMaterial()
         );
     }
-    
+
     three.addChunkToScene = function(chunkId) {
       // get the bounds of the chunk
       var x = this.getChunkX(chunkId);
@@ -147,7 +147,7 @@ function initiate3d() {
       var xLimit = x + 16;
       var yLimit = y + 16;
       var zLimit = z + 16;
-            
+
       // check if the chunk exists, if not create it
       if ( this.chunkCache[chunkId] == undefined )
          this.chunkCache[chunkId] = three.newChunk(chunkId);
@@ -165,17 +165,17 @@ function initiate3d() {
           }
         }
       }
-      
+
       // create a mesh from the chunk and draw it on the scene
       this.scene.add( this.chunkCache[chunkId] );
     }
-    
+
     three.addBlockToScene = function(x, y, z) {
       this.addChunkToScene(
         this.getChunkId(x, y, z)
       );
     }
-  
+
     three.addBlocksToScene = function(blocks) {
       var chunks = new Object();
       for (block in blocks) {
@@ -187,27 +187,27 @@ function initiate3d() {
         this.addChunkToScene(chunk);
       }
     }
-    
+
     /**
      * Function recursivly looks through entire schematic and
      * draws all chunks that if finds, one at a time
      */
     three.addSchematicToScene = function() {
-      if ( three.scene.children[THREE.Mesh] != undefined )
-        this.scene.remove( mesh );
-      
+      if (three.scene.children[THREE.Mesh] != undefined)
+        this.scene.remove(mesh);
+
       var xLimit = Math.ceil(schematic.getSizeX() / 16);
       var yLimit = Math.ceil(schematic.getSizeY() / 16);
       var zLimit = Math.ceil(schematic.getSizeZ() / 16);
-      
+
       for (var xRow = 0; xRow < xLimit; xRow++) {
         for (var yRow = 0; yRow < yLimit; yRow++) {
           for (var zRow = 0; zRow < zLimit; zRow++) {
-            
+
             this.addChunkToScene(
               this.getChunkId (
-                xRow * 16, 
-                yRow * 16, 
+                xRow * 16,
+                yRow * 16,
                 zRow * 16
               )
             );
@@ -215,9 +215,9 @@ function initiate3d() {
         }
       }
     }
-    
+
     animate();
-    
+
   })(jQuery); 
 }
 
@@ -253,10 +253,10 @@ function render() {
 /**
  * @param paramaters as object
  * @return materials as three.js object
- *  
+ *
  *  Prepare the object in 
  *  the following format:
- *  
+ *
  *  material = spriteMapper({
  *    image: 'sprite.png',
  *    imageSize: 256, // size of image in px (must be square)
@@ -288,7 +288,7 @@ function render() {
  *      }
  *    }
  *  });
- * 
+ *
  */
 
 function spriteMapper(paramaters) {
@@ -311,7 +311,7 @@ function spriteMapper(paramaters) {
 /**
  * @param blockId as integer
  * @return object paramaters as required by spriteMapper()
- *  
+ *
  */
 function blockTexture(blockId) {
   switch (blockId) {
