@@ -43,7 +43,7 @@ function initiate3d() {
         grid: grid,
     };
 
-    // array used to store three.js mesh objects for later use
+    // object used to store three.js mesh objects for later use
     // as opposed to regenerating them every time
     three.meshCache = new Object();
 

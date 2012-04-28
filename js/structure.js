@@ -22,9 +22,9 @@ var endTime = new Date();
 
     if (Drupal.settings.structureMode == 'edit') {
       structureBuild();
-    }            
+    }
   });
-  
+
   // when file is uploaded
   $(document).ajaxComplete(function(){
     // see if the file exists
@@ -38,11 +38,11 @@ var endTime = new Date();
     }
   });
 
-})(jQuery); 
+})(jQuery);
 
 /**
  * Provide schematic object via Jonathan Lydall's JsNbtParser
- * 
+ *
  * @param data as binary
  */
 function loadNbtBlocks(data) {
@@ -52,7 +52,7 @@ function loadNbtBlocks(data) {
 
 /* Provide blocks as array from document as string. This function will
 * be used to deserialize blocks data from the database
-* 
+*
 * @return blocks as array
 */
 function loadBlocks() {
@@ -83,7 +83,7 @@ function loadBlocks() {
 
   return blocks;
 }
-  
+
 
 function structureBuild() {
   var controlsExist = false;
@@ -94,11 +94,11 @@ function structureBuild() {
   (function ($) {
     $(document).ready(function(){
       drawControls(currentZ, currentX, currentY);
-      
+
       $('.up-z').click(function() {
         console.log('up');
         currentY++;
-        drawControls(currentZ, currentX, currentY); 
+        drawControls(currentZ, currentX, currentY);
         //if (enable3d) grid = drawGrid(scene, currentZ, grid);
         return false;
       });
@@ -114,41 +114,40 @@ function structureBuild() {
       $('.north-y').click(function() {
         console.log('north');
         currentZ--;
-        drawControls(currentZ, currentX, currentY);  
+        drawControls(currentZ, currentX, currentY);
         return false;
       });
 
       $('.south-y').click(function() {
         console.log('south');
         currentZ++;
-        drawControls(currentZ, currentX, currentY);  
+        drawControls(currentZ, currentX, currentY);
         return false;
       });
 
       $('.east-x').click(function() {
         console.log('east');
         currentX++;
-        drawControls(currentZ, currentX, currentY);  
+        drawControls(currentZ, currentX, currentY);
         return false;
       });
 
       $('.west-x').click(function() {
         console.log('west');
         currentX--;
-        drawControls(currentZ, currentX, currentY);  
+        drawControls(currentZ, currentX, currentY);
         return false;
       });
-      
-      
+
       $('#edit-block-type input').next().append('<span class="block-rotation"><a href="#rotate" class="block-rotate rotation-' + rotation + '">Rotation ' + rotationSymbol(rotation) + '</a></span>');
       $('#edit-block-type input').parent().find('.block-rotation').hide();
       $('#edit-block-type input:checked').parent().find('.block-rotation').show();
-      
+
       $('#edit-block-type').change(function(){
         $('#edit-block-type input').parent().find('.block-rotation').hide();
         $('#edit-block-type input:checked').parent().find('.block-rotation').show();
       });
-      
+
       $('a.block-rotate').click(function(){
         if (rotation < 3) {rotation++}
         else {rotation = 0;}
@@ -156,7 +155,7 @@ function structureBuild() {
         $('#edit-block-type .block-rotate').text('Rotation ' + rotationSymbol(rotation));
         return false;
       });
-      
+
       $('#structure-node-form').submit(function() {
         window["nbtData"] = new com.mordritch.mcSim.NbtParser().encode(schematic.schematic);
         window["nbtData"] = base64_encode(window["nbtData"]);
@@ -167,8 +166,8 @@ function structureBuild() {
       });
 
       $('#structure-node-form .xy-grid').selectable({
-        
-        selecting: function(event, ui){ 
+
+        selecting: function(event, ui){
           $(".ui-selecting:not(.ui-unselecting)", this).each(function(){
               if($(this).attr('style')){
                 $(this).attr('oldstyle', $(this).attr('style'));
@@ -178,7 +177,7 @@ function structureBuild() {
               $(this).addClass('ui-unselecting');
           });
         },
-        
+
         unselecting: function(event, ui){
           $(".ui-unselecting:not(.ui-selecting)", this).each(function(){
             if ($(this).attr('oldstyle')) {
@@ -203,36 +202,42 @@ function structureBuild() {
             type = $('input:radio[name=block_type]:checked').val();
             $(this).attr('class', 'mc-block '+ type);
             var block = identifyBlock(this);
-            schematic.forceSetBlockAndMetadata(block[0]+offsetX,block[1]+offsetY,block[2]+offsetZ,block[3]);
-            
+
+            schematic.forceSetBlockAndMetadata(
+              block[0]+offsetX,
+              block[1]+offsetY,
+              block[2]+offsetZ,
+              block[3]
+            );
+
             // Because forceSetBlockAndMetadata() changed the dimensions of
             // the schematics on the fly we need to account for that
             if ( block[0] < 0 && block[0] * -1 > offsetX ) offsetX = block[0] * -1;
             if ( block[1] < 0 && block[1] * -1 > offsetY ) offsetY = block[1] * -1;
             if ( block[2] < 0 && block[2] * -1 > offsetZ ) offsetZ = block[2] * -1;
-            
+
             // If 3d is enabled, draw the block on the canvas
             if (enable3d) blocks[$(this).attr('id')] = new Object({
-              x : block[0], 
-              y : block[1], 
-              z : block[2] 
+              x : block[0],
+              y : block[1],
+              z : block[2]
             });
           });
           if (enable3d) three.addBlocksToScene(blocks);
-          
+
           // Change the currentX to match the new schematic position
-          //  before we run drawControls() 
+          //  before we run drawControls()
           if (block[0] < 0) currentX += offsetX;
           if (block[1] < 0) currentY += offsetY;
           if (block[2] < 0) currentZ += offsetZ;
           drawControls(currentZ, currentX, currentY);
         }
       });
-            
+
       /* Small helper function to determine which arrow symobl to print
-       * 
+       *
        * @param rotation
-       * 
+       *
        * @return string as either ↑, →, ↓ or ←
        */
       function rotationSymbol(rotation) {
@@ -242,17 +247,17 @@ function structureBuild() {
         else symbol = '\u2190';
         return symbol;
       }
-      
+
       /**
        * Draws user interface for adding blocks on the screen
-       * 
+       *
        * @param Z representing current Z coordinate
        * @param X representing current X coordinate
        * @param Y representing current Y coordinate
        */
       function drawControls(Z, X, Y) {
         startTime = new Date().getTime();
-        
+
         // If there aren't any .xy-grid .mc-block elements then it's our first
         // time through, create them
         if (!controlsExist) {
@@ -263,22 +268,22 @@ function structureBuild() {
           }
           controlsExist = true;
         }
-        
+
         // re-declare our z/x/y counters
         zcount=Z;xcount=X;ycount=Y;
         // loop through all control elements
         $('#structure-node-form .xy-grid .mc-block').each(function() {
-          
+
           $(this).removeAttr('style'); //remove old styling
           blockId = schematic.getBlockId(xcount,ycount,zcount); //get the blockId
-          
+
           if (blockId != 0) {
-            // add a style element to the .mc-block 
+            // add a style element to the .mc-block
             backgroundPosition = spritePosition(blockId);
             $(this).attr('style', blockStyle('mc-sprite.png',backgroundPosition[0],backgroundPosition[1],1));
           }
           else {
-            // if there is not a matching .block, see if there is a matching 
+            // if there is not a matching .block, see if there is a matching
             // block on a lower level
             for(var j = 1; j<5; j++) {
               blockId = schematic.getBlockId(xcount,ycount-j,zcount);
@@ -290,7 +295,7 @@ function structureBuild() {
               }
             }
           }
-          
+
           $(this).attr('id', 'X'+ xcount + '_Y'+ ycount + '_Z' + zcount);
           xcount < X+15 ? xcount++ : newLine();
         });
@@ -298,15 +303,15 @@ function structureBuild() {
         console.log('Execution time of drawControls(): ' + (Number(endTime) - Number(startTime)));
         function newLine(){xcount = X;zcount ++;}
       }
-      
+
       /**
        * Provides CSS used to style .mc-block elements
-       * 
+       *
        * @param image as string representing pafrom module
        * @param x representing offset from left of image
        * @param y representing offset from left of image
-       * @param opacity as decimal 
-       * 
+       * @param opacity as decimal
+       *
        */
       function blockStyle(image,x,y,opacity) {
         return '\n\
@@ -317,7 +322,7 @@ function structureBuild() {
       }
 
      /* Provide .xy-grid .mc-block element and return it as block array
-      * 
+      *
       * @param thisblock as HTML element
       * @return new Array as structured block (X,Y,Z,TYPE)
       */
@@ -335,7 +340,7 @@ function structureBuild() {
       }
 
     });
-  })(jQuery); 
+  })(jQuery);
 }
 
 function spritePosition(blockid) {
@@ -347,7 +352,7 @@ function spritePosition(blockid) {
     case 1: //stone
       x = '1';
       y = '0';
-      break;  
+      break;
     case 2: //grass
       x = '0';
       y = '0';
@@ -852,7 +857,7 @@ function spritePosition(blockid) {
       break;
     case 102: // glass pane
       x = '1';
-      y = '3';  
+      y = '3';
       break;
     case 103: // melon (block)
       x = '8';
