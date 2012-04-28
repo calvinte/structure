@@ -11,7 +11,7 @@ var endTime = new Date();
       loadNbtBlocks(base64_decode(Drupal.settings.structureArray));
     else {
       window["schematic"] = new com.mordritch.mcSim.World_Schematic();
-      schematic.makeNew(16,16,16);
+      schematic.makeNew(16,1,16);
     }
 
     $('a.enable-3d').click(function() {
