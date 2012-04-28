@@ -155,7 +155,6 @@ function initiate3d() {
         this.chunkCache[chunkId] = three.newChunk(chunkId);
       }
 
-      console.log(x,y,z,' ', xLimit,yLimit,zLimit);
       // create every block in the chunk
       for (var xRow = x; xRow < xLimit; xRow++) {
         for (var yRow = y; yRow < yLimit; yRow++) {
