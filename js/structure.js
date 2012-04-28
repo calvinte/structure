@@ -32,10 +32,6 @@ var endTime = new Date();
       loadNbtBlocks(base64_decode(Drupal.settings.schematicFile));
       if (enable3d) three.addSchematicToScene();
     }
-    else {
-      // decode the uploaded file
-      loadNbtBlocks(base64_decode(Drupal.settings.structureArray));
-    }
   });
 
 })(jQuery);

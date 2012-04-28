@@ -107,7 +107,11 @@ function initiate3d() {
         chunkId = this.getChunkId(x, y, z);
 
         this.meshCache[blockId].position = {x:x*16, y:y*16, z:z*16};
-        THREE.GeometryUtils.merge( this.chunkCache[chunkId].geometry, this.meshCache[blockId] );
+
+        THREE.GeometryUtils.merge(
+          this.chunkCache[chunkId].geometry,
+          this.meshCache[blockId]
+        );
       }
     }
 
@@ -117,15 +121,15 @@ function initiate3d() {
     }
 
     three.getChunkX = function(chunkId) {
-      return chunkId.split('-')[0];
+      return Number(chunkId.split('-')[0]);
     }
 
     three.getChunkY = function(chunkId) {
-      return chunkId.split('-')[1];
+      return Number(chunkId.split('-')[1]);
     }
 
     three.getChunkZ = function(chunkId) {
-      return chunkId.split('-')[2];
+      return Number(chunkId.split('-')[2]);
     }
 
     three.newChunk = function(chunkId) {
@@ -146,8 +150,9 @@ function initiate3d() {
       var zLimit = z + 16;
 
       // check if the chunk exists, if not create it
-      if ( this.chunkCache[chunkId] == undefined )
-         this.chunkCache[chunkId] = three.newChunk(chunkId);
+      if ( this.chunkCache[chunkId] == undefined ) {
+        this.chunkCache[chunkId] = three.newChunk(chunkId);
+      }
       // remove the chunk if it already exists
       else {
         this.scene.remove( this.chunkCache[chunkId] );
@@ -155,9 +160,9 @@ function initiate3d() {
       }
 
       // create every block in the chunk
-      for (var xRow = Number(x); xRow < xLimit; xRow++) {
-        for (var yRow = Number(y); yRow < yLimit; yRow++) {
-          for (var zRow = Number(z); zRow < zLimit; zRow++) {
+      for (var xRow = x; xRow < xLimit; xRow++) {
+        for (var yRow = y; yRow < yLimit; yRow++) {
+          for (var zRow = z; zRow < zLimit; zRow++) {
             this.addBlockToChunkCache(xRow, yRow, zRow);
           }
         }
@@ -209,7 +214,6 @@ function initiate3d() {
       for (var xRow = 0; xRow < xLimit; xRow++) {
         for (var yRow = 0; yRow < yLimit; yRow++) {
           for (var zRow = 0; zRow < zLimit; zRow++) {
-
             this.addChunkToScene(
               this.getChunkId (
                 xRow * 16,
@@ -222,11 +226,43 @@ function initiate3d() {
       }
     }
 
+    /*
+     * Animate THREE.Scene
+     */
+    three.animate = function() {
+      requestAnimationFrame( three.animate );
+      three.render();
+    }
+
+    /*
+     * Render THREE.Scene
+     */
+    three.render = function() {
+      var timer = new Date().getTime() * .0005;
+      // position of camera determined by size of schematic
+      xMax = schematic.getSizeX()*16;
+      yMax = schematic.getSizeY()*16;
+      zMax = schematic.getSizeZ()*16;
+
+      var distance = Math.sqrt(Math.pow(xMax, 2) + Math.pow(yMax, 2)) * 1.5;
+
+      this.camera.position.x = (Math.sin( timer ) * distance) + xMax/2;
+      this.camera.position.y = yMax *1.5;
+      this.camera.position.z = (Math.cos( timer ) * distance) + zMax/2;
+      this.camera.lookAt({
+        x:xMax/2,
+        y:yMax/2,
+        z:zMax/2
+      });
+
+      this.renderer.render( this.scene, this.camera );
+    }
+
     // object used to store three.js mesh objects for later use
     // as opposed to regenerating them every time
     three.addSchematicToScene();
 
-    animate();
+    three.animate();
 
   })(jQuery); 
 }
@@ -259,40 +295,6 @@ function drawGrid() {
 
   return grid;
 }
-
-/* 
- * Animate THREE.Scene
- */
-function animate() {
-  requestAnimationFrame( animate );
-  render();
-}
-
-/*
- * Render THREE.Scene
- */
-function render() {
-  var timer = new Date().getTime() * .0005;
-  // position of camera determined by size of schematic
-  xMax = schematic.getSizeX()*16;
-  yMax = schematic.getSizeY()*16;
-  zMax = schematic.getSizeZ()*16;
-
-  var distance = Math.sqrt(Math.pow(xMax, 2) + Math.pow(yMax, 2)) * 1.5;
-
-  three.camera.position.x = (Math.sin( timer ) * distance) + xMax/2;
-  three.camera.position.y = yMax *1.5;
-  three.camera.position.z = (Math.cos( timer ) * distance) + zMax/2;
-  three.camera.lookAt({
-    x:xMax/2,
-    y:yMax/2,
-    z:zMax/2
-  });
-
-  //controls.update();
-  three.renderer.render( three.scene, three.camera );
-}
-
 
 /**
  * @param paramaters as object
