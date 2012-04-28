@@ -105,7 +105,7 @@ function initiate3d() {
     three.addBlockToChunkCache = function(x, y, z) {
       blockId = schematic.getBlockId(x, y, z);
 
-      if ( blockId != 0 && blockId != undefined ) {
+      if ( blockId != 0 ) {
         // first check if we already have a mesh for this id cached
         // if we don't, then generate one
         if ( this.meshCache[blockId] == undefined) {
@@ -169,7 +169,6 @@ function initiate3d() {
           }
         }
       }
-
       // create a mesh from the chunk and draw it on the scene
       this.scene.add( this.chunkCache[chunkId] );
     }

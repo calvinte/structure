@@ -227,7 +227,6 @@ function structureBuild() {
           currentX += offsetX;
           currentY += offsetY;
           currentZ += offsetZ;
-          console.log(currentX, currentY, currentZ);
           drawControls(currentZ, currentX, currentY);
         }
       });
