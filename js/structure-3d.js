@@ -146,10 +146,11 @@ function initiate3d() {
       var zLimit = z + 16;
 
       // check if the chunk exists, if not create it
-      if ( this.chunkCache[chunkId] == undefined )
+      if ( this.chunkCache[chunkId] == undefined ) {
          this.chunkCache[chunkId] = three.newChunk(chunkId);
-      // remove the chunk if it already exists
+      }
       else {
+        // remove the chunk if it already exists
         this.scene.remove( this.chunkCache[chunkId] );
         this.chunkCache[chunkId] = three.newChunk(chunkId);
       }
