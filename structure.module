@@ -301,6 +301,9 @@ function structure_node_content_form($node, $form_state) {
   return $form;
 }
 
+function structure_node_content_form_validate($form, &$form_state) {
+}
+
 function structure_node_content_form_ajax($form, &$form_state) {
   function bin2asc ($binary) {
     $val = 0;
