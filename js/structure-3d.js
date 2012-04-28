@@ -20,7 +20,7 @@ function initiate3d() {
     var scene = new THREE.Scene();
 
     // camera
-    var camera = new THREE.PerspectiveCamera(45, container.innerWidth() / container.innerHeight(), 1, 1000);
+    var camera = new THREE.PerspectiveCamera(45, container.innerWidth() / container.innerHeight(), 1, 10000);
     scene.add(camera);
 
     // add subtle ambient lighting
@@ -32,11 +32,15 @@ function initiate3d() {
     directionalLight.position.set(1, 1, 1).normalize();
     scene.add(directionalLight);
 
+    var grid = drawGrid();
+    scene.add(grid);
+
     // create wrapper object that contains three.js objects
     three = {
         renderer: renderer,
         camera: camera,
-        scene: scene
+        scene: scene,
+        grid: grid,
     };
 
     // array used to store three.js mesh objects for later use
@@ -221,6 +225,35 @@ function initiate3d() {
   })(jQuery); 
 }
 
+/**
+ * Draw 3D x-y axis grid in three.js scene (average execution time less than 1ms on 111126)
+ *
+ * @return grid as THREE.Line object 
+ */
+function drawGrid() {
+  xMax = schematic.getSizeX()*16;
+  yMax = schematic.getSizeY()*16;
+  zMax = schematic.getSizeZ()*16;
+  if(three.grid) {
+    scene.remove(three.grid);
+  }
+  var grid_material = new THREE.LineBasicMaterial( {color: 0x000000, opacity: 0.2} ),
+          geometry = new THREE.Geometry(),
+              floor = -8 + (0*16), step = 16; //replace '0' with y-value
+
+  for (var i = 0; i <= 16; i ++) {
+    geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( 0   - 8, floor, i * step  - 8 ) ) );
+    geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( 256 - 8, floor, i * step  - 8 ) ) );
+
+    geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( i * step - 8, floor,      - 8 ) ) );
+    geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( i * step - 8, floor,  256 - 8 ) ) );
+  }
+
+  var grid = new THREE.Line(geometry, grid_material, THREE.LinePieces);
+
+  return grid;
+}
+
 /* 
  * Animate THREE.Scene
  */
@@ -233,16 +266,21 @@ function animate() {
  * Render THREE.Scene
  */
 function render() {
-  var timer = new Date().getTime() * 0.0005;
+  var timer = new Date().getTime() * .0005;
   // position of camera determined by size of schematic
-  var distance = ((schematic.getSizeX() + schematic.getSizeZ() + schematic.getSizeY())/3)*16;
-  three.camera.position.y = distance;
-  three.camera.position.x = Math.sin( timer ) * distance;
-  three.camera.position.z = Math.cos( timer ) * distance;
+  xMax = schematic.getSizeX()*16;
+  yMax = schematic.getSizeY()*16;
+  zMax = schematic.getSizeZ()*16;
+  //console.log(timer);
+  var distance = Math.sqrt(Math.pow(xMax, 2) + Math.pow(yMax, 2)) * 1.5;
+
+  three.camera.position.x = (Math.sin( timer ) * distance) + xMax/2;
+  three.camera.position.y = yMax *1.5;
+  three.camera.position.z = (Math.cos( timer ) * distance) + zMax/2;
   three.camera.lookAt({
-    x:(schematic.getSizeX()*16)/2,
+    x:xMax/2,
     y:0,
-    z:(schematic.getSizeZ()*16)/2
+    z:zMax/2
   });
 
   //controls.update();
