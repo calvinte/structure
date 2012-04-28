@@ -4,232 +4,233 @@ var three = new Object;
  * Function that initates 3d/three.js
  */
 function initiate3d() {
-  (function ($) {
 
+  var renderer = new THREE.WebGLRenderer();
+
+  (function ($) {
     // container
     container = $('#mc-3d .canvas-wrapper');
     container.empty();
 
     // renderer
-    var renderer = new THREE.WebGLRenderer();
     renderer.setSize(container.innerWidth(), container.innerHeight());
 
     $('#mc-3d .canvas-wrapper').append( renderer.domElement );
-
-    // scene
-    var scene = new THREE.Scene();
-
-    // camera
-    var camera = new THREE.PerspectiveCamera(45, container.innerWidth() / container.innerHeight(), 1, 10000);
-
-    // add subtle ambient lighting
-    var ambientLight = new THREE.AmbientLight(0x555555);
-
-    // add directional light source
-    var directionalLight = new THREE.DirectionalLight(0xffffff);
-    directionalLight.position.set(1, 1, 1).normalize();
-
-    var grid = drawGrid();
-
-    // create wrapper object that contains three.js objects
-    three = {
-        renderer: renderer,
-        camera: camera,
-        light1: ambientLight,
-        light2: directionalLight,
-        scene: scene,
-        grid: grid,
-        meshCache: new Object(),
-    };
-
-    /**
-     * @param x
-     * @param y
-     * @param z
-     * @return Three.js Materials
-     * Function 
-     */
-    three.getBlockMaterials = function(x, y, z) {
-      return spriteMapper(
-        blockTexture(schematic.getBlockId(x, y, z))
-      );
-    }
-
-    /**
-     * @param x
-     * @param y
-     * @param z
-     * @return Three.js object representing cube at position x,y,z
-     */
-    three.generateBlockObject = function(x, y, z) {
-      this.meshCache[schematic.getBlockId(x, y, z)] = new THREE.Mesh(
-        new THREE.CubeGeometry(
-          16, 16, 16,
-          1, 1, 1,
-          this.getBlockMaterials(x, y, z)
-        ),
-        new THREE.MeshFaceMaterial(),
-        false
-      );
-    }
-
-    /**
-     * @param x
-     * @param y
-     * @param z
-     * 
-     * Function removes block from position x,y,z
-     */
-    three.removeBlockFromScene = function(x, y, z) {
-      if (schematic.getBlockId(x, y, z) != 0) {
-        var Cube = this.generateBlockObject(x, y, z);
-        three.scene.remove(Cube);
-      }
-    }
-
-    /**
-     * @param x
-     * @param y
-     * @param z
-     * 
-     * Function adds block to position x,y,z. 
-     * Removes any block in it's place
-     */
-    three.addBlockToChunkCache = function(x, y, z) {
-      blockId = schematic.getBlockId(x, y, z);
-
-      if ( blockId != 0 ) {
-        // first check if we already have a mesh for this id cached
-        // if we don't, then generate one
-        if ( this.meshCache[blockId] == undefined) {
-          this.generateBlockObject(x, y, z);
-        }
-        chunkId = this.getChunkId(x, y, z);
-
-        this.meshCache[blockId].position = {x:x*16, y:y*16, z:z*16};
-        THREE.GeometryUtils.merge( this.chunkCache[chunkId].geometry, this.meshCache[blockId] );
-      }
-    }
-
-    three.getChunkId = function(x, y, z){
-      var chunkPosition = schematic.getBlockChunkPosition(x, y, z);
-      return chunkPosition.x + '-' + chunkPosition.y + '-' + chunkPosition.z;
-    }
-
-    three.getChunkX = function(chunkId) {
-      return Number(chunkId.split('-')[0]);
-    }
-
-    three.getChunkY = function(chunkId) {
-      return Number(chunkId.split('-')[1]);
-    }
-
-    three.getChunkZ = function(chunkId) {
-      return Number(chunkId.split('-')[2]);
-    }
-
-    three.newChunk = function(chunkId) {
-      return this.chunkCache[chunkId] = 
-        new THREE.Mesh(
-          new THREE.Geometry(),
-          new THREE.MeshFaceMaterial()
-        );
-    }
-
-    three.addChunkToScene = function(chunkId) {
-      // get the bounds of the chunk
-      var x = this.getChunkX(chunkId) * 16;
-      var y = this.getChunkY(chunkId) * 16;
-      var z = this.getChunkZ(chunkId) * 16;
-      var xLimit = x + 16;
-      var yLimit = y + 16;
-      var zLimit = z + 16;
-
-      // check if the chunk exists, if not create it
-      if ( this.chunkCache[chunkId] == undefined ) {
-         this.chunkCache[chunkId] = three.newChunk(chunkId);
-      }
-      else {
-        // remove the chunk if it already exists
-        this.scene.remove( this.chunkCache[chunkId] );
-        this.chunkCache[chunkId] = three.newChunk(chunkId);
-      }
-
-      // create every block in the chunk
-      for (var xRow = x; xRow < xLimit; xRow++) {
-        for (var yRow = y; yRow < yLimit; yRow++) {
-          for (var zRow = z; zRow < zLimit; zRow++) {
-            this.addBlockToChunkCache(xRow, yRow, zRow);
-          }
-        }
-      }
-      // create a mesh from the chunk and draw it on the scene
-      this.scene.add( this.chunkCache[chunkId] );
-    }
-
-    three.addBlockToScene = function(x, y, z) {
-      this.addChunkToScene(
-        this.getChunkId(x, y, z)
-      );
-    }
-
-    three.addBlocksToScene = function(blocks) {
-      var chunks = new Object();
-      for (block in blocks) {
-        // break blocks up by chunk
-        chunks[three.getChunkId(
-          blocks[block].x,
-          blocks[block].y,
-          blocks[block].z
-        )] = new Object();
-      }
-      for (chunk in chunks) {
-        // draws blocks on a per-chunk basis
-        this.addChunkToScene(chunk);
-      }
-    }
-
-    /**
-     * Function recursivly looks through entire schematic and
-     * draws all chunks that if finds, one at a time
-     */
-    three.addSchematicToScene = function() {
-      this.scene = new THREE.Scene();
-      this.scene.add(this.light1);
-      this.scene.add(this.light2);
-      this.scene.add(this.grid);
-      // Need to clear the chunk cache because it's
-      // based on position
-      // @TODO base chunk cache on unique ids
-      three.chunkCache = new Object()
-
-      var xLimit = Math.ceil(schematic.getSizeX() / 16);
-      var yLimit = Math.ceil(schematic.getSizeY() / 16);
-      var zLimit = Math.ceil(schematic.getSizeZ() / 16);
-
-      for (var xRow = 0; xRow < xLimit; xRow++) {
-        for (var yRow = 0; yRow < yLimit; yRow++) {
-          for (var zRow = 0; zRow < zLimit; zRow++) {
-
-            this.addChunkToScene(
-              this.getChunkId (
-                xRow * 16,
-                yRow * 16,
-                zRow * 16
-              )
-            );
-          }
-        }
-      }
-    }
-
-    // object used to store three.js mesh objects for later use
-    // as opposed to regenerating them every time
-    three.addSchematicToScene();
-
-    animate();
-
   })(jQuery); 
+
+  // scene
+  var scene = new THREE.Scene();
+
+  // camera
+  var camera = new THREE.PerspectiveCamera(45, container.innerWidth() / container.innerHeight(), 1, 10000);
+
+  // add subtle ambient lighting
+  var ambientLight = new THREE.AmbientLight(0x555555);
+
+  // add directional light source
+  var directionalLight = new THREE.DirectionalLight(0xffffff);
+  directionalLight.position.set(1, 1, 1).normalize();
+
+  var grid = drawGrid();
+
+  // create wrapper object that contains three.js objects
+  three = {
+      renderer: renderer,
+      camera: camera,
+      light1: ambientLight,
+      light2: directionalLight,
+      scene: scene,
+      grid: grid,
+      meshCache: new Object(),
+  };
+
+  /**
+   * @param x
+   * @param y
+   * @param z
+   * @return Three.js Materials
+   * Function 
+   */
+  three.getBlockMaterials = function(x, y, z) {
+    return spriteMapper(
+      blockTexture(schematic.getBlockId(x, y, z))
+    );
+  }
+
+  /**
+   * @param x
+   * @param y
+   * @param z
+   * @return Three.js object representing cube at position x,y,z
+   */
+  three.generateBlockObject = function(x, y, z) {
+    this.meshCache[schematic.getBlockId(x, y, z)] = new THREE.Mesh(
+      new THREE.CubeGeometry(
+        16, 16, 16,
+        1, 1, 1,
+        this.getBlockMaterials(x, y, z)
+      ),
+      new THREE.MeshFaceMaterial(),
+      false
+    );
+  }
+
+  /**
+   * @param x
+   * @param y
+   * @param z
+   * 
+   * Function removes block from position x,y,z
+   */
+  three.removeBlockFromScene = function(x, y, z) {
+    if (schematic.getBlockId(x, y, z) != 0) {
+      var Cube = this.generateBlockObject(x, y, z);
+      three.scene.remove(Cube);
+    }
+  }
+
+  /**
+   * @param x
+   * @param y
+   * @param z
+   * 
+   * Function adds block to position x,y,z. 
+   * Removes any block in it's place
+   */
+  three.addBlockToChunkCache = function(x, y, z) {
+    blockId = schematic.getBlockId(x, y, z);
+
+    if ( blockId != 0 ) {
+      // first check if we already have a mesh for this id cached
+      // if we don't, then generate one
+      if ( this.meshCache[blockId] == undefined) {
+        this.generateBlockObject(x, y, z);
+      }
+      chunkId = this.getChunkId(x, y, z);
+
+      this.meshCache[blockId].position = {x:x*16, y:y*16, z:z*16};
+      THREE.GeometryUtils.merge( this.chunkCache[chunkId].geometry, this.meshCache[blockId] );
+    }
+  }
+
+  three.getChunkId = function(x, y, z){
+    var chunkPosition = schematic.getBlockChunkPosition(x, y, z);
+    return chunkPosition.x + '-' + chunkPosition.y + '-' + chunkPosition.z;
+  }
+
+  three.getChunkX = function(chunkId) {
+    return Number(chunkId.split('-')[0]);
+  }
+
+  three.getChunkY = function(chunkId) {
+    return Number(chunkId.split('-')[1]);
+  }
+
+  three.getChunkZ = function(chunkId) {
+    return Number(chunkId.split('-')[2]);
+  }
+
+  three.newChunk = function(chunkId) {
+    return this.chunkCache[chunkId] = 
+      new THREE.Mesh(
+        new THREE.Geometry(),
+        new THREE.MeshFaceMaterial()
+      );
+  }
+
+  three.addChunkToScene = function(chunkId) {
+    // get the bounds of the chunk
+    var x = this.getChunkX(chunkId) * 16;
+    var y = this.getChunkY(chunkId) * 16;
+    var z = this.getChunkZ(chunkId) * 16;
+    var xLimit = x + 16;
+    var yLimit = y + 16;
+    var zLimit = z + 16;
+
+    // check if the chunk exists, if not create it
+    if ( this.chunkCache[chunkId] == undefined ) {
+       this.chunkCache[chunkId] = three.newChunk(chunkId);
+    }
+    else {
+      // remove the chunk if it already exists
+      this.scene.remove( this.chunkCache[chunkId] );
+      this.chunkCache[chunkId] = three.newChunk(chunkId);
+    }
+
+    // create every block in the chunk
+    for (var xRow = x; xRow < xLimit; xRow++) {
+      for (var yRow = y; yRow < yLimit; yRow++) {
+        for (var zRow = z; zRow < zLimit; zRow++) {
+          this.addBlockToChunkCache(xRow, yRow, zRow);
+        }
+      }
+    }
+    // create a mesh from the chunk and draw it on the scene
+    this.scene.add( this.chunkCache[chunkId] );
+  }
+
+  three.addBlockToScene = function(x, y, z) {
+    this.addChunkToScene(
+      this.getChunkId(x, y, z)
+    );
+  }
+
+  three.addBlocksToScene = function(blocks) {
+    var chunks = new Object();
+    for (block in blocks) {
+      // break blocks up by chunk
+      chunks[three.getChunkId(
+        blocks[block].x,
+        blocks[block].y,
+        blocks[block].z
+      )] = new Object();
+    }
+    for (chunk in chunks) {
+      // draws blocks on a per-chunk basis
+      this.addChunkToScene(chunk);
+    }
+  }
+
+  /**
+   * Function recursivly looks through entire schematic and
+   * draws all chunks that if finds, one at a time
+   */
+  three.addSchematicToScene = function() {
+    this.scene = new THREE.Scene();
+    this.scene.add(this.light1);
+    this.scene.add(this.light2);
+    this.scene.add(this.grid);
+    // Need to clear the chunk cache because it's
+    // based on position
+    // @TODO base chunk cache on unique ids
+    three.chunkCache = new Object()
+
+    var xLimit = Math.ceil(schematic.getSizeX() / 16);
+    var yLimit = Math.ceil(schematic.getSizeY() / 16);
+    var zLimit = Math.ceil(schematic.getSizeZ() / 16);
+
+    for (var xRow = 0; xRow < xLimit; xRow++) {
+      for (var yRow = 0; yRow < yLimit; yRow++) {
+        for (var zRow = 0; zRow < zLimit; zRow++) {
+
+          this.addChunkToScene(
+            this.getChunkId (
+              xRow * 16,
+              yRow * 16,
+              zRow * 16
+            )
+          );
+        }
+      }
+    }
+  }
+
+  // object used to store three.js mesh objects for later use
+  // as opposed to regenerating them every time
+  three.addSchematicToScene();
+
+  animate();
+
 }
 
 /**
