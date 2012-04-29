@@ -129,9 +129,24 @@ function initiate3d() {
       }
       chunkId = this.getChunkId(x, y, z);
 
-      this.meshCache[blockId].position = {x:x*16, y:y*16, z:z*16};
+      this.meshCache[blockId].position = this.getBlockPositionInChunk(x, y, z);
+
       THREE.GeometryUtils.merge( this.chunkCache[chunkId].geometry, this.meshCache[blockId] );
     }
+  }
+
+  structure.getBlockPositionInChunk = function(x, y, z) {
+    var xPos = x * 16;
+    var yPos = y * 16;
+    var zPos = z * 16;
+
+    xOffset = Math.floor(x/16);
+    yOffset = Math.floor(y/16);
+    zOffset = Math.floor(z/16);
+
+    return { x: (x - xOffset) * 16,
+             y: (y - yOffset) * 16,
+             z: (z - zOffset) * 16}
   }
 
   structure.getChunkId = function(x, y, z){
@@ -201,7 +216,9 @@ function initiate3d() {
       }
     }
     // create a mesh from the chunk and draw it on the scene
-    this.scene.add( this.chunkCache[chunkId] );
+    var chunk = this.chunkCache[chunkId];
+    chunk.position = {x:x, y:y, z:z};
+    this.scene.add( chunk );
   }
 
   structure.addBlockToScene = function(x, y, z) {
@@ -262,22 +279,26 @@ function initiate3d() {
 
   structure.sortChunksByDistance = function() {
     var chunksByDistance = new Array();
-    for (var chunk in structure.chunkCache) {
+    for (var chunk in structure.scene.children) {
       var chunkPosition = new Array(
-        structure.chunkCache[chunk].position.x + 8,
-        structure.chunkCache[chunk].position.y + 8,
-        structure.chunkCache[chunk].position.z + 8
+        structure.scene.children[chunk].position.x + 8,
+        structure.scene.children[chunk].position.y + 8,
+        structure.scene.children[chunk].position.z + 8
       );
       var cameraPosition = new Array(
         structure.camera.position.x,
         structure.camera.position.y,
         structure.camera.position.z
       );
-      console.log(chunk, chunkPosition);
-      chunksByDistance[structure.math.getDistance(
-       chunkPosition,
-       cameraPosition
-      )] = chunk;
+
+      var distance = Math.floor(
+        structure.math.getDistance(
+          chunkPosition,
+          cameraPosition
+        )
+      );
+
+      chunksByDistance[distance.toString()] = chunk;
     }
     return chunksByDistance;
   }
@@ -354,7 +375,22 @@ function render() {
     y:yMax/2,
     z:zMax/2
   });
-
+  var chunksToDraw = 30; 
+  var chunksDrawn = 0;
+  orderedChunks = structure.sortChunksByDistance();
+  for (var chunkDistance in orderedChunks) {
+    if (chunkDistance != undefined) {
+      var chunkId = orderedChunks[chunkDistance];
+      if (chunksToDraw > chunksDrawn) {
+        structure.scene.children[chunkId].visible = true;
+        chunksDrawn++;
+      }
+      else {
+        structure.scene.children[chunkId].visible = false;
+        chunksDrawn++;
+      }
+    }
+  }
   structure.stats.update();
   structure.renderer.render( structure.scene, structure.camera );
 }
