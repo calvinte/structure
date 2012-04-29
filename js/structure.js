@@ -30,7 +30,7 @@ var endTime = new Date();
     // see if the file exists
     if (Drupal.settings.schematicFile) {
       loadNbtBlocks(base64_decode(Drupal.settings.schematicFile));
-      if (enable3d) three.addSchematicToScene();
+      if (enable3d) structure.addSchematicToScene();
     }
   });
 
@@ -217,7 +217,7 @@ function structureBuild() {
             });
           });
 
-          if (enable3d) three.addBlocksToScene(blocks);
+          if (enable3d) structure.addBlocksToScene(blocks);
           // Change the currentX to match the new schematic position
           //  before we run drawControls()
           currentX += offsetX;
@@ -229,7 +229,7 @@ function structureBuild() {
           // the entire schematic
           // @TODO optimize this
           if (offsetX || offsetY || offsetZ) {
-            if (enable3d) three.addSchematicToScene();
+            if (enable3d) structure.addSchematicToScene();
           }
 
         }

@@ -1,4 +1,4 @@
-var three = new Object;
+var structure = new Object;
 
 /**
  * Function that initates 3d/three.js
@@ -34,7 +34,7 @@ function initiate3d() {
   var grid = drawGrid();
 
   // create wrapper object that contains three.js objects
-  three = {
+  structure = {
       renderer: renderer,
       camera: camera,
       light1: ambientLight,
@@ -51,7 +51,7 @@ function initiate3d() {
    * @return Three.js Materials
    * Function 
    */
-  three.getBlockMaterials = function(x, y, z) {
+  structure.getBlockMaterials = function(x, y, z) {
     return spriteMapper(
       blockTexture(schematic.getBlockId(x, y, z))
     );
@@ -63,7 +63,7 @@ function initiate3d() {
    * @param z
    * @return Three.js object representing cube at position x,y,z
    */
-  three.generateBlockObject = function(x, y, z) {
+  structure.generateBlockObject = function(x, y, z) {
     this.meshCache[schematic.getBlockId(x, y, z)] = new THREE.Mesh(
       new THREE.CubeGeometry(
         16, 16, 16,
@@ -82,10 +82,10 @@ function initiate3d() {
    * 
    * Function removes block from position x,y,z
    */
-  three.removeBlockFromScene = function(x, y, z) {
+  structure.removeBlockFromScene = function(x, y, z) {
     if (schematic.getBlockId(x, y, z) != 0) {
       var Cube = this.generateBlockObject(x, y, z);
-      three.scene.remove(Cube);
+      structure.scene.remove(Cube);
     }
   }
 
@@ -97,7 +97,7 @@ function initiate3d() {
    * Function adds block to position x,y,z. 
    * Removes any block in it's place
    */
-  three.addBlockToChunkCache = function(x, y, z) {
+  structure.addBlockToChunkCache = function(x, y, z) {
     blockId = schematic.getBlockId(x, y, z);
 
     if ( blockId != 0 ) {
@@ -113,24 +113,24 @@ function initiate3d() {
     }
   }
 
-  three.getChunkId = function(x, y, z){
+  structure.getChunkId = function(x, y, z){
     var chunkPosition = schematic.getBlockChunkPosition(x, y, z);
     return chunkPosition.x + '-' + chunkPosition.y + '-' + chunkPosition.z;
   }
 
-  three.getChunkX = function(chunkId) {
+  structure.getChunkX = function(chunkId) {
     return Number(chunkId.split('-')[0]);
   }
 
-  three.getChunkY = function(chunkId) {
+  structure.getChunkY = function(chunkId) {
     return Number(chunkId.split('-')[1]);
   }
 
-  three.getChunkZ = function(chunkId) {
+  structure.getChunkZ = function(chunkId) {
     return Number(chunkId.split('-')[2]);
   }
 
-  three.newChunk = function(chunkId) {
+  structure.newChunk = function(chunkId) {
     return this.chunkCache[chunkId] = 
       new THREE.Mesh(
         new THREE.Geometry(),
@@ -138,7 +138,7 @@ function initiate3d() {
       );
   }
 
-  three.addChunkToScene = function(chunkId) {
+  structure.addChunkToScene = function(chunkId) {
     // get the bounds of the chunk
     var x = this.getChunkX(chunkId) * 16;
     var y = this.getChunkY(chunkId) * 16;
@@ -149,12 +149,12 @@ function initiate3d() {
 
     // check if the chunk exists, if not create it
     if ( this.chunkCache[chunkId] == undefined ) {
-       this.chunkCache[chunkId] = three.newChunk(chunkId);
+       this.chunkCache[chunkId] = structure.newChunk(chunkId);
     }
     else {
       // remove the chunk if it already exists
       this.scene.remove( this.chunkCache[chunkId] );
-      this.chunkCache[chunkId] = three.newChunk(chunkId);
+      this.chunkCache[chunkId] = structure.newChunk(chunkId);
     }
 
     // create every block in the chunk
@@ -169,17 +169,17 @@ function initiate3d() {
     this.scene.add( this.chunkCache[chunkId] );
   }
 
-  three.addBlockToScene = function(x, y, z) {
+  structure.addBlockToScene = function(x, y, z) {
     this.addChunkToScene(
       this.getChunkId(x, y, z)
     );
   }
 
-  three.addBlocksToScene = function(blocks) {
+  structure.addBlocksToScene = function(blocks) {
     var chunks = new Object();
     for (block in blocks) {
       // break blocks up by chunk
-      chunks[three.getChunkId(
+      chunks[structure.getChunkId(
         blocks[block].x,
         blocks[block].y,
         blocks[block].z
@@ -195,7 +195,7 @@ function initiate3d() {
    * Function recursivly looks through entire schematic and
    * draws all chunks that if finds, one at a time
    */
-  three.addSchematicToScene = function() {
+  structure.addSchematicToScene = function() {
     this.scene = new THREE.Scene();
     this.scene.add(this.light1);
     this.scene.add(this.light2);
@@ -203,7 +203,7 @@ function initiate3d() {
     // Need to clear the chunk cache because it's
     // based on position
     // @TODO base chunk cache on unique ids
-    three.chunkCache = new Object()
+    structure.chunkCache = new Object()
 
     var xLimit = Math.ceil(schematic.getSizeX() / 16);
     var yLimit = Math.ceil(schematic.getSizeY() / 16);
@@ -227,7 +227,7 @@ function initiate3d() {
 
   // object used to store three.js mesh objects for later use
   // as opposed to regenerating them every time
-  three.addSchematicToScene();
+  structure.addSchematicToScene();
 
   animate();
 
@@ -242,8 +242,8 @@ function drawGrid() {
   xMax = schematic.getSizeX()*16;
   yMax = schematic.getSizeY()*16;
   zMax = schematic.getSizeZ()*16;
-  if(three.grid) {
-    scene.remove(three.grid);
+  if(structure.grid) {
+    scene.remove(structure.grid);
   }
   var grid_material = new THREE.LineBasicMaterial( {color: 0x000000, opacity: 0.2} ),
           geometry = new THREE.Geometry(),
@@ -282,17 +282,17 @@ function render() {
 
   var distance = Math.sqrt(Math.pow(xMax, 2) + Math.pow(yMax, 2)) * 1.5;
 
-  three.camera.position.x = (Math.sin( timer ) * distance) + xMax/2;
-  three.camera.position.y = yMax *1.5;
-  three.camera.position.z = (Math.cos( timer ) * distance) + zMax/2;
-  three.camera.lookAt({
+  structure.camera.position.x = (Math.sin( timer ) * distance) + xMax/2;
+  structure.camera.position.y = yMax *1.5;
+  structure.camera.position.z = (Math.cos( timer ) * distance) + zMax/2;
+  structure.camera.lookAt({
     x:xMax/2,
     y:yMax/2,
     z:zMax/2
   });
 
   //controls.update();
-  three.renderer.render( three.scene, three.camera );
+  structure.renderer.render( structure.scene, structure.camera );
 }
 
 
