@@ -6,6 +6,7 @@ var structure = new Object();
 function initiate3d() {
 
   var renderer = new THREE.WebGLRenderer();
+  var stats = new Stats();
 
   (function ($) {
     // container
@@ -20,6 +21,7 @@ function initiate3d() {
     $('#mc-3d .zoom-in').click(function(){structure.zoom  --});
     $('#mc-3d .zoom-out').click(function(){structure.zoom ++});
 
+    $('#mc-3d').append( stats.getDomElement() );
   })(jQuery); 
 
   // scene
@@ -44,9 +46,9 @@ function initiate3d() {
       scene: scene,
       meshCache: new Object(),
       zoom: Number(10),
+      math: new Object(),
+      stats: stats,
   };
-
-  structure.math = new Object();
 
   /**
    * Function returns distance between two points in three dimensional space
@@ -258,6 +260,28 @@ function initiate3d() {
     }
   }
 
+  structure.sortChunksByDistance = function() {
+    var chunksByDistance = new Array();
+    for (var chunk in structure.chunkCache) {
+      var chunkPosition = new Array(
+        structure.chunkCache[chunk].position.x + 8,
+        structure.chunkCache[chunk].position.y + 8,
+        structure.chunkCache[chunk].position.z + 8
+      );
+      var cameraPosition = new Array(
+        structure.camera.position.x,
+        structure.camera.position.y,
+        structure.camera.position.z
+      );
+      console.log(chunk, chunkPosition);
+      chunksByDistance[structure.math.getDistance(
+       chunkPosition,
+       cameraPosition
+      )] = chunk;
+    }
+    return chunksByDistance;
+  }
+
   // object used to store three.js mesh objects for later use
   // as opposed to regenerating them every time
   structure.addSchematicToScene();
@@ -315,7 +339,7 @@ function render() {
   var xMax = structure.getSizeX();
   var yMax = structure.getSizeY();
   var zMax = structure.getSizeZ();
-  var zoomMod = structure.zoom * .15;
+  var zoomMod = structure.zoom * .1;
 
   var distance = structure.math.getDistance(
     Array(0, 0, 0),
@@ -331,7 +355,7 @@ function render() {
     z:zMax/2
   });
 
-  //controls.update();
+  structure.stats.update();
   structure.renderer.render( structure.scene, structure.camera );
 }
 

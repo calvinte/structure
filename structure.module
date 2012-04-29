@@ -18,16 +18,17 @@ function structure_node_info() {
  */
 function structure_form($node, $form_state) {
   drupal_add_css(drupal_get_path('module', 'structure') . '/styles.css');
-  drupal_add_js(drupal_get_path('module', 'structure') . '/js/Three.js');
-  drupal_add_js(drupal_get_path('module', 'structure') . '/js/jquery-ui-1.8.16.custom.min.js');
-  drupal_add_js(drupal_get_path('module', 'structure') . '/js/RequestAnimationFrame.js');
+  drupal_add_js(drupal_get_path('module', 'structure') . '/libs/Three.js');
+  drupal_add_js(drupal_get_path('module', 'structure') . '/libs/Stats.js');
+  drupal_add_js(drupal_get_path('module', 'structure') . '/libs/jquery-ui-1.8.16.custom.min.js');
+  drupal_add_js(drupal_get_path('module', 'structure') . '/libs/RequestAnimationFrame.js');
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure.js');
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure-3d.js');
-  drupal_add_js(drupal_get_path('module', 'structure') . '/js/base64_decode.js');
+  drupal_add_js(drupal_get_path('module', 'structure') . '/libs/base64_decode.js');
   drupal_add_js(drupal_get_path('module', 'structure') . '/js/update.js');
-  drupal_add_js(drupal_get_path('module', 'structure') . '/js/JsNbtParser/js/NbtParser.js');
-  drupal_add_js(drupal_get_path('module', 'structure') . '/js/JsNbtParser/js/binary-parser.js');
-  drupal_add_js(drupal_get_path('module', 'structure') . '/js/JsNbtParser/js/World_Schematic.js');
+  drupal_add_js(drupal_get_path('module', 'structure') . '/libs/JsNbtParser/js/NbtParser.js');
+  drupal_add_js(drupal_get_path('module', 'structure') . '/libs/JsNbtParser/js/binary-parser.js');
+  drupal_add_js(drupal_get_path('module', 'structure') . '/libs/JsNbtParser/js/World_Schematic.js');
   drupal_add_js(array('structurePath' => drupal_get_path('module', 'structure')), 'setting');
   if (isset($node->field_structurearray['und']['0']['value'])) {
     drupal_add_js(array('structureArray' => $node->field_structurearray['und']['0']['value']), 'setting');
@@ -368,17 +369,17 @@ function structure_menu_local_tasks_alter(&$data, $router_item, $root_path) {
 function structure_view($node, $view_mode) {
   if ($view_mode == 'full' && node_is_page($node)) {
     drupal_add_css(drupal_get_path('module', 'structure') . '/styles.css');
-    drupal_add_js(drupal_get_path('module', 'structure') . '/js/Three.js');
-    drupal_add_js(drupal_get_path('module', 'structure') . '/js/jquery-ui-1.8.16.custom.min.js');
-    drupal_add_js(drupal_get_path('module', 'structure') . '/js/RequestAnimationFrame.js');
+    drupal_add_js(drupal_get_path('module', 'structure') . '/libs/Three.js');
+    drupal_add_js(drupal_get_path('module', 'structure') . '/libs/Stats.js');
+    drupal_add_js(drupal_get_path('module', 'structure') . '/libs/jquery-ui-1.8.16.custom.min.js');
+    drupal_add_js(drupal_get_path('module', 'structure') . '/libs/RequestAnimationFrame.js');
     drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure.js');
     drupal_add_js(drupal_get_path('module', 'structure') . '/js/structure-3d.js');
     drupal_add_js(drupal_get_path('module', 'structure') . '/js/update.js');
-    drupal_add_js(drupal_get_path('module', 'structure') . '/js/base64_decode.js');
-    drupal_add_js(drupal_get_path('module', 'structure') . '/js/update.js');
-    drupal_add_js(drupal_get_path('module', 'structure') . '/js/JsNbtParser/js/NbtParser.js');
-    drupal_add_js(drupal_get_path('module', 'structure') . '/js/JsNbtParser/js/binary-parser.js');
-    drupal_add_js(drupal_get_path('module', 'structure') . '/js/JsNbtParser/js/World_Schematic.js');
+    drupal_add_js(drupal_get_path('module', 'structure') . '/libs/base64_decode.js');
+    drupal_add_js(drupal_get_path('module', 'structure') . '/libs/JsNbtParser/js/NbtParser.js');
+    drupal_add_js(drupal_get_path('module', 'structure') . '/libs/JsNbtParser/js/binary-parser.js');
+    drupal_add_js(drupal_get_path('module', 'structure') . '/libs/JsNbtParser/js/World_Schematic.js');
     drupal_add_js(array('structurePath' => drupal_get_path('module', 'structure')), 'setting');
     drupal_add_js(array('structureArray' => $node->field_structurearray['und']['0']['value']), 'setting');
     drupal_add_js(array('structureMode' => 'view'), 'setting');
