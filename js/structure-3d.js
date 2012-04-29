@@ -16,6 +16,10 @@ function initiate3d() {
     renderer.setSize(container.innerWidth(), container.innerHeight());
 
     $('#mc-3d .canvas-wrapper').append( renderer.domElement );
+
+    $('#mc-3d .zoom-in').click(function(){structure.zoom  --});
+    $('#mc-3d .zoom-out').click(function(){structure.zoom ++});
+
   })(jQuery); 
 
   // scene
@@ -42,6 +46,7 @@ function initiate3d() {
       scene: scene,
       grid: grid,
       meshCache: new Object(),
+      zoom: Number(10),
   };
 
   /**
@@ -279,14 +284,15 @@ function animate() {
 function render() {
   var timer = new Date().getTime() * .0005;
   // position of camera determined by size of schematic
-  xMax = schematic.getSizeX()*16;
-  yMax = schematic.getSizeY()*16;
-  zMax = schematic.getSizeZ()*16;
+  var xMax = schematic.getSizeX()*16;
+  var yMax = schematic.getSizeY()*16;
+  var zMax = schematic.getSizeZ()*16;
+  var zoomMod = structure.zoom * .15;
 
-  var distance = Math.sqrt(Math.pow(xMax, 2) + Math.pow(yMax, 2)) * 1.5;
+  var distance = Math.sqrt(Math.pow(xMax, 2) + Math.pow(yMax, 2)) * zoomMod;
 
   structure.camera.position.x = (Math.sin( timer ) * distance) + xMax/2;
-  structure.camera.position.y = yMax *1.5;
+  structure.camera.position.y = yMax * zoomMod;
   structure.camera.position.z = (Math.cos( timer ) * distance) + zMax/2;
   structure.camera.lookAt({
     x:xMax/2,
