@@ -262,7 +262,7 @@ function drawGrid() {
   return grid;
 }
 
-/* 
+/*
  * Animate THREE.Scene
  */
 function animate() {
