@@ -35,8 +35,6 @@ function initiate3d() {
   var directionalLight = new THREE.DirectionalLight(0xffffff);
   directionalLight.position.set(1, 1, 1).normalize();
 
-  var grid = drawGrid();
-
   // create wrapper object that contains three.js objects
   structure = {
       renderer: renderer,
@@ -44,10 +42,26 @@ function initiate3d() {
       light1: ambientLight,
       light2: directionalLight,
       scene: scene,
-      grid: grid,
       meshCache: new Object(),
       zoom: Number(10),
   };
+
+  structure.math = new Object();
+
+  /**
+   * Function returns distance between two points in three dimensional space
+   *
+   * @param a as Array(x, y, z)
+   * @param b as Array(x, y, z)
+   * @return Number
+   */
+  structure.math.getDistance = function(a, b) {
+    return Math.sqrt(
+      Math.pow((b[0] - a[0]), 2) +
+      Math.pow((b[1] - a[1]), 2) +
+      Math.pow((b[2] - a[2]), 2)
+    );
+  }
 
   /**
    * @param x
@@ -122,6 +136,20 @@ function initiate3d() {
     var chunkPosition = schematic.getBlockChunkPosition(x, y, z);
     return chunkPosition.x + '-' + chunkPosition.y + '-' + chunkPosition.z;
   }
+
+  structure.getSizeX = function() {
+    return schematic.getSizeX() * 16;
+  }
+
+  structure.getSizeY = function() {
+    return schematic.getSizeY() * 16;
+  }
+
+  structure.getSizeZ = function() {
+    return schematic.getSizeZ() * 16;
+  }
+
+  structure.grid = drawGrid();
 
   structure.getChunkX = function(chunkId) {
     return Number(chunkId.split('-')[0]);
@@ -244,9 +272,9 @@ function initiate3d() {
  * @return grid as THREE.Line object 
  */
 function drawGrid() {
-  xMax = schematic.getSizeX()*16;
-  yMax = schematic.getSizeY()*16;
-  zMax = schematic.getSizeZ()*16;
+  xMax = structure.getSizeX();
+  yMax = structure.getSizeY();
+  zMax = structure.getSizeZ();
   if(structure.grid) {
     structure.scene.remove(structure.grid);
   }
@@ -284,12 +312,15 @@ function animate() {
 function render() {
   var timer = new Date().getTime() * .0005;
   // position of camera determined by size of schematic
-  var xMax = schematic.getSizeX()*16;
-  var yMax = schematic.getSizeY()*16;
-  var zMax = schematic.getSizeZ()*16;
+  var xMax = structure.getSizeX();
+  var yMax = structure.getSizeY();
+  var zMax = structure.getSizeZ();
   var zoomMod = structure.zoom * .15;
 
-  var distance = Math.sqrt(Math.pow(xMax, 2) + Math.pow(yMax, 2)) * zoomMod;
+  var distance = structure.math.getDistance(
+    Array(0, 0, 0),
+    Array(xMax, yMax, zMax)
+  ) * zoomMod;
 
   structure.camera.position.x = (Math.sin( timer ) * distance) + xMax/2;
   structure.camera.position.y = yMax * zoomMod;
