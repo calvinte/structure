@@ -1,3 +1,5 @@
+var structure = new Object();
+
 /**
  * Function that initates 3d/three.js
  */
