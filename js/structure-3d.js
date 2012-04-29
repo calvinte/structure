@@ -1,5 +1,3 @@
-var structure = new Object;
-
 /**
  * Function that initates 3d/three.js
  */
@@ -243,22 +241,24 @@ function drawGrid() {
   yMax = schematic.getSizeY()*16;
   zMax = schematic.getSizeZ()*16;
   if(structure.grid) {
-    scene.remove(structure.grid);
+    structure.scene.remove(structure.grid);
   }
   var grid_material = new THREE.LineBasicMaterial( {color: 0x000000, opacity: 0.2} ),
           geometry = new THREE.Geometry(),
-              floor = -8 + (0*16), step = 16; //replace '0' with y-value
+          floor = -8 + ( 0 * 16), step = 16;
 
-  for (var i = 0; i <= 16; i ++) {
+  for (var i = 0; i <= zMax/16; i ++) {
     geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( 0   - 8, floor, i * step  - 8 ) ) );
-    geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( 256 - 8, floor, i * step  - 8 ) ) );
+    geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( xMax - 8, floor, i * step  - 8 ) ) );
+  }
 
+  for (var i = 0; i <= xMax/16; i ++) {
     geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( i * step - 8, floor,      - 8 ) ) );
-    geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( i * step - 8, floor,  256 - 8 ) ) );
+    geometry.vertices.push( new THREE.Vertex( new THREE.Vector3( i * step - 8, floor,  zMax - 8 ) ) );
   }
 
   var grid = new THREE.Line(geometry, grid_material, THREE.LinePieces);
-
+  structure.grid = grid;
   return grid;
 }
 
@@ -267,6 +267,7 @@ function drawGrid() {
  */
 function animate() {
   requestAnimationFrame( animate );
+  structure.scene.add(drawGrid());
   render();
 }
 
