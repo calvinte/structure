@@ -7,6 +7,7 @@ function initiate3d() {
 
   var renderer = new THREE.WebGLRenderer();
   var stats = new Stats();
+  stats.historical = new Array();
 
   (function ($) {
     // container
@@ -218,6 +219,7 @@ function initiate3d() {
     // create a mesh from the chunk and draw it on the scene
     var chunk = this.chunkCache[chunkId];
     chunk.position = {x:x, y:y, z:z};
+    chunk.chunk = true;
     this.scene.add( chunk );
   }
 
@@ -303,6 +305,77 @@ function initiate3d() {
     return chunksByDistance;
   }
 
+  /*
+   * Render THREE.Scene
+   */
+  structure.render = function() {
+    var timer = new Date().getTime() * .0005;
+    // position of camera determined by size of schematic
+    var xMax = structure.getSizeX();
+    var yMax = structure.getSizeY();
+    var zMax = structure.getSizeZ();
+    var zoomMod = structure.zoom * .1;
+    var distance = structure.math.getDistance(
+      Array(0, 0, 0),
+      Array(xMax, yMax, zMax)
+    ) * zoomMod;
+
+    structure.camera.position.x = (Math.sin( timer ) * distance) + xMax/2;
+    structure.camera.position.y = yMax * zoomMod;
+    structure.camera.position.z = (Math.cos( timer ) * distance) + zMax/2;
+    structure.camera.lookAt({
+      x:xMax/2,
+      y:yMax/2,
+      z:zMax/2
+    });
+
+    structure.stats.update();
+    var chunksToDraw = structure.render.numberOfChunksByFramerate(chunksToDraw);
+    structure.render.chunksByDistance(chunksToDraw);
+    structure.renderer.render( structure.scene, structure.camera );
+  }
+
+  structure.render.numberOfChunksByFramerate = function() {
+    fps = structure.stats.getFps();
+    structure.stats.historical.push(fps);
+    statsInHistory = stats.historical.length;
+    if (statsInHistory > 5) {
+      structure.stats.historical.splice(0, statsInHistory - 5);
+    }
+    avgFps = 0;
+    for (historicalFps in structure.stats.historical) {
+      avgFps += structure.stats.historical[historicalFps];
+    }
+    avgFps /= structure.stats.historical.length;
+    return avgFps * 2;
+  }
+
+  structure.render.chunksByDistance = function(chunksToDraw) {
+    var chunksDrawn = 0;
+    orderedChunks = structure.sortChunksByDistance();
+    for (var chunkDistance in orderedChunks) {
+      if (chunkDistance != undefined) {
+        var chunkId = orderedChunks[chunkDistance];
+        if (chunksToDraw > chunksDrawn) {
+          // check that the object is indeed a chunk
+          if (structure.scene.children[chunkId].chunk) {
+            // make it visible
+            structure.scene.children[chunkId].visible = true;
+            chunksDrawn++;
+          }
+        }
+        else {
+          // check that the object is indeed a chunk
+          if (structure.scene.children[chunkId].chunk) {
+            // make it invisible
+            structure.scene.children[chunkId].visible = false;
+            chunksDrawn++;
+          }
+        }
+      }
+    }
+  }
+
   // object used to store three.js mesh objects for later use
   // as opposed to regenerating them every time
   structure.addSchematicToScene();
@@ -348,53 +421,8 @@ function drawGrid() {
 function animate() {
   requestAnimationFrame( animate );
   structure.scene.add(drawGrid());
-  render();
+  structure.render();
 }
-
-/*
- * Render THREE.Scene
- */
-function render() {
-  var timer = new Date().getTime() * .0005;
-  // position of camera determined by size of schematic
-  var xMax = structure.getSizeX();
-  var yMax = structure.getSizeY();
-  var zMax = structure.getSizeZ();
-  var zoomMod = structure.zoom * .1;
-
-  var distance = structure.math.getDistance(
-    Array(0, 0, 0),
-    Array(xMax, yMax, zMax)
-  ) * zoomMod;
-
-  structure.camera.position.x = (Math.sin( timer ) * distance) + xMax/2;
-  structure.camera.position.y = yMax * zoomMod;
-  structure.camera.position.z = (Math.cos( timer ) * distance) + zMax/2;
-  structure.camera.lookAt({
-    x:xMax/2,
-    y:yMax/2,
-    z:zMax/2
-  });
-  var chunksToDraw = 30; 
-  var chunksDrawn = 0;
-  orderedChunks = structure.sortChunksByDistance();
-  for (var chunkDistance in orderedChunks) {
-    if (chunkDistance != undefined) {
-      var chunkId = orderedChunks[chunkDistance];
-      if (chunksToDraw > chunksDrawn) {
-        structure.scene.children[chunkId].visible = true;
-        chunksDrawn++;
-      }
-      else {
-        structure.scene.children[chunkId].visible = false;
-        chunksDrawn++;
-      }
-    }
-  }
-  structure.stats.update();
-  structure.renderer.render( structure.scene, structure.camera );
-}
-
 
 /**
  * @param paramaters as object
