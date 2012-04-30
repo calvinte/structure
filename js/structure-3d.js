@@ -330,17 +330,22 @@ function initiate3d() {
     });
 
     structure.stats.update();
+    this.render.frameCounter++;
     var chunksToDraw = structure.render.numberOfChunksByFramerate(chunksToDraw);
     structure.render.chunksByDistance(chunksToDraw);
     structure.renderer.render( structure.scene, structure.camera );
   }
 
+  // counts to 20
+  structure.render.frameCounter = 0;
+
   structure.render.numberOfChunksByFramerate = function() {
     fps = structure.stats.getFps();
     structure.stats.historical.push(fps);
     statsInHistory = stats.historical.length;
-    if (statsInHistory > 5) {
-      structure.stats.historical.splice(0, statsInHistory - 5);
+
+    if (statsInHistory > 20) {
+      structure.stats.historical.splice(0, statsInHistory - 20);
     }
     avgFps = 0;
     for (historicalFps in structure.stats.historical) {
@@ -351,25 +356,28 @@ function initiate3d() {
   }
 
   structure.render.chunksByDistance = function(chunksToDraw) {
-    var chunksDrawn = 0;
-    orderedChunks = structure.sortChunksByDistance();
-    for (var chunkDistance in orderedChunks) {
-      if (chunkDistance != undefined) {
-        var chunkId = orderedChunks[chunkDistance];
-        if (chunksToDraw > chunksDrawn) {
-          // check that the object is indeed a chunk
-          if (structure.scene.children[chunkId].chunk) {
-            // make it visible
-            structure.scene.children[chunkId].visible = true;
-            chunksDrawn++;
+    //only run every 20 fromes
+    if (structure.render.frameCounter % 20 == 0) {
+      var chunksDrawn = 0;
+      orderedChunks = structure.sortChunksByDistance();
+      for (var chunkDistance in orderedChunks) {
+        if (chunkDistance != undefined) {
+          var chunkId = orderedChunks[chunkDistance];
+          if (chunksToDraw > chunksDrawn) {
+            // check that the object is indeed a chunk
+            if (structure.scene.children[chunkId].chunk) {
+              // make it visible
+              structure.scene.children[chunkId].visible = true;
+              chunksDrawn++;
+            }
           }
-        }
-        else {
-          // check that the object is indeed a chunk
-          if (structure.scene.children[chunkId].chunk) {
-            // make it invisible
-            structure.scene.children[chunkId].visible = false;
-            chunksDrawn++;
+          else {
+            // check that the object is indeed a chunk
+            if (structure.scene.children[chunkId].chunk) {
+              // make it invisible
+              structure.scene.children[chunkId].visible = false;
+              chunksDrawn++;
+            }
           }
         }
       }
