@@ -216,11 +216,14 @@ function initiate3d() {
         }
       }
     }
-    // create a mesh from the chunk and draw it on the scene
+
     var chunk = this.chunkCache[chunkId];
-    chunk.position = {x:x, y:y, z:z};
-    chunk.chunk = true;
-    this.scene.add( chunk );
+    // make sure the chunk isn't empty
+    if(chunk.geometry.faces.length > 0) {
+      chunk.position = {x:x, y:y, z:z};
+      chunk.chunk = true;
+      this.scene.add( chunk );
+    }
   }
 
   structure.addBlockToScene = function(x, y, z) {
@@ -363,22 +366,19 @@ function initiate3d() {
       for (var chunkDistance in orderedChunks) {
         if (chunkDistance != undefined) {
           var chunkId = orderedChunks[chunkDistance];
-          if (chunksToDraw > chunksDrawn) {
-            // check that the object is indeed a chunk
-            if (structure.scene.children[chunkId].chunk) {
+          if (structure.scene.children[chunkId].chunk) {
+            if (chunksToDraw > chunksDrawn) {
+              // check that the object is indeed a chunk
               // make it visible
               structure.scene.children[chunkId].visible = true;
-              chunksDrawn++;
             }
-          }
-          else {
-            // check that the object is indeed a chunk
-            if (structure.scene.children[chunkId].chunk) {
+            else {
+              // check that the object is indeed a chunk
               // make it invisible
               structure.scene.children[chunkId].visible = false;
-              chunksDrawn++;
             }
           }
+          chunksDrawn++;
         }
       }
     }
