@@ -154,7 +154,6 @@ function structureBuild() {
         window["nbtData"] = base64_encode(window["nbtData"]);
         $('#edit-field-structurearray-und-0-value').val('');
         $('#edit-field-structurearray-und-0-value').val(nbtData);
-        alert($('#edit-field-structurearray-und-0-value').val());
         return true;
       });
 
