@@ -317,7 +317,7 @@ function initiate3d() {
     var xMax = structure.getSizeX();
     var yMax = structure.getSizeY();
     var zMax = structure.getSizeZ();
-    var zoomMod = structure.zoom * .1;
+    var zoomMod = structure.zoom * .15;
     var distance = structure.math.getDistance(
       Array(0, 0, 0),
       Array(xMax, yMax, zMax)
